@@ -16,7 +16,13 @@ def flatten(s):
     ['m', 'i', 'n', 'm', 'e', 'w', 't', 'a', 't', 'i', 'o', 'n', 's']
     """
     "*** YOUR CODE HERE ***"
-
+    res = []
+    for item in range(len(s)):
+        if type(s[item]) == list:
+            res = res + flatten(s[item])
+        else:
+            res = res + [s[item]]
+    return res
 
 def merge(s, t):
     """Merges two sorted lists.
@@ -42,7 +48,12 @@ def merge(s, t):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    if not s or not t:
+        return s + t
+    elif s[0] < t[0]:
+        return [s[0]] + merge(s[1:], t)
+    else:
+        return [t[0]] + merge(s, t[1:])
 
 def size_of_tree(t):
     """Return the number of entries in the tree.
@@ -102,7 +113,7 @@ def divide(quotients, divisors):
     >>> divide(range(1, 5), range(20, 25))
     {1: [20, 21, 22, 23, 24], 2: [20, 22, 24], 3: [21, 24], 4: [20, 24]}
     """
-    return {____: ____ for ____ in ____}
+    #return {____: ____ for ____ in ____}
 
 
 
