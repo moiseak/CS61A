@@ -1,0 +1,922 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="Laryn Qi, Charlotte Le, Raymond Tan" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/hl.js"></script>
+    <script src="../../assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="../../assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/mono-blue.css">
+    <link rel="icon" href="../../assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="../../assets/css/lab.css">
+
+
+    <title>
+Lab 4 Solutions | CS 61A Summer 2024
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../index.html">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="../../assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="../../office-hours.html">Weekly Schedule</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                External Websites
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://oh.cs61a.org/">Office Hours Queue</a></li>
+                <li><a href="https://pythontutor.com/cp/composingprograms.html">Python Tutor</a></li>
+                <li><a href="https://code.cs61a.org/">Online Code Editor</a></li>
+                <li><a href="https://www.composingprograms.com/">Textbook</a></li>
+                <li><a href="https://edstem.org/us/courses/59836/discussion/">Ed</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Forms
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/regrades">Request a Regrade</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/debugging-guide">Debugging Guide</a></li>
+                <li><a href="../../articles/studying.html">Studying Guide</a></li>
+                <li><a href="../../articles/composition.html">Composition Guide</a></li>
+                <li><a href="../../articles/pair-programming.html">Pair Programming Guide</a></li>
+                <li><a href="../../resources.html">Past Exams & Websites</a></li>
+                <li><a href="../../articles/campus-res/index.html">Department and Campus</a></li>
+                <li><a href="../../articles/advice/index.html">Advice from Former Students</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="../../instructor.html">Instructors</a></li>
+                <li><a href="../../staff.html">TAs & Tutors</a></li>
+                <li><a href="../../contact/index.html">Contact</a></li>
+              </ul>
+            </li>
+            <li><a href="../../articles/about.html">Syllabus</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Lab 4 Solutions
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="lab04.zip" class="label label-outline">lab04.zip</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+<h2>Solution Files</h2>
+
+
+    
+<h1 id="topics">Topics</h1>
+
+
+<p>Consult this section if you need a refresher on the material for this lab. It's
+okay to skip directly to <a href="index.html#required-questions">the questions</a> and refer back
+here should you get stuck.</p>
+
+
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Lists<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+
+
+<h2 id="lists" class="no-toc">Lists</h2>
+
+
+<p>A list is a data structure that can hold an ordered collection of items.
+These items, known as elements, can be of any data type, including numbers, strings, or even other lists.
+A comma-separated list of expressions in square brackets creates a list:</p>
+
+<pre><code>&gt;&gt;&gt; list_of_values = [2, 1, 3, True, 3]
+&gt;&gt;&gt; nested_list = [2, [1, 3], [True, [3]]]</code></pre>
+
+<p>Each position in a list has an index, with the left-most element indexed <code>0</code>.</p>
+
+<pre><code>&gt;&gt;&gt; list_of_values[0]
+2
+&gt;&gt;&gt; nested_list[1]
+[1, 3]</code></pre>
+
+<p>A negative index counts from the end, with the right-most element indexed <code>&#x2d;1</code>.</p>
+
+<pre><code>&gt;&gt;&gt; nested_list[&#x2d;1]
+[True, [3]]</code></pre>
+
+<p>Adding lists creates a longer list containing the elements of the added lists.</p>
+
+<pre><code>&gt;&gt;&gt; [1, 2] + [3] + [4, 5]
+[1, 2, 3, 4, 5]</code></pre>
+
+</div>
+
+
+        <button id='toggle-2' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        List Comprehensions<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-2">
+
+
+<h2 id="list-comprehensions" class="no-toc">List Comprehensions</h2>
+
+
+<p>A list comprehension describes the elements in a list and evaluates to a new list
+containing those elements.</p>
+
+<p>There are two forms:</p>
+
+<pre><code>[&lt;expression&gt; for &lt;element&gt; in &lt;sequence&gt;]
+[&lt;expression&gt; for &lt;element&gt; in &lt;sequence&gt; if &lt;conditional&gt;]</code></pre>
+
+<p>Here's an example that starts with <code>[1, 2, 3, 4]</code>, picks out the even elements
+<code>2</code> and <code>4</code> using <code>if i % 2 == 0</code>, then squares each of these using <code>i*i</code>. The
+purpose of <code>for i</code> is to give a name to each element in <code>[1, 2, 3, 4]</code>.</p>
+
+<pre><code>&gt;&gt;&gt; [i*i for i in [1, 2, 3, 4] if i % 2 == 0]
+[4, 16]</code></pre>
+
+<p>This list comprehension evaluates to a list of:</p>
+
+<ul>
+  <li>The value of <code>i*i</code></li>
+  <li>For each element <code>i</code> in the sequence <code>[1, 2, 3, 4]</code></li>
+  <li>For which <code>i % 2 == 0</code></li>
+</ul>
+
+<p>In other words, this list comprehension will create a new list that contains
+the square of every even element of the original list <code>[1, 2, 3, 4]</code>.</p>
+
+<p>We can also rewrite a list comprehension as an equivalent <code>for</code> statement,
+such as for the example above:</p>
+
+<pre><code>&gt;&gt;&gt; result = []
+&gt;&gt;&gt; for i in [1, 2, 3, 4]:
+...     if i % 2 == 0:
+...         result = result + [i*i]
+&gt;&gt;&gt; result
+[4, 16]</code></pre>
+
+</div>
+
+
+        <button id='toggle-3' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        List Slicing<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-3">
+
+
+<h2 id="list-slicing" class="no-toc">List Slicing</h2>
+
+
+<p>To create a copy of part or all of a list, we can use list slicing.
+The syntax to slice a list <code>lst</code> is:
+<code>lst[&lt;start index&gt;:&lt;end index&gt;:&lt;step size&gt;]</code>.</p>
+
+<p>This expression evaluates to a new list containing the elements of <code>lst</code>:</p>
+
+<ul>
+  <li>Starting at and including the element at <code>&lt;start index&gt;</code>.</li>
+  <li>Up to but not including the element at <code>&lt;end index&gt;</code>.</li>
+  <li>With <code>&lt;step size&gt;</code> as the difference between indices of elements to include.</li>
+</ul>
+
+<p>If the start, end, or step size are not explicitly specified, Python has
+default values for them. A negative step size indicates that we are stepping
+backwards through a list when including elements.</p>
+
+<pre><code>&gt;&gt;&gt; lst = [6, 5, 4, 3, 2, 1, 0]
+&gt;&gt;&gt; lst[:3]     # Start index defaults to 0
+[6, 5, 4]
+&gt;&gt;&gt; lst[3:]     # End index defaults to len(lst)
+[3, 2, 1, 0]
+&gt;&gt;&gt; lst[:]      # Creates a copy of the list
+[6, 5, 4, 3, 2, 1, 0]
+&gt;&gt;&gt; lst[:] == lst
+True
+&gt;&gt;&gt; lst[:] is lst
+False
+&gt;&gt;&gt; lst[::&#x2d;1]   # Make a reversed copy of the entire list
+[0, 1, 2, 3, 4, 5, 6]
+&gt;&gt;&gt; lst[::2]    # Skip every other; step size defaults to 1 otherwise
+[6, 4, 2, 0]</code></pre>
+
+</div>
+
+
+        <button id='toggle-4' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Dictionaries<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-4">
+
+
+<h2 id="dictionaries" class="no-toc">Dictionaries</h2>
+
+
+<p>A dictionary contains key-value pairs and allows the values to be looked up by
+their key using square brackets. Each key must be unique.</p>
+
+<pre><code>&gt;&gt;&gt; d = {2: 4, &#x27;two&#x27;: [&#x27;four&#x27;], (1, 1): 4}
+&gt;&gt;&gt; d[2]
+4
+&gt;&gt;&gt; d[&#x27;two&#x27;]
+[&#x27;four&#x27;]
+&gt;&gt;&gt; d[(1, 1)]
+4</code></pre>
+
+<p>The sequence of keys or values or key-value pairs can be accessed using
+<code>.keys()</code> or <code>.values()</code> or <code>.items()</code>.</p>
+
+<pre><code>&gt;&gt;&gt; for k in d.keys():
+...     print(k)
+...
+2
+two
+(1, 1)
+&gt;&gt;&gt; for v in d.values():
+...     print(v)
+...
+4
+[&#x27;four&#x27;]
+4
+&gt;&gt;&gt; for k, v in d.items():
+...     print(k, v)
+...
+2 4
+two [&#x27;four&#x27;]
+(1, 1) 4</code></pre>
+
+<p>You can check whether a dictionary contains a key using <code>in</code>:</p>
+
+<pre><code>&gt;&gt;&gt; &#x27;two&#x27; in d
+True
+&gt;&gt;&gt; 4 in d
+False</code></pre>
+
+<p>A dictionary comprehension is an expression that evaluates to a new dictionary.</p>
+
+<pre><code>&gt;&gt;&gt; {3*x: 3*x + 1 for x in range(2, 5)}
+{6: 7, 9: 10, 12: 13}</code></pre>
+
+</div>
+
+<!-- 
+        <button id='toggle-5' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Tuples<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-5"> -->
+
+<!-- ## Tuples -->
+
+<!-- <incldue topics/tuples/text/immutability.md> -->
+
+<!-- </div> -->
+
+
+        <button id='toggle-6' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Getting Started Videos<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-6">
+
+
+<h2 id="getting-started-videos" class="no-toc">Getting Started Videos</h2>
+
+
+<p>These videos may provide some helpful direction for tackling the coding
+problems on this assignment.</p>
+
+<blockquote><p>To see these videos, you should be logged into your berkeley.edu email.</p></blockquote>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZdDx1QalEZO0pM5iqyIDv3G"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZdDx1QalEZO0pM5iqyIDv3G'> YouTube link </a></p>
+</div>
+
+
+<h1 id="required-questions">Required Questions</h1>
+
+
+
+<h2 id="sequences-and-containers">Sequences and Containers</h2>
+
+
+<blockquote><p><strong>Important:</strong>
+For all WWPD questions, type <code>Function</code> if you believe the answer is
+<code>&lt;function...&gt;</code>, <code>Error</code> if it errors, and <code>Nothing</code> if nothing is displayed.</p></blockquote>
+
+
+<h3 id="q1-wwpd-lists-amp-ranges">Q1: WWPD: Lists &amp; Ranges</h3>
+
+
+<blockquote><p>Use Ok to test your knowledge with the following "What Would Python Display?" questions:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q lists-wwpd -u<button id="copy-code-python3ok-qlists-wwpd-u" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qlists-wwpd-u").onclick = () => copyCode('python3 ok -q lists-wwpd -u', "copy-code-python3ok-qlists-wwpd-u");
+        </script>
+        <br/></blockquote>
+
+<p>Predict what Python will display when you type the following into the
+interactive interpreter. Then try it to check your answers.</p>
+
+<pre><code>&gt;&gt;&gt; s = [7//3, 5, [4, 0, 1], 2]
+&gt;&gt;&gt; s[0]
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x32;</div>
+&gt;&gt;&gt; s[2]
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x5b;&#x34;&#x2c;&#x20;&#x30;&#x2c;&#x20;&#x31;&#x5d;</div>
+&gt;&gt;&gt; s[&#x2d;1]
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x32;</div>
+&gt;&gt;&gt; len(s)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x34;</div>
+&gt;&gt;&gt; 4 in s
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x46;&#x61;&#x6c;&#x73;&#x65;</div>
+&gt;&gt;&gt; 4 in s[2]
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x54;&#x72;&#x75;&#x65;</div>
+&gt;&gt;&gt; s[2] + [3 + 2]
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x5b;&#x34;&#x2c;&#x20;&#x30;&#x2c;&#x20;&#x31;&#x2c;&#x20;&#x35;&#x5d;</div>
+&gt;&gt;&gt; 5 in s[2]
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x46;&#x61;&#x6c;&#x73;&#x65;</div>
+&gt;&gt;&gt; s[2] * 2
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x5b;&#x34;&#x2c;&#x20;&#x30;&#x2c;&#x20;&#x31;&#x2c;&#x20;&#x34;&#x2c;&#x20;&#x30;&#x2c;&#x20;&#x31;&#x5d;</div>
+&gt;&gt;&gt; list(range(3, 6))
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x5b;&#x33;&#x2c;&#x20;&#x34;&#x2c;&#x20;&#x35;&#x5d;</div>
+&gt;&gt;&gt; range(3, 6)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x72;&#x61;&#x6e;&#x67;&#x65;&#x28;&#x33;&#x2c;&#x20;&#x36;&#x29;</div>
+&gt;&gt;&gt; r = range(3, 6)
+&gt;&gt;&gt; [r[0], r[2]]
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x5b;&#x33;&#x2c;&#x20;&#x35;&#x5d;</div>
+&gt;&gt;&gt; range(4)[&#x2d;1]
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x33;</div></code></pre>
+        <button id='prompt-1' class='btn btn-outline btn-lg solutiontoggle prompt'>
+        Toggle Solution<noscript> (enable JavaScript)</noscript>
+        </button>
+        
+
+
+<h3 id="q2-dictionaries">Q2: Dictionaries</h3>
+
+
+<blockquote><p>Use Ok to test your knowledge with the following "What Would Python Display?" questions:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q pokemon -u<button id="copy-code-python3ok-qpokemon-u" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qpokemon-u").onclick = () => copyCode('python3 ok -q pokemon -u', "copy-code-python3ok-qpokemon-u");
+        </script>
+        <br/></blockquote>
+
+<pre><code>&gt;&gt;&gt; pokemon = {&#x27;pikachu&#x27;: 25, &#x27;dragonair&#x27;: 148, &#x27;mew&#x27;: 151}
+&gt;&gt;&gt; pokemon[&#x27;pikachu&#x27;]
+<div class="alt prompt-2">______</div><div class="solution prompt-2">&#x32;&#x35;</div>
+&gt;&gt;&gt; len(pokemon)
+<div class="alt prompt-2">______</div><div class="solution prompt-2">&#x33;</div>
+&gt;&gt;&gt; &#x27;mewtwo&#x27; in pokemon
+<div class="alt prompt-2">______</div><div class="solution prompt-2">&#x46;&#x61;&#x6c;&#x73;&#x65;</div>
+&gt;&gt;&gt; &#x27;pikachu&#x27; in pokemon
+<div class="alt prompt-2">______</div><div class="solution prompt-2">&#x54;&#x72;&#x75;&#x65;</div>
+&gt;&gt;&gt; 25 in pokemon
+<div class="alt prompt-2">______</div><div class="solution prompt-2">&#x46;&#x61;&#x6c;&#x73;&#x65;</div>
+&gt;&gt;&gt; 148 in pokemon.values()
+<div class="alt prompt-2">______</div><div class="solution prompt-2">&#x54;&#x72;&#x75;&#x65;</div>
+&gt;&gt;&gt; 151 in pokemon.keys()
+<div class="alt prompt-2">______</div><div class="solution prompt-2">&#x46;&#x61;&#x6c;&#x73;&#x65;</div>
+&gt;&gt;&gt; &#x27;mew&#x27; in pokemon.keys()
+<div class="alt prompt-2">______</div><div class="solution prompt-2">&#x54;&#x72;&#x75;&#x65;</div></code></pre>
+        <button id='prompt-2' class='btn btn-outline btn-lg solutiontoggle prompt'>
+        Toggle Solution<noscript> (enable JavaScript)</noscript>
+        </button>
+        
+
+
+<h3 id="q3-flatten">Q3: Flatten</h3>
+
+
+<p>Write a function <code>flatten</code> that takes in a list <code>s</code> and returns
+a <strong>new list</strong> that is the "flattened" version of <code>s</code>.
+You should not modify the original list.</p>
+
+<blockquote><p><strong>Note:</strong> The input list may be deeply nested, meaning that there
+could be multiple layers of lists within lists.
+Make sure your solution supports this.</p>
+
+<p><strong>Hint</strong>: you can check if something is a list by using the built-in
+<code>type</code> function. For example:</p>
+
+<pre><code>&gt;&gt;&gt; type(3) == list
+False
+&gt;&gt;&gt; type([1, 2, 3]) == list
+True</code></pre></blockquote>
+
+<solution>
+
+<pre><code>def flatten(s):
+    &quot;&quot;&quot;Returns a flattened version of list s.
+
+    &gt;&gt;&gt; flatten([1, 2, 3])
+    [1, 2, 3]
+    &gt;&gt;&gt; deep = [1, [[2], 3], 4, [5, 6]]
+    &gt;&gt;&gt; flatten(deep)
+    [1, 2, 3, 4, 5, 6]
+    &gt;&gt;&gt; deep                                # input list is unchanged
+    [1, [[2], 3], 4, [5, 6]]
+    &gt;&gt;&gt; very_deep = [[&#x27;m&#x27;, [&#x27;i&#x27;, [&#x27;n&#x27;, [&#x27;m&#x27;, &#x27;e&#x27;, [&#x27;w&#x27;, &#x27;t&#x27;, [&#x27;a&#x27;], &#x27;t&#x27;, &#x27;i&#x27;, &#x27;o&#x27;], &#x27;n&#x27;]], &#x27;s&#x27;]]]
+    &gt;&gt;&gt; flatten(very_deep)
+    [&#x27;m&#x27;, &#x27;i&#x27;, &#x27;n&#x27;, &#x27;m&#x27;, &#x27;e&#x27;, &#x27;w&#x27;, &#x27;t&#x27;, &#x27;a&#x27;, &#x27;t&#x27;, &#x27;i&#x27;, &#x27;o&#x27;, &#x27;n&#x27;, &#x27;s&#x27;]
+    &quot;&quot;&quot;
+<div class="sol-highlight">    lst = []
+    for elem in s:
+        if type(elem) == list:
+            lst += flatten(elem)
+        else:
+            lst += [elem]
+    return lst
+
+# Alternate solution
+    if not s:
+        return []
+    elif type(s[0]) == list:
+        return flatten(s[0]) + flatten(s[1:])
+    else:
+        return [s[0]] + flatten(s[1:])</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q flatten<button id="copy-code-python3ok-qflatten" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qflatten").onclick = () => copyCode('python3 ok -q flatten', "copy-code-python3ok-qflatten");
+        </script>
+        <br/>
+
+
+<h3 id="q4-merge">Q4: Merge</h3>
+
+
+<p>Implement <code>merge</code>, which takes 2 <em>sorted</em> lists of numbers <code>s</code> and <code>t</code>.  It returns a <strong>new list</strong> that contains all the elements in both <code>s</code> and <code>t</code> in sorted order. Do not remove duplicates: the length of the result should be <code>len(s) + len(t)</code>. <strong>Use recursion</strong> (<code>while</code> or <code>for</code> loops are not allowed).</p>
+
+<solution>
+
+<pre><code>def merge(s, t):
+    &quot;&quot;&quot;Merges two sorted lists.
+
+    &gt;&gt;&gt; s1 = [1, 3, 5]
+    &gt;&gt;&gt; s2 = [2, 4, 6]
+    &gt;&gt;&gt; merge(s1, s2)
+    [1, 2, 3, 4, 5, 6]
+    &gt;&gt;&gt; s1
+    [1, 3, 5]
+    &gt;&gt;&gt; s2
+    [2, 4, 6]
+    &gt;&gt;&gt; merge([], [2, 4, 6])
+    [2, 4, 6]
+    &gt;&gt;&gt; merge([1, 2, 3], [])
+    [1, 2, 3]
+    &gt;&gt;&gt; merge([5, 7], [2, 4, 6])
+    [2, 4, 5, 6, 7]
+    &gt;&gt;&gt; merge([2, 3, 4], [2, 4, 6])
+    [2, 2, 3, 4, 4, 6]
+    &gt;&gt;&gt; from construct_check import check
+    &gt;&gt;&gt; check(LAB_SOURCE_FILE, &#x27;merge&#x27;, [&#x27;While&#x27;, &#x27;For&#x27;])    # ban iteration
+    True
+    &quot;&quot;&quot;
+<div class="sol-highlight">    # Recursive Solution
+    if not s or not t:
+        return s + t
+    elif s[0] &lt; t[0]:
+        return [s[0]] + merge(s[1:], t)
+    else:
+        return [t[0]] + merge(s, t[1:])
+
+    # Alternative Recursive Solution
+    if not s or not t:
+        return s + t
+    elif s[0] &lt;= t[0]:
+        return [s[0]] + merge(s[1:], t)
+    else:
+        return merge(t, s)
+    # For the last line, instead of concatenating [t[0]] at the front like we did for the first solution,
+    # we instead call merge again with the arguments switched, so that in the next call to merge, s
+    # is now t, and t is s.
+    # Note that in order for this to work successfully, we have to modify the elif case to have &lt;= rather
+    # than just &lt;, otherwise we run into infinite recursion. (Try out the last doctest to see why)</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q merge<button id="copy-code-python3ok-qmerge" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qmerge").onclick = () => copyCode('python3 ok -q merge', "copy-code-python3ok-qmerge");
+        </script>
+        <br/>
+
+
+<h2 id="trees">Trees</h2>
+
+
+<p>Consult the drop-down if you need a refresher on trees. It's
+okay to skip directly to the questions and refer back
+here should you get stuck.</p>
+
+
+        <button id='toggle-7' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Trees<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-7">
+
+<p>A path is a sequence of trees in which each is the parent of the next.</p>
+
+<p>A <code>tree</code> is a data structure that represents a hierarchy of information. A file system is a good example of a tree structure. For example, within your <code>cs61a</code> folder, you have folders separating your <code>projects</code>, <code>lab</code> assignments, and <code>homework</code>. The next level is folders that separate different assignments, <code>hw01</code>, <code>lab01</code>, <code>hog</code>, etc., and inside those are the files themselves, including the starter files and <code>ok</code>. Below is an incomplete diagram of what your <code>cs61a</code> directory might look like.</p>
+
+<p><img class="img-responsive center-block" src="assets/cs61a-tree.png" alt="cs61a_tree" width="" height=""></p>
+
+<p>As you can see, unlike trees in nature, the tree abstract data type is drawn with the root at the top and the leaves at the bottom.</p>
+
+<p>For a tree <code>t</code>:</p>
+
+<ul>
+  <li>Its root label can be any value, and <code>label(t)</code> returns it.</li>
+  <li>Its branches are trees, and <code>branches(t)</code> returns a list of branches.</li>
+  <li>An identical tree can be constructed with <code>tree(label(t), branches(t))</code>.</li>
+  <li>You can call functions that take trees as arguments, such as <code>is_leaf(t)</code>.</li>
+  <li>That's how you work with trees. No <code>t == x</code> or <code>t[0]</code> or <code>x in t</code> or <code>list(t)</code>, etc.</li>
+  <li>There's no way to change a tree (that doesn't violate an abstraction barrier).</li>
+</ul>
+
+<p>Here's an example tree <code>t1</code>, for which its branch <code>branches(t1)[1]</code> is <code>t2</code>.</p>
+
+<pre><code class="python">t2 = tree(5, [tree(6), tree(7)])
+t1 = tree(3, [tree(4), t2])</code></pre>
+
+
+
+<p><img class="img-responsive center-block" src="assets/example_tree_illustration.png" alt="Example Tree" width="100%" height=""></p>
+
+</div>
+
+
+<h3 id="q5-size">Q5: Size</h3>
+
+
+<p>Define the function <code>size_of_tree</code>, which takes in a tree <code>t</code> and returns
+the number of entries it contains.</p>
+
+<solution>
+
+<pre><code>def size_of_tree(t):
+    &quot;&quot;&quot;Return the number of entries in the tree.
+    &gt;&gt;&gt; numbers = tree(1, [tree(2), tree(3, [tree(4), tree(5)]), tree(6, [tree(7)])])
+    &gt;&gt;&gt; print_tree(numbers)
+    1
+      2
+      3
+        4
+        5
+      6
+        7
+    &gt;&gt;&gt; size_of_tree(numbers)
+    7
+    &quot;&quot;&quot;
+<div class="sol-highlight">    return 1 + sum([size_of_tree(t) for t in branches(t)])
+
+# Alternate solution
+def size_of_tree(t):
+    subtrees_sum = 0
+    for subtree in branches(t):
+        subtrees_sum += size_of_tree(subtree)
+    return 1 + subtrees_sum</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q size_of_tree<button id="copy-code-python3ok-qsize_of_tree" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qsize_of_tree").onclick = () => copyCode('python3 ok -q size_of_tree', "copy-code-python3ok-qsize_of_tree");
+        </script>
+        <br/>
+
+
+<h3 id="q6-replace-loki-at-leaf">Q6: Replace Loki at Leaf</h3>
+
+
+<p>Define <code>replace_loki_at_leaf</code>, which takes a tree <code>t</code> and a value <code>lokis_replacement</code>. <code>replace_loki_at_leaf</code> returns a <strong>new tree</strong> that's the same as <code>t</code> except
+that every leaf label equal to <code>&quot;loki&quot;</code> has been replaced with <code>lokis_replacement</code>.</p>
+
+<p>If you want to learn about the Norse mythology referenced in this problem, you can read about it <a href="https://en.wikipedia.org/wiki/Yggdrasil">here</a>.</p>
+
+<solution>
+
+<pre><code class="python">  def replace_loki_at_leaf(t, lokis_replacement):
+      &quot;&quot;&quot;Returns a new tree where every leaf value equal to &quot;loki&quot; has
+      been replaced with lokis_replacement.
+
+      &gt;&gt;&gt; yggdrasil = tree(&#x27;odin&#x27;,
+      ...                  [tree(&#x27;balder&#x27;,
+      ...                        [tree(&#x27;loki&#x27;),
+      ...                         tree(&#x27;freya&#x27;)]),
+      ...                   tree(&#x27;frigg&#x27;,
+      ...                        [tree(&#x27;loki&#x27;)]),
+      ...                   tree(&#x27;loki&#x27;,
+      ...                        [tree(&#x27;sif&#x27;),
+      ...                         tree(&#x27;loki&#x27;)]),
+      ...                   tree(&#x27;loki&#x27;)])
+      &gt;&gt;&gt; laerad = copy_tree(yggdrasil)    # copy yggdrasil for testing purposes
+      &gt;&gt;&gt; print_tree(replace_loki_at_leaf(yggdrasil, &#x27;freya&#x27;))
+      odin
+        balder
+          freya
+          freya
+        frigg
+          freya
+        loki
+          sif
+          freya
+        freya
+      &gt;&gt;&gt; laerad == yggdrasil    # Make sure original tree is unmodified
+      True
+      &quot;&quot;&quot;
+<div class="sol-highlight">      if is_leaf(t) and label(t) == &quot;loki&quot;:
+          return tree(lokis_replacement)
+      else:
+          bs = [replace_loki_at_leaf(b, lokis_replacement) for b in branches(t)]
+          return tree(label(t), bs)</div></code></pre>
+
+
+</solution>
+
+<!--
+<br />
+
+<p>Watch the hints video below for somewhere to start:
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/FUIXaJaReOA"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/FUIXaJaReOA'> YouTube link </a></p></p>
+
+<br />
+-->
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q replace_loki_at_leaf<button id="copy-code-python3ok-qreplace_loki_at_leaf" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qreplace_loki_at_leaf").onclick = () => copyCode('python3 ok -q replace_loki_at_leaf', "copy-code-python3ok-qreplace_loki_at_leaf");
+        </script>
+        <br/>
+
+<!--
+<div class="sol-highlight">
+
+<p>We approach this problem recursively.</p>
+
+<ul>
+  <li><p><strong>Base Case:</strong> if the tree is a leaf, we can immediately decide what to
+  do. If the label is loki, we return a tree with the lokis_replacement label. Otherwise, we just return the original tree. In our solution, it
+  looks like we always recurse over the branches:</p>
+
+<pre><code>bs = [replace_loki_at_leaf(b, lokis_replacement) for b in branches(t)]</code></pre>
+
+  <p>But this will not do anything for a leaf, since <code>branches(t)</code> is an
+  empty sequence. It's also possible to have a separate case.</p></li>
+  <li><strong>Otherwise:</strong> we cannot do anything about the current element, since
+  we're only allowed to replace at leaves. Therefore, we need to examine
+  all of our branches, and replace their leaves. After replacing their
+  leaves, we can return an updated tree.</li>
+</ul>
+
+</div>
+-->
+
+
+<h2 id="check-your-score-locally">Check Your Score Locally</h2>
+
+<p>You can locally check your score on each question of this assignment by running</p>
+
+<pre><code>python3 ok &#x2d;&#x2d;score</code></pre>
+
+<p><strong>This does NOT submit the assignment!</strong> When you are satisfied with your score, submit the assignment to Gradescope to receive credit for it.</p>
+
+
+<h1 id="submit-assignment">Submit Assignment</h1>
+
+
+<p>Submit this assignment by uploading any files you've edited <strong>to the appropriate Gradescope assignment.</strong> <a href="../lab00.html#submit-with-gradescope">Lab 00</a> has detailed instructions.</p>
+
+<p>In addition, all students who are <strong>not</strong> in the mega lab must submit the attendance form for credit. Ask your section TA for the link! Submit this form for each section, whether you attended lab or missed it for a good reason. The attendance form is not required for mega section students.</p>
+
+
+<h1 id="optional-questions">Optional Questions</h1>
+
+
+
+<h3 id="q7-divide">Q7: Divide</h3>
+
+
+<p>Implement <code>divide</code>, which takes two lists of positive integers <code>quotients</code> and
+<code>divisors</code>. It returns a dictionary whose keys are the elements of <code>quotients</code>.
+For each key <code>q</code>, its corresponding value is a list of all the elements of
+<code>divisors</code> that can be evenly divided by <code>q</code>.</p>
+
+<blockquote><p>Hint: The value for each key needs be a list, so list comprehension might be useful here.</p></blockquote>
+
+<solution>
+
+<pre><code>def divide(quotients, divisors):
+    &quot;&quot;&quot;Return a dictonary in which each quotient q is a key for the list of
+    divisors that it divides evenly.
+
+    &gt;&gt;&gt; divide([3, 4, 5], [8, 9, 10, 11, 12])
+    {3: [9, 12], 4: [8, 12], 5: [10]}
+    &gt;&gt;&gt; divide(range(1, 5), range(20, 25))
+    {1: [20, 21, 22, 23, 24], 2: [20, 22, 24], 3: [21, 24], 4: [20, 24]}
+    &quot;&quot;&quot;
+<div class="sol-highlight">    return {q: [d for d in divisors if d % q == 0] for q in quotients}</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q divide<button id="copy-code-python3ok-qdivide" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qdivide").onclick = () => copyCode('python3 ok -q divide', "copy-code-python3ok-qdivide");
+        </script>
+        <br/>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="index.html#topics">Topics</a></li>
+  <li><a href="index.html#required-questions">Required Questions</a></li>
+  <ul>
+    <li><a href="index.html#sequences-and-containers">Sequences and Containers</a></li>
+    <ul>
+      <li><a href="index.html#q1-wwpd-lists-amp-ranges">Q1: WWPD: Lists &amp; Ranges</a></li>
+      <li><a href="index.html#q2-dictionaries">Q2: Dictionaries</a></li>
+      <li><a href="index.html#q3-flatten">Q3: Flatten</a></li>
+      <li><a href="index.html#q4-merge">Q4: Merge</a></li>
+    </ul>
+    <li><a href="index.html#trees">Trees</a></li>
+    <ul>
+      <li><a href="index.html#q5-size">Q5: Size</a></li>
+      <li><a href="index.html#q6-replace-loki-at-leaf">Q6: Replace Loki at Leaf</a></li>
+    </ul>
+    <li><a href="index.html#check-your-score-locally">Check Your Score Locally</a></li>
+  </ul>
+  <li><a href="index.html#submit-assignment">Submit Assignment</a></li>
+  <li><a href="index.html#optional-questions">Optional Questions</a></li>
+  <ul>
+    <li><a href="index.html#q7-divide">Q7: Divide</a></li>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <!-- <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer> -->
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="../../assets/js/network_storage.js"></script>
+    <script src="../../assets/js/storable.js"></script>
+    <script src="../../assets/js/editor.js"></script>
+    <script src="../../assets/js/copy-button.js"></script>
+    <script src="../../assets/js/env-diagram.js"></script>
+    
+<!-- <script src="/assets/js/sketchy.js"></script> -->
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

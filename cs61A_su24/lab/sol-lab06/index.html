@@ -1,0 +1,920 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="Laryn Qi, Charlotte Le, Raymond Tan" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/hl.js"></script>
+    <script src="../../assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="../../assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/mono-blue.css">
+    <link rel="icon" href="../../assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="../../assets/css/lab.css">
+
+
+    <title>
+Lab 6 Solutions | CS 61A Summer 2024
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../index.html">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="../../assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="../../office-hours.html">Weekly Schedule</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                External Websites
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://oh.cs61a.org/">Office Hours Queue</a></li>
+                <li><a href="https://pythontutor.com/cp/composingprograms.html">Python Tutor</a></li>
+                <li><a href="https://code.cs61a.org/">Online Code Editor</a></li>
+                <li><a href="https://www.composingprograms.com/">Textbook</a></li>
+                <li><a href="https://edstem.org/us/courses/59836/discussion/">Ed</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Forms
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/regrades">Request a Regrade</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/debugging-guide">Debugging Guide</a></li>
+                <li><a href="../../articles/studying.html">Studying Guide</a></li>
+                <li><a href="../../articles/composition.html">Composition Guide</a></li>
+                <li><a href="../../articles/pair-programming.html">Pair Programming Guide</a></li>
+                <li><a href="../../resources.html">Past Exams & Websites</a></li>
+                <li><a href="../../articles/campus-res/index.html">Department and Campus</a></li>
+                <li><a href="../../articles/advice/index.html">Advice from Former Students</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="../../instructor.html">Instructors</a></li>
+                <li><a href="../../staff.html">TAs & Tutors</a></li>
+                <li><a href="../../contact/index.html">Contact</a></li>
+              </ul>
+            </li>
+            <li><a href="../../articles/about.html">Syllabus</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Lab 6 Solutions
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="lab06.zip" class="label label-outline">lab06.zip</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+<h2>Solution Files</h2>
+
+
+    
+<h1 id="topics">Topics</h1>
+
+
+<!-- Here's a refresher on Object-Oriented Programming. It's okay to skip directly to -->
+Here's a refresher on Iterators and Generators. It's okay to skip directly to
+the questions and refer back here if you get stuck.
+
+<!-- 
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Object-Oriented Programming<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1"> -->
+<!-- </div> -->
+<page-break>
+
+
+<h2 id="iterators">Iterators</h2>
+
+
+
+        <button id='toggle-2' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Iterators<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-2">
+An <strong>iterable</strong> is any value that can be iterated through, or gone through one
+element at a time. One construct that we've used to iterate through an iterable
+is a for statement:
+
+<pre><code>for elem in iterable:
+    # do something</code></pre>
+
+<p>In general, an <strong>iterable</strong> is an object on which calling the built-in <code>iter</code>
+function returns an <em>iterator</em>. An <strong>iterator</strong> is an object on which calling
+the built-in <code>next</code> function returns the next value.</p>
+
+<p>For example, a list is an iterable value.</p>
+
+<pre><code>&gt;&gt;&gt; s = [1, 2, 3, 4]
+&gt;&gt;&gt; next(s)       # s is iterable, but not an iterator
+TypeError: &#x27;list&#x27; object is not an iterator
+&gt;&gt;&gt; t = iter(s)   # Creates an iterator
+&gt;&gt;&gt; t
+&lt;list_iterator object ...&gt;
+&gt;&gt;&gt; next(t)       # Calling next on an iterator
+1
+&gt;&gt;&gt; next(t)       # Calling next on the same iterator
+2
+&gt;&gt;&gt; next(iter(t)) # Calling iter on an iterator returns itself
+3
+&gt;&gt;&gt; t2 = iter(s)
+&gt;&gt;&gt; next(t2)      # Second iterator starts at the beginning of s
+1
+&gt;&gt;&gt; next(t)       # First iterator is unaffected by second iterator
+4
+&gt;&gt;&gt; next(t)       # No elements left!
+StopIteration
+&gt;&gt;&gt; s             # Original iterable is unaffected
+[1, 2, 3, 4]</code></pre>
+
+<p>You can also use an iterator in a <code>for</code> statement because all iterators are
+iterable. But note that since iterators keep their state, they're
+only good to iterate through an iterable once:</p>
+
+<pre><code>&gt;&gt;&gt; t = iter([4, 3, 2, 1])
+&gt;&gt;&gt; for e in t:
+...     print(e)
+4
+3
+2
+1
+&gt;&gt;&gt; for e in t:
+...     print(e)</code></pre>
+
+<p>There are built-in functions that return iterators.</p>
+
+<pre><code>&gt;&gt;&gt; m = map(lambda x: x * x, [3, 4, 5])
+&gt;&gt;&gt; next(m)
+9
+&gt;&gt;&gt; next(m)
+16
+&gt;&gt;&gt; f = filter(lambda x: x &gt; 3, [3, 4, 5])
+&gt;&gt;&gt; next(f)
+4
+&gt;&gt;&gt; next(f)
+5
+&gt;&gt;&gt; z = zip([30, 40, 50], [3, 4, 5])
+&gt;&gt;&gt; next(z)
+(30, 3)
+&gt;&gt;&gt; next(z)
+(40, 4)</code></pre>
+
+</div>
+
+
+<h2 id="generators">Generators</h2>
+
+
+
+        <button id='toggle-3' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Generators<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-3">
+We can create our own custom iterators by writing a <em>generator function</em>, which
+returns a special type of iterator called a <strong>generator</strong>.  Generator functions
+have <code>yield</code> statements within the body of the function instead of <code>return</code>
+statements.  Calling a generator function will return a generator object and
+will <em>not</em> execute the body of the function.
+
+<p>For example, let's consider the following generator function:</p>
+
+<pre><code>def countdown(n):
+    print(&quot;Beginning countdown!&quot;)
+    while n &gt;= 0:
+        yield n
+        n &#x2d;= 1
+    print(&quot;Blastoff!&quot;)</code></pre>
+
+<p>Calling <code>countdown(k)</code> will return a generator object that counts down from <code>k</code>
+to 0.  Since generators are iterators, we can call <code>iter</code> on the resulting
+object, which will simply return the same object.  Note that the body is not
+executed at this point; nothing is printed and no numbers are outputted.</p>
+
+<pre><code>&gt;&gt;&gt; c = countdown(5)
+&gt;&gt;&gt; c
+&lt;generator object countdown ...&gt;
+&gt;&gt;&gt; c is iter(c)
+True</code></pre>
+
+<p>So how is the counting done? Again, since generators are iterators, we call
+<code>next</code> on them to get the next element!  The first time <code>next</code> is called,
+execution begins at the first line of the function body and continues until the
+<code>yield</code> statement is reached. The result of evaluating the expression in the
+<code>yield</code> statement is returned.  The following interactive session continues
+from the one above.</p>
+
+<pre><code>&gt;&gt;&gt; next(c)
+Beginning countdown!
+5</code></pre>
+
+<p>Unlike functions we've seen before in this course, generator functions can
+remember their state. On any consecutive calls to <code>next</code>, execution picks up
+from the line after the <code>yield</code> statement that was previously executed. Like
+the first call to <code>next</code>, execution will continue until the next <code>yield</code>
+statement is reached. Note that because of this, <code>Beginning countdown!</code> doesn't
+get printed again.</p>
+
+<pre><code>&gt;&gt;&gt; next(c)
+4
+&gt;&gt;&gt; next(c)
+3</code></pre>
+
+<p>The next 3 calls to <code>next</code> will continue to yield consecutive descending
+integers until 0.  On the following call, a <code>StopIteration</code> error will be
+raised because there are no more values to yield (i.e. the end of the function
+body was reached before hitting a <code>yield</code> statement).</p>
+
+<pre><code>&gt;&gt;&gt; next(c)
+2
+&gt;&gt;&gt; next(c)
+1
+&gt;&gt;&gt; next(c)
+0
+&gt;&gt;&gt; next(c)
+Blastoff!
+StopIteration</code></pre>
+
+<p>Separate calls to <code>countdown</code> will create distinct generator objects with their
+own state. Usually, generators shouldn't restart. If you'd like to reset the
+sequence, create another generator object by calling the generator function
+again.</p>
+
+<pre><code>&gt;&gt;&gt; c1, c2 = countdown(5), countdown(5)
+&gt;&gt;&gt; c1 is c2
+False
+&gt;&gt;&gt; next(c1)
+5
+&gt;&gt;&gt; next(c2)
+5</code></pre>
+
+<p>Here is a summary of the above:</p>
+
+<ul>
+  <li>A <em>generator function</em> has a <code>yield</code> statement and returns a <em>generator object</em>.</li>
+  <li>Calling the <code>iter</code> function on a generator object returns the same object
+  without modifying its current state.</li>
+  <li>The body of a generator function is not evaluated until <code>next</code> is called on
+  a resulting generator object. Calling the <code>next</code> function on a generator
+  object computes and returns the next object in its sequence. If the sequence
+  is exhausted, <code>StopIteration</code> is raised.</li>
+  <li><p>A generator "remembers" its state for the next <code>next</code> call. Therefore,</p>
+
+  <ul>
+    <li><p>the first <code>next</code> call works like this:</p>
+
+    <ol>
+      <li>Enter the function and run until the line with <code>yield</code>.</li>
+      <li>Return the value in the <code>yield</code> statement, but remember the state of the
+      function for future <code>next</code> calls.</li>
+    </ol></li>
+    <li><p>And subsequent <code>next</code> calls work like this:</p>
+
+    <ol>
+      <li>Re-enter the function, start at <strong>the line after the <code>yield</code> statement that
+      was previously executed</strong>, and run until the next <code>yield</code> statement.</li>
+      <li>Return the value in the <code>yield</code> statement, but remember the state of the
+      function for future <code>next</code> calls.</li>
+    </ol></li>
+  </ul></li>
+  <li>Calling a generator function returns a brand new generator object (like
+  calling <code>iter</code> on an iterable object).</li>
+  <li>A generator should not restart unless it's defined that way. To start over
+  from the first element in a generator, just call the generator function again
+  to create a new generator.</li>
+</ul>
+
+<p>Another useful tool for generators is the <code>yield from</code> statement. <code>yield from</code>
+will yield all values from an iterator or iterable.</p>
+
+<pre><code>&gt;&gt;&gt; def gen_list(lst):
+...     yield from lst
+...
+&gt;&gt;&gt; g = gen_list([1, 2, 3, 4])
+&gt;&gt;&gt; next(g)
+1
+&gt;&gt;&gt; next(g)
+2
+&gt;&gt;&gt; next(g)
+3
+&gt;&gt;&gt; next(g)
+4
+&gt;&gt;&gt; next(g)
+StopIteration</code></pre>
+
+</div>
+
+
+<h2 id="getting-started-videos">Getting Started Videos</h2>
+
+
+
+        <button id='toggle-4' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Getting Started Videos<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-4">
+
+<p>These videos may provide some helpful direction for tackling the coding problems on this assignment.</p>
+
+<p>To see these videos, you should be logged into your berkeley.edu email.</p>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZfvGO8juWJjZu3Kl2ZFkjaY"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZfvGO8juWJjZu3Kl2ZFkjaY'> YouTube link </a></p>
+</div>
+
+<!-- ## Object-Oriented Programming -->
+
+
+<h1 id="required-questions">Required Questions</h1>
+
+
+
+<h3 id="q1-wwpd-iterators">Q1: WWPD: Iterators</h3>
+
+
+<blockquote><p><strong>Important:</strong>
+Enter <code>StopIteration</code> if a <code>StopIteration</code> exception occurs,
+<code>Error</code> if you believe a different error occurs,
+and <code>Iterator</code> if the output is an iterator object.</p>
+
+<p><strong>Important:</strong> Python's built-in function <code>map</code>, <code>filter</code>, and <code>zip</code> return <em>iterators</em>, not lists.</p></blockquote>
+
+<!-- separate block quotes -->
+
+<blockquote><p>Use Ok to test your knowledge with the following "What Would Python Display?" questions:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q iterators-wwpd -u<button id="copy-code-python3ok-qiterators-wwpd-u" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qiterators-wwpd-u").onclick = () => copyCode('python3 ok -q iterators-wwpd -u', "copy-code-python3ok-qiterators-wwpd-u");
+        </script>
+        <br/></blockquote>
+
+<pre><code>&gt;&gt;&gt; s = [1, 2, 3, 4]
+&gt;&gt;&gt; t = iter(s)
+&gt;&gt;&gt; next(s)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x45;&#x72;&#x72;&#x6f;&#x72;</div>
+&gt;&gt;&gt; next(t)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x31;</div>
+&gt;&gt;&gt; next(t)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x32;</div>
+&gt;&gt;&gt; next(iter(s))
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x31;</div>
+&gt;&gt;&gt; next(iter(s))
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x31;</div>
+&gt;&gt;&gt; u = t
+&gt;&gt;&gt; next(u)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x33;</div>
+&gt;&gt;&gt; next(t)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x34;</div></code></pre>
+        <button id='prompt-1' class='btn btn-outline btn-lg solutiontoggle prompt'>
+        Toggle Solution<noscript> (enable JavaScript)</noscript>
+        </button>
+        
+
+<pre><code>&gt;&gt;&gt; r = range(6)
+&gt;&gt;&gt; r_iter = iter(r)
+&gt;&gt;&gt; next(r_iter)
+<div class="alt prompt-2">______</div><div class="solution prompt-2">&#x30;</div>
+&gt;&gt;&gt; [x + 1 for x in r]
+<div class="alt prompt-2">______</div><div class="solution prompt-2">&#x5b;&#x31;&#x2c;&#x20;&#x32;&#x2c;&#x20;&#x33;&#x2c;&#x20;&#x34;&#x2c;&#x20;&#x35;&#x2c;&#x20;&#x36;&#x5d;</div>
+&gt;&gt;&gt; [x + 1 for x in r_iter]
+<div class="alt prompt-2">______</div><div class="solution prompt-2">&#x5b;&#x32;&#x2c;&#x20;&#x33;&#x2c;&#x20;&#x34;&#x2c;&#x20;&#x35;&#x2c;&#x20;&#x36;&#x5d;</div>
+&gt;&gt;&gt; next(r_iter)
+<div class="alt prompt-2">______</div><div class="solution prompt-2">&#x53;&#x74;&#x6f;&#x70;&#x49;&#x74;&#x65;&#x72;&#x61;&#x74;&#x69;&#x6f;&#x6e;</div></code></pre>
+        <button id='prompt-2' class='btn btn-outline btn-lg solutiontoggle prompt'>
+        Toggle Solution<noscript> (enable JavaScript)</noscript>
+        </button>
+        
+
+<pre><code>&gt;&gt;&gt; map_iter = map(lambda x : x + 10, range(5))
+&gt;&gt;&gt; next(map_iter)
+<div class="alt prompt-3">______</div><div class="solution prompt-3">&#x31;&#x30;</div>
+&gt;&gt;&gt; next(map_iter)
+<div class="alt prompt-3">______</div><div class="solution prompt-3">&#x31;&#x31;</div>
+&gt;&gt;&gt; list(map_iter)
+<div class="alt prompt-3">______</div><div class="solution prompt-3">&#x5b;&#x31;&#x32;&#x2c;&#x20;&#x31;&#x33;&#x2c;&#x20;&#x31;&#x34;&#x5d;</div>
+&gt;&gt;&gt; for e in filter(lambda x : x % 4 == 0, range(1000, 1008)):
+...     print(e)
+<div class="alt prompt-3">______</div><div class="solution prompt-3">&#x31;&#x30;&#x30;&#x30;&#xa;&#x31;&#x30;&#x30;&#x34;</div>
+&gt;&gt;&gt; [x + y for x, y in zip([1, 2, 3], [4, 5, 6])]
+<div class="alt prompt-3">______</div><div class="solution prompt-3">&#x5b;&#x35;&#x2c;&#x20;&#x37;&#x2c;&#x20;&#x39;&#x5d;</div></code></pre>
+        <button id='prompt-3' class='btn btn-outline btn-lg solutiontoggle prompt'>
+        Toggle Solution<noscript> (enable JavaScript)</noscript>
+        </button>
+        
+
+<page-break>
+
+
+<h3 id="q2-count-occurrences">Q2: Count Occurrences</h3>
+
+
+<p>Implement <code>count_occurrences</code>, which takes an iterator <code>t</code>, an integer <code>n</code>, and
+a value <code>x</code>. It returns the number of elements in the
+first <code>n</code> elements of <code>t</code> that equal to <code>x</code>.</p>
+
+<blockquote><p><strong>Important</strong>: Call <code>next</code> on <code>t</code> exactly <code>n</code> times. Assume there are at least
+<code>n</code> elements in <code>t</code>.</p></blockquote>
+
+<!-- separate block quotes -->
+
+<solution>
+
+<pre><code>def count_occurrences(t, n, x):
+    &quot;&quot;&quot;Return the number of times that x is equal to one of the
+    first n elements of iterator t.
+
+    &gt;&gt;&gt; s = iter([10, 9, 10, 9, 9, 10, 8, 8, 8, 7])
+    &gt;&gt;&gt; count_occurrences(s, 10, 9)
+    3
+    &gt;&gt;&gt; t = iter([10, 9, 10, 9, 9, 10, 8, 8, 8, 7])
+    &gt;&gt;&gt; count_occurrences(t, 3, 10)
+    2
+    &gt;&gt;&gt; u = iter([3, 2, 2, 2, 1, 2, 1, 4, 4, 5, 5, 5])
+    &gt;&gt;&gt; count_occurrences(u, 1, 3)  # Only iterate over 3
+    1
+    &gt;&gt;&gt; count_occurrences(u, 3, 2)  # Only iterate over 2, 2, 2
+    3
+    &gt;&gt;&gt; list(u)                     # Ensure that the iterator has advanced the right amount
+    [1, 2, 1, 4, 4, 5, 5, 5]
+    &gt;&gt;&gt; v = iter([4, 1, 6, 6, 7, 7, 6, 6, 2, 2, 2, 5])
+    &gt;&gt;&gt; count_occurrences(v, 6, 6)
+    2
+    &quot;&quot;&quot;
+<div class="sol-highlight">    count = 0
+    for _ in range(n):
+        if next(t) == x:
+            count += 1
+    return count</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q count_occurrences<button id="copy-code-python3ok-qcount_occurrences" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qcount_occurrences").onclick = () => copyCode('python3 ok -q count_occurrences', "copy-code-python3ok-qcount_occurrences");
+        </script>
+        <br/>
+
+<page-break>
+
+
+<h3 id="q3-hailstone">Q3: Hailstone</h3>
+
+
+<p>Write a generator function that outputs the hailstone sequence starting at number <code>n</code>.</p>
+
+<p>Here's a quick reminder of how the hailstone sequence is defined:</p>
+
+<ol>
+  <li>Pick a positive integer <code>n</code> as the start.</li>
+  <li>If <code>n</code> is even, divide it by 2.</li>
+  <li>If <code>n</code> is odd, multiply it by 3 and add 1.</li>
+  <li>Continue this process until <code>n</code> is 1.</li>
+</ol>
+
+<p>Make sure you don't create an infinite generator!</p>
+
+<blockquote><p>As an extra challenge, try writing a solution using recursion. Since <code>hailstone</code> returns a generator, you can <code>yield from</code> a call to <code>hailstone</code>!</p></blockquote>
+
+<solution>
+
+<pre><code>def hailstone(n):
+    &quot;&quot;&quot;Yields the elements of the hailstone sequence starting at n.
+
+    &gt;&gt;&gt; for num in hailstone(10):
+    ...     print(num)
+    10
+    5
+    16
+    8
+    4
+    2
+    1
+    &quot;&quot;&quot;
+<div class="sol-highlight">    while n &gt; 1:
+        yield n
+        if n % 2 == 0:
+            n //= 2
+        else:
+            n = n * 3 + 1
+    yield n
+
+    # Recursive Solution
+def hailstone(n):
+    yield n
+    if n != 1:
+        if n % 2 == 0:
+            yield from hailstone(n//2)
+        else:
+            yield from hailstone(n*3+1)
+</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q hailstone<button id="copy-code-python3ok-qhailstone" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qhailstone").onclick = () => copyCode('python3 ok -q hailstone', "copy-code-python3ok-qhailstone");
+        </script>
+        <br/>
+
+<!-- <div class="sol-highlight">
+Walkthrough
+<p>
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/fQlIJa2_yqw?t=1h18m52s"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/fQlIJa2_yqw?t=1h18m52s'> YouTube link </a></p>
+</div> -->
+
+<page-break>
+
+
+<h2 id="check-your-score-locally">Check Your Score Locally</h2>
+
+<p>You can locally check your score on each question of this assignment by running</p>
+
+<pre><code>python3 ok &#x2d;&#x2d;score</code></pre>
+
+<p><strong>This does NOT submit the assignment!</strong> When you are satisfied with your score, submit the assignment to Gradescope to receive credit for it.</p>
+
+<page-break>
+
+
+<h1 id="submit-assignment">Submit Assignment</h1>
+
+
+<p>Submit this assignment by uploading any files you've edited <strong>to the appropriate Gradescope assignment.</strong> <a href="../lab00.html#submit-with-gradescope">Lab 00</a> has detailed instructions.</p>
+
+<p>In addition, all students who are <strong>not</strong> in the mega lab must submit the attendance form for credit. Ask your section TA for the link! Submit this form for each section, whether you attended lab or missed it for a good reason. The attendance form is not required for mega section students.</p>
+
+<page-break>
+
+
+<h1 id="optional-questions">Optional Questions</h1>
+
+
+
+<h3 id="q4-merge">Q4: Merge</h3>
+
+
+<p>Implement <code>merge(incr_a, incr_b)</code>, which takes two iterables <code>incr_a</code> and <code>incr_b</code> whose
+elements are ordered. <code>merge</code> yields elements from <code>incr_a</code> and <code>incr_b</code> in sorted
+order, eliminating repetition.  You may assume <code>incr_a</code> and <code>incr_b</code> themselves do not
+contain repeats, and that none of the elements of either are <code>None</code>.
+You may <strong>not</strong> assume that the iterables are finite; either may produce an infinite
+stream of results.</p>
+
+<p>You will probably find it helpful to use the two-argument version of the built-in
+<code>next</code> function: <code>next(incr, v)</code> is the same as <code>next(incr)</code>, except that instead of
+raising <code>StopIteration</code> when <code>incr</code> runs out of elements, it returns <code>v</code>.</p>
+
+<p>See the doctest for examples of behavior.</p>
+
+<solution>
+
+<pre><code>def merge(incr_a, incr_b):
+    &quot;&quot;&quot;Yield the elements of strictly increasing iterables incr_a and incr_b, removing
+    repeats. Assume that incr_a and incr_b have no repeats. incr_a or incr_b may or may not
+    be infinite sequences.
+
+    &gt;&gt;&gt; m = merge([0, 2, 4, 6, 8, 10, 12, 14], [0, 3, 6, 9, 12, 15])
+    &gt;&gt;&gt; type(m)
+    &lt;class &#x27;generator&#x27;&gt;
+    &gt;&gt;&gt; list(m)
+    [0, 2, 3, 4, 6, 8, 9, 10, 12, 14, 15]
+    &gt;&gt;&gt; def big(n):
+    ...    k = 0
+    ...    while True: yield k; k += n
+    &gt;&gt;&gt; m = merge(big(2), big(3))
+    &gt;&gt;&gt; [next(m) for _ in range(11)]
+    [0, 2, 3, 4, 6, 8, 9, 10, 12, 14, 15]
+    &quot;&quot;&quot;
+    iter_a, iter_b = iter(incr_a), iter(incr_b)
+    next_a, next_b = next(iter_a, None), next(iter_b, None)
+<div class="sol-highlight">    while next_a is not None or next_b is not None:
+        if next_a is None or next_b is not None and next_b &lt; next_a:
+            yield next_b
+            next_b = next(iter_b, None)
+        elif next_b is None or next_a is not None and next_a &lt; next_b:
+            yield next_a
+            next_a = next(iter_a, None)
+        else:
+            yield next_a
+            next_a, next_b = next(iter_a, None), next(iter_b, None)</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q merge<button id="copy-code-python3ok-qmerge" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qmerge").onclick = () => copyCode('python3 ok -q merge', "copy-code-python3ok-qmerge");
+        </script>
+        <br/>
+
+
+<h3 id="q5-deep-map">Q5: Deep Map</h3>
+
+
+<p>Write a function <code>deep_map</code> that takes a list <code>s</code> and a one-argument function
+<code>f</code>. <code>s</code> may be a nested list, one that contain other lists. <code>deep_map</code> modifies
+<code>s</code> by replacing each element within <code>s</code> or any of the lists it contains with
+the result of calling <code>f</code> on that element.</p>
+
+<p><code>deep_map</code> returns <code>None</code> and should not create any new lists.</p>
+
+<blockquote><p><strong>Hint:</strong> <code>type(a) == list</code> will evaluate to <code>True</code> if <code>a</code> is a list.</p></blockquote>
+
+<solution>
+
+<pre><code>def deep_map(f, s):
+    &quot;&quot;&quot;Replace all non&#x2d;list elements x with f(x) in the nested list s.
+
+    &gt;&gt;&gt; six = [1, 2, [3, [4], 5], 6]
+    &gt;&gt;&gt; deep_map(lambda x: x * x, six)
+    &gt;&gt;&gt; six
+    [1, 4, [9, [16], 25], 36]
+    &gt;&gt;&gt; # Check that you&#x27;re not making new lists
+    &gt;&gt;&gt; s = [3, [1, [4, [1]]]]
+    &gt;&gt;&gt; s1 = s[1]
+    &gt;&gt;&gt; s2 = s1[1]
+    &gt;&gt;&gt; s3 = s2[1]
+    &gt;&gt;&gt; deep_map(lambda x: x + 1, s)
+    &gt;&gt;&gt; s
+    [4, [2, [5, [2]]]]
+    &gt;&gt;&gt; s1 is s[1]
+    True
+    &gt;&gt;&gt; s2 is s1[1]
+    True
+    &gt;&gt;&gt; s3 is s2[1]
+    True
+    &quot;&quot;&quot;
+<div class="sol-highlight">    for i in range(len(s)):
+        if type(s[i]) == list:
+            deep_map(f, s[i])
+        else:
+            s[i] = f(s[i])</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q deep_map<button id="copy-code-python3ok-qdeep_map" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qdeep_map").onclick = () => copyCode('python3 ok -q deep_map', "copy-code-python3ok-qdeep_map");
+        </script>
+        <br/>
+
+<!-- <include topics/lists/mutable/medium/rope.md> -->
+
+
+<h3 id="q6-buying-fruit">Q6: Buying Fruit</h3>
+
+
+<p>Implement <code>buy</code>, which takes a list of <code>required_fruits</code> (strings), a dictionary
+ <code>prices</code> (strings for key, positive integers for value), and a <code>total_amount</code> (integer). It
+prints all the ways to buy some of each required fruit so that the total price
+equals <code>total_amount</code>. You must include at least one of every fruit in <code>required_fruit</code>
+and cannot include any other fruits that are not in <code>required_fruit</code>.</p>
+
+<blockquote><p>The <code>display</code> function will be helpful. You can call <code>display</code> on a <code>fruit</code> and its <code>count</code> to create a string containing both.</p>
+
+<p>What does <code>fruits</code> and <code>amount</code> represent? How are they used in the recursive?</p></blockquote>
+
+<solution>
+
+<pre><code>def buy(required_fruits, prices, total_amount):
+    &quot;&quot;&quot;Print ways to buy some of each fruit so that the sum of prices is amount.
+
+    &gt;&gt;&gt; prices = {&#x27;oranges&#x27;: 4, &#x27;apples&#x27;: 3, &#x27;bananas&#x27;: 2, &#x27;kiwis&#x27;: 9}
+    &gt;&gt;&gt; buy([&#x27;apples&#x27;, &#x27;oranges&#x27;, &#x27;bananas&#x27;], prices, 12)
+    [2 apples][1 orange][1 banana]
+    &gt;&gt;&gt; buy([&#x27;apples&#x27;, &#x27;oranges&#x27;, &#x27;bananas&#x27;], prices, 16)
+    [2 apples][1 orange][3 bananas]
+    [2 apples][2 oranges][1 banana]
+    &gt;&gt;&gt; buy([&#x27;apples&#x27;, &#x27;kiwis&#x27;], prices, 36)
+    [3 apples][3 kiwis]
+    [6 apples][2 kiwis]
+    [9 apples][1 kiwi]
+    &quot;&quot;&quot;
+    def add(fruits, amount, cart):
+        if fruits == [] and amount == 0:
+            print(cart)
+        elif fruits and amount &gt; 0:
+            fruit = fruits[0]
+<div class="sol-highlight">            price = prices[fruit]</div><div class="sol-highlight">            for k in range(1, amount // price + 1):</div><div class="sol-highlight">                add(fruits[1:], amount &#x2d; price * k, cart + display(fruit, k))</div>    add(required_fruits, total_amount, &#x27;&#x27;)
+
+def display(fruit, count):
+    &quot;&quot;&quot;Display a count of a fruit in square brackets.
+
+    &gt;&gt;&gt; display(&#x27;apples&#x27;, 3)
+    &#x27;[3 apples]&#x27;
+    &gt;&gt;&gt; display(&#x27;apples&#x27;, 1)
+    &#x27;[1 apple]&#x27;
+    &quot;&quot;&quot;
+    assert count &gt;= 1 and fruit[&#x2d;1] == &#x27;s&#x27;
+    if count == 1:
+        fruit = fruit[:&#x2d;1]  # get rid of the plural s
+    return &#x27;[&#x27; + str(count) + &#x27; &#x27; + fruit + &#x27;]&#x27;</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q buy<button id="copy-code-python3ok-qbuy" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qbuy").onclick = () => copyCode('python3 ok -q buy', "copy-code-python3ok-qbuy");
+        </script>
+        <br/>
+
+<!-- <include topics/oop/easy/account.md> -->
+
+<!-- <include topics/oop/easy/email.md> -->
+
+<!-- <include topics/oop/medium/make-change.md> -->
+
+<!-- <include topics/local-score.md> -->
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="index.html#topics">Topics</a></li>
+  <ul>
+    <li><a href="index.html#iterators">Iterators</a></li>
+    <li><a href="index.html#generators">Generators</a></li>
+    <li><a href="index.html#getting-started-videos">Getting Started Videos</a></li>
+  </ul>
+  <li><a href="index.html#required-questions">Required Questions</a></li>
+  <ul>
+    <li><a href="index.html#q1-wwpd-iterators">Q1: WWPD: Iterators</a></li>
+    <li><a href="index.html#q2-count-occurrences">Q2: Count Occurrences</a></li>
+    <li><a href="index.html#q3-hailstone">Q3: Hailstone</a></li>
+  </ul>
+  <ul>
+    <li><a href="index.html#check-your-score-locally">Check Your Score Locally</a></li>
+  </ul>
+  <li><a href="index.html#submit-assignment">Submit Assignment</a></li>
+  <li><a href="index.html#optional-questions">Optional Questions</a></li>
+  <ul>
+    <li><a href="index.html#q4-merge">Q4: Merge</a></li>
+    <li><a href="index.html#q5-deep-map">Q5: Deep Map</a></li>
+    <li><a href="index.html#q6-buying-fruit">Q6: Buying Fruit</a></li>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <!-- <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer> -->
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="../../assets/js/network_storage.js"></script>
+    <script src="../../assets/js/storable.js"></script>
+    <script src="../../assets/js/editor.js"></script>
+    <script src="../../assets/js/copy-button.js"></script>
+    <script src="../../assets/js/env-diagram.js"></script>
+    
+<!-- <script src="/assets/js/sketchy.js"></script> -->
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

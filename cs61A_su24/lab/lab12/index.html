@@ -1,0 +1,1364 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="Laryn Qi, Charlotte Le, Raymond Tan" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/hl.js"></script>
+    <script src="../../assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="../../assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/mono-blue.css">
+    <link rel="icon" href="../../assets/images/favicon.ico">
+
+    
+
+    <title>
+Lab 12: Final Review | CS 61A Summer 2024
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../index.html">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="../../assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="../../office-hours.html">Weekly Schedule</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                External Websites
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://oh.cs61a.org/">Office Hours Queue</a></li>
+                <li><a href="https://pythontutor.com/cp/composingprograms.html">Python Tutor</a></li>
+                <li><a href="https://code.cs61a.org/">Online Code Editor</a></li>
+                <li><a href="https://www.composingprograms.com/">Textbook</a></li>
+                <li><a href="https://edstem.org/us/courses/59836/discussion/">Ed</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Forms
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/regrades">Request a Regrade</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/debugging-guide">Debugging Guide</a></li>
+                <li><a href="../../articles/studying.html">Studying Guide</a></li>
+                <li><a href="../../articles/composition.html">Composition Guide</a></li>
+                <li><a href="../../articles/pair-programming.html">Pair Programming Guide</a></li>
+                <li><a href="../../resources.html">Past Exams & Websites</a></li>
+                <li><a href="../../articles/campus-res/index.html">Department and Campus</a></li>
+                <li><a href="../../articles/advice/index.html">Advice from Former Students</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="../../instructor.html">Instructors</a></li>
+                <li><a href="../../staff.html">TAs & Tutors</a></li>
+                <li><a href="../../contact/index.html">Contact</a></li>
+              </ul>
+            </li>
+            <li><a href="../../articles/about.html">Syllabus</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Lab 12: Final Review
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="lab12.zip" class="label label-outline">lab12.zip</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+
+<p><i>Due by 11:59pm on Monday, August 5.</i></p>
+
+
+
+
+
+
+<h2 id='starter-files'>Starter Files</h2>
+
+<p>Download <a href="lab12.zip">lab12.zip</a>.
+Inside the archive, you will find starter files for the questions in this lab,
+  along with a copy of the <a href="ok">Ok</a> autograder.</p>
+
+
+
+
+
+
+
+
+    
+<!-- 
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Getting Started / Solution Videos<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+
+
+<h1 id="getting-started-solution-videos" class="no-toc">Getting Started / Solution Videos</h1>
+
+
+<p>These videos may provide some helpful direction for tackling the coding
+problems on this assignment. In somce cases, the video may also explain
+the solution as well.</p>
+
+<blockquote><p>To see these videos, you should be logged into your berkeley.edu email.</p></blockquote>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZemxoZLunqBS5cXLcA5f2V2&si=j0HddyvgcxicPTUT"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZemxoZLunqBS5cXLcA5f2V2&si=j0HddyvgcxicPTUT'> YouTube link </a></p>
+</div> -->
+
+<blockquote><p><strong>Note</strong>: This assignment will not be graded. It is intended to help you prepare for the final exam. You <strong>do not</strong> need to submit anything for this assignment.</p></blockquote>
+
+<br>
+
+
+<h1 id="recursion-and-tree-recursion">Recursion and Tree Recursion</h1>
+
+
+
+<h3 id="q1-subsequences">Q1: Subsequences</h3>
+
+
+<p>A subsequence of a sequence <code>S</code> is a subset of elements from <code>S</code>, in the same
+order they appear in <code>S</code>. Consider the list <code>[1, 2, 3]</code>. A few of its
+subsequences are <code>[]</code>, <code>[1, 3]</code>, <code>[2]</code>, and <code>[1, 2, 3]</code>.</p>
+
+<p>Write a function that takes in a list and returns all possible subsequences of that list.
+The subsequences should be returned as a list of lists, where each nested list is a
+subsequence of the original input.</p>
+
+<p>In order to accomplish this, you might first want to write a function <code>insert_into_all</code>
+that takes an item and a list of lists, adds the item to the beginning of each nested list,
+and returns the resulting list.</p>
+
+<solution>
+
+<pre><code>def insert_into_all(item, nested_list):
+    &quot;&quot;&quot;Return a new list consisting of all the lists in nested_list,
+    but with item added to the front of each. You can assume that
+     nested_list is a list of lists.
+
+    &gt;&gt;&gt; nl = [[], [1, 2], [3]]
+    &gt;&gt;&gt; insert_into_all(0, nl)
+    [[0], [0, 1, 2], [0, 3]]
+    &quot;&quot;&quot;
+    "*** YOUR CODE HERE ***"
+
+def subseqs(s):
+    &quot;&quot;&quot;Return a nested list (a list of lists) of all subsequences of S.
+    The subsequences can appear in any order. You can assume S is a list.
+
+    &gt;&gt;&gt; seqs = subseqs([1, 2, 3])
+    &gt;&gt;&gt; sorted(seqs)
+    [[], [1], [1, 2], [1, 2, 3], [1, 3], [2], [2, 3], [3]]
+    &gt;&gt;&gt; subseqs([])
+    [[]]
+    &quot;&quot;&quot;
+    if ________________:
+        ________________
+    else:
+        ________________
+        ________________
+</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q subseqs<button id="copy-code-python3ok-qsubseqs" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qsubseqs").onclick = () => copyCode('python3 ok -q subseqs', "copy-code-python3ok-qsubseqs");
+        </script>
+        <br/>
+
+
+<h3 id="q2-non-decreasing-subsequences">Q2: Non-Decreasing Subsequences</h3>
+
+
+<p>Just like the last question, we want to write a function that takes a list and
+returns a list of lists, where each individual list is a subsequence of the
+original input.</p>
+
+<p>This time we have another condition: we only want the subsequences for which
+consecutive elements are <em>nondecreasing</em>.  For example, <code>[1, 3, 2]</code> is a
+subsequence of <code>[1, 3, 2, 4]</code>, but since 2 &lt; 3, this subsequence would <em>not</em>
+be included in our result.</p>
+
+<p>You may assume that the list passed in as <code>s</code> contains only nonnegative elements.</p>
+
+<p><strong>Fill in the blanks</strong> to complete the implementation of the <code>non_decrease_subseqs</code>
+function. You may assume that the input list contains no negative elements.</p>
+
+<p>You may use the provided helper function <code>insert_into_all</code>, which takes in an
+<code>item</code> and a list of lists and inserts the <code>item</code> to the front of each list.</p>
+
+<solution>
+
+<pre><code>def non_decrease_subseqs(s):
+    &quot;&quot;&quot;Assuming that S is a list, return a nested list of all subsequences
+    of S (a list of lists) for which the elements of the subsequence
+    are strictly nondecreasing. The subsequences can appear in any order.
+
+    &gt;&gt;&gt; seqs = non_decrease_subseqs([1, 3, 2])
+    &gt;&gt;&gt; sorted(seqs)
+    [[], [1], [1, 2], [1, 3], [2], [3]]
+    &gt;&gt;&gt; non_decrease_subseqs([])
+    [[]]
+    &gt;&gt;&gt; seqs2 = non_decrease_subseqs([1, 1, 2])
+    &gt;&gt;&gt; sorted(seqs2)
+    [[], [1], [1], [1, 1], [1, 1, 2], [1, 2], [1, 2], [2]]
+    &quot;&quot;&quot;
+    def subseq_helper(s, prev):
+        if not s:
+            return ____________________
+        elif s[0] &lt; prev:
+            return ____________________
+        else:
+            a = ______________________
+            b = ______________________
+            return insert_into_all(________, ______________) + ________________
+    return subseq_helper(____, ____)
+</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q non_decrease_subseqs<button id="copy-code-python3ok-qnon_decrease_subseqs" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qnon_decrease_subseqs").onclick = () => copyCode('python3 ok -q non_decrease_subseqs', "copy-code-python3ok-qnon_decrease_subseqs");
+        </script>
+        <br/>
+
+
+<h3 id="q3-number-of-trees">Q3: Number of Trees</h3>
+
+
+<p>A <strong>full binary tree</strong> is a tree where each node has either 2 branches or 0 branches, but never 1 branch.</p>
+
+<p>Write a function which returns the number of unique full binary tree structures that have exactly n leaves.
+See the doctests for visualizations of the possible full binary tree sturctures that have 1, 2, and 3 leaves.</p>
+
+<blockquote><p><strong>Hint</strong>: A full binary tree can be constructed by connecting two smaller full binary trees to a root node. 
+If the two smaller full binary trees have <code>a</code> and <code>b</code> leaves, the new full binary tree will have <code>a + b</code> leaves.
+For example, as shown in the first diagram below, a full binary tree with 4 leaves can be constructed by connecting 
+a full binary tree that has three leaves (yellow) with a full binary tree that has one leaf (orange).
+A full binary tree with 4 leaves can also be constructed by connecting two full binary trees with 2 leaves each (second diagram)
+<img class="img-responsive center-block" src="assets/num_trees_ex1.png" alt="4-leaf Full Binary Tree 1" title="4-leaf Full Binary Tree 1" width="" height=""></p>
+
+<p><img class="img-responsive center-block" src="assets/num_trees_ex2.png" alt="4-leaf Full Binary Tree 2" title="4-leaf Full Binary Tree 2" width="" height=""></p></blockquote>
+
+<p>For those interested in combinatorics, this problem does have a <a href="http://en.wikipedia.org/wiki/Catalan_number">closed
+form solution</a>):</p>
+
+<solution>
+
+<pre><code>def num_trees(n):
+    &quot;&quot;&quot;Returns the number of unique full binary trees with exactly n leaves. E.g.,
+
+    1   2        3       3    ...
+    *   *        *       *
+       / \      / \     / \
+      *   *    *   *   *   *
+              / \         / \
+             *   *       *   *
+
+    &gt;&gt;&gt; num_trees(1)
+    1
+    &gt;&gt;&gt; num_trees(2)
+    1
+    &gt;&gt;&gt; num_trees(3)
+    2
+    &gt;&gt;&gt; num_trees(8)
+    429
+
+    &quot;&quot;&quot;
+    "*** YOUR CODE HERE ***"
+</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q num_trees<button id="copy-code-python3ok-qnum_trees" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qnum_trees").onclick = () => copyCode('python3 ok -q num_trees', "copy-code-python3ok-qnum_trees");
+        </script>
+        <br/>
+
+
+<h1 id="generators">Generators</h1>
+
+
+
+<h3 id="q4-partition-generator">Q4: Partition Generator</h3>
+
+
+<p>Construct the generator function <code>partition_gen</code>, which takes in a number <code>n</code> and returns an <em>n-partition iterator</em>. An <em>n-partition iterator</em> yields partitions of <code>n</code>, where a partition of <code>n</code> is a list of integers whose sum is <code>n</code>. The iterator should only return unique partitions; the order of numbers within a partition and the order in which partitions are returned does not matter.</p>
+
+<p><strong>Important:</strong> The skeleton code is only a suggestion; feel free to add or remove lines as you see fit.</p>
+
+<solution>
+
+<pre><code>def partition_gen(n):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; partitions = [sorted(p) for p in partition_gen(4)]
+    &gt;&gt;&gt; for partition in sorted(partitions): # note: order doesn&#x27;t matter
+    ...     print(partition)
+    [1, 1, 1, 1]
+    [1, 1, 2]
+    [1, 3]
+    [2, 2]
+    [4]
+    &quot;&quot;&quot;
+    def yield_helper(num, segment):
+        if num == 0:
+            ____________________________________________
+        elif ____________________________________________:
+            for small_part in ________________________________:
+                yield ____________________________________________
+            yield ________________________________________
+    yield from yield_helper(n, n)</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q partition_gen<button id="copy-code-python3ok-qpartition_gen" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qpartition_gen").onclick = () => copyCode('python3 ok -q partition_gen', "copy-code-python3ok-qpartition_gen");
+        </script>
+        <br/>
+
+
+<h1 id="object-oriented-programming">Object-Oriented Programming</h1>
+
+
+
+<h3 id="q5-cucumber">Q5: Cucumber</h3>
+
+
+<p>Cucumber is a card game. Cards are positive integers (no suits). Players are numbered from 0 up to <code>players</code>
+(0, 1, 2, 3 in a 4-player game).</p>
+
+<p>In each <code>Round</code>, the players each <code>play</code> one card, starting with the <code>starter</code> and
+in ascending order (player 0 follows player 3 in a 4-player game). If the <code>card</code> played is as high or higher than
+the <code>highest</code> card played so far, that player takes control. The winner is the last player who took control
+after every player has played once.</p>
+
+<p>Implement <code>Round</code> so that <code>CucumberGame</code> behaves as described in the doctests below.</p>
+
+<blockquote><p><em>Hint</em>: Here is an example of a try-catch with an <code>AssertionError</code></p>
+
+<pre><code class="python">&gt;&gt; try:
+...   assert False, &#x27;oh no!&#x27;
+... except AssertionError as e:
+...   print(e)
+...
+oh no!</code></pre></blockquote>
+
+<solution>
+
+<pre><code>class CucumberGame:
+    &quot;&quot;&quot;Play a round and return all winners so far. Cards is a list of pairs.
+    Each (who, card) pair in cards indicates who plays and what card they play.
+    &gt;&gt;&gt; g = CucumberGame()
+    &gt;&gt;&gt; g.play_round(3, [(3, 4), (0, 8), (1, 8), (2, 5)])
+    &gt;&gt;&gt; g.winners
+    [1]
+    &gt;&gt;&gt; g.play_round(1, [(3, 5), (1, 4), (2, 5), (0, 8), (3, 7), (0, 6), (1, 7)])
+    It is not your turn, player 3
+    It is not your turn, player 0
+    The round is over, player 1
+    &gt;&gt;&gt; g.winners
+    [1, 3]
+    &gt;&gt;&gt; g.play_round(3, [(3, 7), (2, 5), (0, 9)]) # Round is never completed
+    It is not your turn, player 2
+    &gt;&gt;&gt; g.winners
+    [1, 3]
+    &quot;&quot;&quot;
+    def __init__(self):
+        self.winners = []
+
+    def play_round(self, starter, cards):
+        r = Round(starter)
+        for who, card in cards:
+            try:
+                r.play(who, card)
+            except AssertionError as e:
+                print(e)
+        if r.winner != None:
+            self.winners.append(r.winner)
+
+class Round:
+    players = 4
+
+    def __init__(self, starter):
+        self.starter = starter
+        self.next_player = starter
+        self.highest = &#x2d;1
+        self.winner = None
+
+    def play(self, who, card):
+        assert not self.is_complete(), f&#x27;The round is over, player {who}&#x27;
+        assert who == self.next_player, f&#x27;It is not your turn, player {who}&#x27;
+        self.next_player = ______________________________________
+        if card &gt;= self.highest:
+            ______________________________________
+            ______________________________________
+        if ______________________________________:
+            ______________________________________
+
+    def is_complete(self):
+        &quot;&quot;&quot; Checks if a game could end. &quot;&quot;&quot;
+        return ______________________________________
+</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q CucumberGame<button id="copy-code-python3ok-qCucumberGame" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qCucumberGame").onclick = () => copyCode('python3 ok -q CucumberGame', "copy-code-python3ok-qCucumberGame");
+        </script>
+        <br/>
+
+
+<h3 id="q6-miss-manners">Q6: Miss Manners</h3>
+
+
+<p>Create a class called <code>MissManners</code> that promotes politeness among our
+objects. A <code>MissManners</code> object takes another object on construction.
+It has one method, called <code>ask</code>.  It responds by calling methods on the
+object it contains, but only if the caller said please first.</p>
+
+<p>We can also compose multiple instances of <code>MissManners</code> objects upon
+each other (see <code>double_fussy</code> in doctests). A multilevel <code>MissManners</code> object
+must be politely requested to ask its own <code>MissManners</code> object. This continues
+until we reach the bottom level <code>MissManners</code> object.</p>
+
+<blockquote><p><em>Hint</em>: Use <code>getattr</code> <a href="https://docs.python.org/3/library/functions.html#getattr">(Python
+docs)</a> and
+<code>hasattr</code> <a href="https://docs.python.org/3/library/functions.html#hasattr">(Python
+docs)</a> to
+access methods using strings. You may want to search online for some
+examples of their usage.</p>
+
+<p><em>Hint</em>: Your implementation will need to use the <code>*args</code> notation that
+allows functions to take a flexible number of arguments.
+If you need a refresher, take a look at your implementation of
+<code>make_averaged</code> in the Hog project.</p></blockquote>
+
+<pre><code>class MissManners:
+    &quot;&quot;&quot;A container class that only forwards messages that say please.
+
+    &gt;&gt;&gt; v = VendingMachine(&#x27;teaspoon&#x27;, 10)
+    &gt;&gt;&gt; v.restock(2)
+    &#x27;Current teaspoon stock: 2&#x27;
+
+    &gt;&gt;&gt; m = MissManners(v)
+    &gt;&gt;&gt; m.ask(&#x27;vend&#x27;)
+    &#x27;You must learn to say please first.&#x27;
+    &gt;&gt;&gt; m.ask(&#x27;please vend&#x27;)
+    &#x27;Please add $10 more funds.&#x27;
+    &gt;&gt;&gt; m.ask(&#x27;please add_funds&#x27;, 20)
+    &#x27;Current balance: $20&#x27;
+    &gt;&gt;&gt; m.ask(&#x27;now will you vend?&#x27;)
+    &#x27;You must learn to say please first.&#x27;
+    &gt;&gt;&gt; m.ask(&#x27;please hand over a teaspoon&#x27;)
+    &#x27;Thanks for asking, but I know not how to hand over a teaspoon.&#x27;
+    &gt;&gt;&gt; m.ask(&#x27;please vend&#x27;)
+    &#x27;Here is your teaspoon and $10 change.&#x27;
+
+    &gt;&gt;&gt; double_fussy = MissManners(m) # Composed MissManners objects
+    &gt;&gt;&gt; double_fussy.ask(&#x27;add_funds&#x27;, 10)
+    &#x27;You must learn to say please first.&#x27;
+    &gt;&gt;&gt; double_fussy.ask(&#x27;please add_funds&#x27;, 10)
+    &#x27;Thanks for asking, but I know not how to add_funds.&#x27;
+    &gt;&gt;&gt; double_fussy.ask(&#x27;please please add_funds&#x27;, 10)
+    &#x27;Thanks for asking, but I know not how to please add_funds.&#x27;
+    &gt;&gt;&gt; double_fussy.ask(&#x27;please ask&#x27;, &#x27;please add_funds&#x27;, 10)
+    &#x27;Current balance: $10&#x27;
+    &quot;&quot;&quot;
+    def __init__(self, obj):
+        self.obj = obj
+
+    def ask(self, message, *args):
+        magic_word = &#x27;please &#x27;
+        if not message.startswith(magic_word):
+            return &#x27;You must learn to say please first.&#x27;
+        "*** YOUR CODE HERE ***"
+</code></pre>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q MissManners<button id="copy-code-python3ok-qMissManners" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qMissManners").onclick = () => copyCode('python3 ok -q MissManners', "copy-code-python3ok-qMissManners");
+        </script>
+        <br/>
+
+</p>
+
+
+<h1 id="mutable-lists">Mutable Lists</h1>
+
+
+
+<h3 id="q7-trade">Q7: Trade</h3>
+
+
+<p>In the integer market, each participant has a list of positive integers to
+trade. When two participants meet, they trade the smallest non-empty prefix of
+their list of integers. A prefix is a slice that starts at index
+0.</p>
+
+<p>Write a function <code>trade</code> that exchanges the first <code>m</code> elements of list <code>first</code>
+with the first <code>n</code> elements of list <code>second</code>, such that the sums of those
+elements are equal, and the sum is as small as possible. If no such prefix
+exists, return the string <code>&#x27;No deal!&#x27;</code> and do not change either list. Otherwise
+change both lists and return <code>&#x27;Deal!&#x27;</code>. A partial implementation is provided.</p>
+
+<blockquote><p><strong>Hint:</strong> You can mutate a slice of a list using <em>slice assignment</em>. To do so, specify
+a slice of the list <code>[i:j]</code> on the left-hand side of an assignment statement
+and another list on the right-hand side of the assignment statement. The
+operation will replace the entire given slice of the list from <code>i</code> inclusive
+to <code>j</code> exclusive with the elements from the given list. The slice and the
+given list need not be the same length.</p>
+
+<pre><code>&gt;&gt;&gt; a = [1, 2, 3, 4, 5, 6]
+&gt;&gt;&gt; b = a
+&gt;&gt;&gt; a[2:5] = [10, 11, 12, 13]
+&gt;&gt;&gt; a
+[1, 2, 10, 11, 12, 13, 6]
+&gt;&gt;&gt; b
+[1, 2, 10, 11, 12, 13, 6]</code></pre>
+
+<p>Additionally, recall that the starting and ending indices for a slice can be left out
+and Python will use a default value. <code>lst[i:]</code> is the same as <code>lst[i:len(lst)]</code>, and
+<code>lst[:j]</code> is the same as <code>lst[0:j]</code>.</p></blockquote>
+
+<solution>
+
+<pre><code>def trade(first, second):
+    &quot;&quot;&quot;Exchange the smallest prefixes of first and second that have equal sum.
+
+    &gt;&gt;&gt; a = [1, 1, 3, 2, 1, 1, 4]
+    &gt;&gt;&gt; b = [4, 3, 2, 7]
+    &gt;&gt;&gt; trade(a, b) # Trades 1+1+3+2=7 for 4+3=7
+    &#x27;Deal!&#x27;
+    &gt;&gt;&gt; a
+    [4, 3, 1, 1, 4]
+    &gt;&gt;&gt; b
+    [1, 1, 3, 2, 2, 7]
+    &gt;&gt;&gt; c = [3, 3, 2, 4, 1]
+    &gt;&gt;&gt; trade(b, c)
+    &#x27;No deal!&#x27;
+    &gt;&gt;&gt; b
+    [1, 1, 3, 2, 2, 7]
+    &gt;&gt;&gt; c
+    [3, 3, 2, 4, 1]
+    &gt;&gt;&gt; trade(a, c)
+    &#x27;Deal!&#x27;
+    &gt;&gt;&gt; a
+    [3, 3, 2, 1, 4]
+    &gt;&gt;&gt; b
+    [1, 1, 3, 2, 2, 7]
+    &gt;&gt;&gt; c
+    [4, 3, 1, 4, 1]
+    &gt;&gt;&gt; d = [1, 1]
+    &gt;&gt;&gt; e = [2]
+    &gt;&gt;&gt; trade(d, e)
+    &#x27;Deal!&#x27;
+    &gt;&gt;&gt; d
+    [2]
+    &gt;&gt;&gt; e
+    [1, 1]
+    &quot;&quot;&quot;
+    m, n = 1, 1
+
+    equal_prefix = lambda: ______________________
+    while _______________________________:
+        if __________________:
+            m += 1
+        else:
+            n += 1
+
+    if equal_prefix():
+        first[:m], second[:n] = second[:n], first[:m]
+        return &#x27;Deal!&#x27;
+    else:
+        return &#x27;No deal!&#x27;</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q trade<button id="copy-code-python3ok-qtrade" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qtrade").onclick = () => copyCode('python3 ok -q trade', "copy-code-python3ok-qtrade");
+        </script>
+        <br/>
+
+
+<h3 id="q8-shuffle">Q8: Shuffle</h3>
+
+
+<p>Define a function <code>shuffle</code> that takes a sequence with an even number of
+elements (cards) and creates a new list that interleaves the elements
+of the first half with the elements of the second half.</p>
+
+<p>To interleave two sequences <code>s0</code> and <code>s1</code> is to create a new sequence such that the new sequence contains (in this order) the first element of <code>s0</code>,  the first element of <code>s1</code>, the second element of <code>s0</code>, the second element of <code>s1</code>, and so on.</p>
+
+<blockquote><p><strong>Note:</strong>
+If you're running into an issue where the special
+heart / diamond / spades / clubs symbols are erroring in the doctests,
+feel free to copy paste the below doctests into your file
+as these don't use the special characters and should not give
+an "illegal multibyte sequence" error.</p></blockquote>
+
+<solution>
+
+<pre><code>def card(n):
+    &quot;&quot;&quot;Return the playing card numeral as a string for a positive n &lt;= 13.&quot;&quot;&quot;
+    assert type(n) == int and n &gt; 0 and n &lt;= 13, &quot;Bad card n&quot;
+    specials = {1: &#x27;A&#x27;, 11: &#x27;J&#x27;, 12: &#x27;Q&#x27;, 13: &#x27;K&#x27;}
+    return specials.get(n, str(n))
+
+def shuffle(cards):
+    &quot;&quot;&quot;Return a shuffled list that interleaves the two halves of cards.
+
+    &gt;&gt;&gt; shuffle(range(6))
+    [0, 3, 1, 4, 2, 5]
+    &gt;&gt;&gt; suits = [&#x27;H&#x27;, &#x27;D&#x27;, &#x27;S&#x27;, &#x27;C&#x27;]
+    &gt;&gt;&gt; cards = [card(n) + suit for n in range(1,14) for suit in suits]
+    &gt;&gt;&gt; cards[:12]
+    [&#x27;AH&#x27;, &#x27;AD&#x27;, &#x27;AS&#x27;, &#x27;AC&#x27;, &#x27;2H&#x27;, &#x27;2D&#x27;, &#x27;2S&#x27;, &#x27;2C&#x27;, &#x27;3H&#x27;, &#x27;3D&#x27;, &#x27;3S&#x27;, &#x27;3C&#x27;]
+    &gt;&gt;&gt; cards[26:30]
+    [&#x27;7S&#x27;, &#x27;7C&#x27;, &#x27;8H&#x27;, &#x27;8D&#x27;]
+    &gt;&gt;&gt; shuffle(cards)[:12]
+    [&#x27;AH&#x27;, &#x27;7S&#x27;, &#x27;AD&#x27;, &#x27;7C&#x27;, &#x27;AS&#x27;, &#x27;8H&#x27;, &#x27;AC&#x27;, &#x27;8D&#x27;, &#x27;2H&#x27;, &#x27;8S&#x27;, &#x27;2D&#x27;, &#x27;8C&#x27;]
+    &gt;&gt;&gt; shuffle(shuffle(cards))[:12]
+    [&#x27;AH&#x27;, &#x27;4D&#x27;, &#x27;7S&#x27;, &#x27;10C&#x27;, &#x27;AD&#x27;, &#x27;4S&#x27;, &#x27;7C&#x27;, &#x27;JH&#x27;, &#x27;AS&#x27;, &#x27;4C&#x27;, &#x27;8H&#x27;, &#x27;JD&#x27;]
+    &gt;&gt;&gt; cards[:12]  # Should not be changed
+    [&#x27;AH&#x27;, &#x27;AD&#x27;, &#x27;AS&#x27;, &#x27;AC&#x27;, &#x27;2H&#x27;, &#x27;2D&#x27;, &#x27;2S&#x27;, &#x27;2C&#x27;, &#x27;3H&#x27;, &#x27;3D&#x27;, &#x27;3S&#x27;, &#x27;3C&#x27;]
+    &quot;&quot;&quot;
+    assert len(cards) % 2 == 0, &#x27;len(cards) must be even&#x27;
+    half = _______________
+    shuffled = []
+    for i in _____________:
+        _________________
+        _________________
+    return shuffled</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q shuffle<button id="copy-code-python3ok-qshuffle" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qshuffle").onclick = () => copyCode('python3 ok -q shuffle', "copy-code-python3ok-qshuffle");
+        </script>
+        <br/>
+
+
+<h1 id="linked-lists">Linked Lists</h1>
+
+
+
+<h3 id="q9-link-pop">Q9: Link Pop</h3>
+
+
+<p>Implement <code>link_pop</code>, which is similar to the <code>pop()</code> method for lists. 
+<code>link_pop</code> takes in a Linked List <code>lnk</code> and optionally one extra argument <code>index</code>. If
+provided a second argument, <code>link_pop</code> will remove the value at <code>index</code> from
+the list and return it. If not given a second argument, <code>link_pop</code> will remove
+the last value from the list and return it. Assume that you will never be asked
+to remove an element at index 0 or at an index out of range.</p>
+
+<blockquote><p><strong>Note:</strong> In the function definition, <code>index=&#x2d;1</code> denotes that when an <code>index</code> argument is not provided, the value of <code>index</code> defaults to <code>&#x2d;1</code>.</p></blockquote>
+
+<solution>
+
+<pre><code>def link_pop(lnk, index=&#x2d;1):
+    &#x27;&#x27;&#x27;Implement the pop method for a Linked List.
+
+    &gt;&gt;&gt; lnk = Link(1, Link(2, Link(3, Link(4, Link(5)))))
+    &gt;&gt;&gt; removed = link_pop(lnk)
+    &gt;&gt;&gt; print(removed)
+    5
+    &gt;&gt;&gt; print(lnk)
+    &lt;1 2 3 4&gt;
+    &gt;&gt;&gt; link_pop(lnk, 2)
+    3
+    &gt;&gt;&gt; print(lnk)
+    &lt;1 2 4&gt;
+    &gt;&gt;&gt; link_pop(lnk)
+    4
+    &gt;&gt;&gt; link_pop(lnk)
+    2
+    &gt;&gt;&gt; print(lnk)
+    &lt;1&gt;
+    &#x27;&#x27;&#x27;
+    if index == &#x2d;1:
+        while ___________________:
+            ___________________
+        removed = ___________________
+        ___________________
+    else:
+        while ___________________:
+            ___________________
+            ___________________
+        removed = ___________________
+        ___________________
+    return removed</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q link_pop<button id="copy-code-python3ok-qlink_pop" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qlink_pop").onclick = () => copyCode('python3 ok -q link_pop', "copy-code-python3ok-qlink_pop");
+        </script>
+        <br/>
+
+
+<h3 id="q10-deep-linked-list-length">Q10: Deep Linked List Length</h3>
+
+
+<p>A linked list that contains one or more linked lists as elements is called a
+<em>deep</em> linked list. Write a function <code>deep_len</code> that takes in a (possibly deep)
+linked list and returns the <em>deep length</em> of that linked list. The deep length of
+a linked list is the total number of non-link elements in the list, as well as the
+total number of elements contained in all contained lists. See the function's doctests
+for examples of the deep length of linked lists.</p>
+
+<blockquote><p><strong>Hint:</strong> Use <code>isinstance</code> to check if something is an instance of an object.</p></blockquote>
+
+<solution>
+
+<pre><code>def deep_len(lnk):
+    &quot;&quot;&quot; Returns the deep length of a possibly deep linked list.
+
+    &gt;&gt;&gt; deep_len(Link(1, Link(2, Link(3))))
+    3
+    &gt;&gt;&gt; deep_len(Link(Link(1, Link(2)), Link(3, Link(4))))
+    4
+    &gt;&gt;&gt; levels = Link(Link(Link(1, Link(2)), Link(3)), Link(Link(4), Link(5)))
+    &gt;&gt;&gt; print(levels)
+    &lt;&lt;&lt;1 2&gt; 3&gt; &lt;4&gt; 5&gt;
+    &gt;&gt;&gt; deep_len(levels)
+    5
+    &quot;&quot;&quot;
+    if ______________:
+        return 0
+    elif ______________:
+        return 1
+    else:
+        return _________________________
+</code></pre>
+
+</solution>
+
+
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q deep_len<button id="copy-code-python3ok-qdeep_len" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qdeep_len").onclick = () => copyCode('python3 ok -q deep_len', "copy-code-python3ok-qdeep_len");
+        </script>
+        <br/>
+
+
+<h3 id="q11-every-other">Q11: Every Other</h3>
+
+
+<p>Implement <code>every_other</code>, which takes a linked list <code>s</code>. It mutates <code>s</code> such
+that all of the odd-indexed elements (using 0-based indexing) are removed from
+the list. For example:</p>
+
+<pre><code>&gt;&gt;&gt; s = Link(&#x27;a&#x27;, Link(&#x27;b&#x27;, Link(&#x27;c&#x27;, Link(&#x27;d&#x27;))))
+&gt;&gt;&gt; every_other(s)
+&gt;&gt;&gt; s.first
+&#x27;a&#x27;
+&gt;&gt;&gt; s.rest.first
+&#x27;c&#x27;
+&gt;&gt;&gt; s.rest.rest is Link.empty
+True</code></pre>
+
+<p>If <code>s</code> contains fewer than two elements, <code>s</code> remains unchanged.</p>
+
+<blockquote><p>Do not return anything! <code>every_other</code> should mutate the original list.</p></blockquote>
+
+<solution>
+
+<pre><code>def every_other(s):
+    &quot;&quot;&quot;Mutates a linked list so that all the odd&#x2d;indiced elements are removed
+    (using 0&#x2d;based indexing).
+
+    &gt;&gt;&gt; s = Link(1, Link(2, Link(3, Link(4))))
+    &gt;&gt;&gt; every_other(s)
+    &gt;&gt;&gt; s
+    Link(1, Link(3))
+    &gt;&gt;&gt; odd_length = Link(5, Link(3, Link(1)))
+    &gt;&gt;&gt; every_other(odd_length)
+    &gt;&gt;&gt; odd_length
+    Link(5, Link(1))
+    &gt;&gt;&gt; singleton = Link(4)
+    &gt;&gt;&gt; every_other(singleton)
+    &gt;&gt;&gt; singleton
+    Link(4)
+    &quot;&quot;&quot;
+    "*** YOUR CODE HERE ***"
+</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q every_other<button id="copy-code-python3ok-qevery_other" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qevery_other").onclick = () => copyCode('python3 ok -q every_other', "copy-code-python3ok-qevery_other");
+        </script>
+        <br/>
+
+
+<h1 id="trees">Trees</h1>
+
+
+
+<h3 id="q12-reverse-other">Q12: Reverse Other</h3>
+
+
+<p>Write a function <code>reverse_other</code> that mutates the tree such that <strong>labels</strong> on
+<em>every other</em> (odd-depth) level are reversed. For example,
+<code>Tree(1,[Tree(2, [Tree(4)]), Tree(3)])</code> becomes <code>Tree(1,[Tree(3, [Tree(4)]), Tree(2)])</code>.
+Notice that the nodes themselves are <em>not</em> reversed; only the labels are.</p>
+
+<code-input reverse-other lang:python>
+
+<pre><code>def reverse_other(t):
+    &quot;&quot;&quot;Mutates the tree such that nodes on every other (odd&#x2d;depth)
+    level have the labels of their branches all reversed.
+
+    &gt;&gt;&gt; t = Tree(1, [Tree(2), Tree(3), Tree(4)])
+    &gt;&gt;&gt; reverse_other(t)
+    &gt;&gt;&gt; t
+    Tree(1, [Tree(4), Tree(3), Tree(2)])
+    &gt;&gt;&gt; t = Tree(1, [Tree(2, [Tree(3, [Tree(4), Tree(5)]), Tree(6, [Tree(7)])]), Tree(8)])
+    &gt;&gt;&gt; reverse_other(t)
+    &gt;&gt;&gt; t
+    Tree(1, [Tree(8, [Tree(3, [Tree(5), Tree(4)]), Tree(6, [Tree(7)])]), Tree(2)])
+    &quot;&quot;&quot;
+    "*** YOUR CODE HERE ***"
+</code></pre>
+
+</code-input>
+
+
+<h1 id="efficiency">Efficiency</h1>
+
+
+
+<h3 id="q13-efficiency-practice">Q13: Efficiency Practice</h3>
+
+
+<p>Choose the term that fills in the blank for the functions defined below:
+<code>&lt;function&gt;</code> runs in <code>____</code> time in the length of its input.</p>
+
+<ul>
+  <li>Constant</li>
+  <li>Logarithmic</li>
+  <li>Linear</li>
+  <li>Quadratic</li>
+  <li>Exponential</li>
+  <li>None of these</li>
+</ul>
+
+<p>Assume that <code>len</code> runs in constant time
+and <code>all</code> runs in linear time in the length of its input.
+Selecting an element of a list by its index requires constant time.
+Constructing a range requires constant time.</p>
+
+<pre><code>def count_partitions(n, m):
+    &quot;&quot;&quot;Counts the number of partitions of a positive integer n, 
+    using parts up to size m.&quot;&quot;&quot;
+    if n == 0:
+        return 1
+    elif n &lt; 0:
+        return 0
+    elif m == 0:
+        return 0
+    else:
+        with_m = count_partitions(n&#x2d;m, m)
+        without_m = count_partitions(n, m&#x2d;1)
+        return with_m + without_m
+
+def is_palindrome(s):
+    &quot;&quot;&quot;Return whether a list of numbers s is a palindrome.&quot;&quot;&quot;
+    return all([s[i] == s[len(s) &#x2d; i &#x2d; 1] for i in range(len(s))])
+
+def binary_search(lst, n):
+    &quot;&quot;&quot;Takes in a sorted list lst and returns the index where integer n
+    is contained in lst. Returns &#x2d;1 if n does not exist in lst.&quot;&quot;&quot;
+    low = 0
+    high = len(lst)
+    while low &lt;= high:
+        middle = (low + high) // 2
+        if lst[middle] == n:
+            return middle
+        elif n &lt; lst[middle]:
+            high = middle &#x2d; 1
+        else:
+            low = middle + 1
+    return &#x2d;1</code></pre>
+
+
+
+<blockquote><p>The <code>is_palindrome</code> question was reformatted from question 6(d) on fall 2019's
+<a href="../../exam/fa19/final/61a-fa19-final.pdf#page=7">final</a>.</p></blockquote>
+
+<p>Use Ok to test your understanding:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q efficiency_practice -u<button id="copy-code-python3ok-qefficiency_practice-u" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qefficiency_practice-u").onclick = () => copyCode('python3 ok -q efficiency_practice -u', "copy-code-python3ok-qefficiency_practice-u");
+        </script>
+        <br/>
+
+
+
+
+<h1 id="scheme">Scheme</h1>
+
+
+
+<h3 id="q14-no-repeats">Q14: No Repeats</h3>
+
+
+<p>Implement <code>no&#x2d;repeats</code>, which takes a list of numbers <code>s</code>. It returns a list
+that has all of the unique elements of <code>s</code> in the order that they first appear,
+but no repeats.</p>
+
+<p>For example, <code>(no&#x2d;repeats (list 5 4 5 4 2 2))</code> evaluates to <code>(5 4 2)</code>.</p>
+
+<blockquote><p><strong>Hint:</strong> You may find it helpful to use <code>filter</code> with a <code>lambda</code> procedure to
+filter out repeats. To test if two numbers <code>a</code> and <code>b</code> are not equal, use
+<code>(not (= a b))</code>.</p></blockquote>
+
+<solution>
+
+<pre><code class="scheme">(define (no&#x2d;repeats s)
+  'YOUR-CODE-HERE
+)</code></pre>
+
+
+
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q no_repeats<button id="copy-code-python3ok-qno_repeats" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qno_repeats").onclick = () => copyCode('python3 ok -q no_repeats', "copy-code-python3ok-qno_repeats");
+        </script>
+        <br/>
+
+
+<h1 id="scheme-lists">Scheme Lists</h1>
+
+
+
+<h3 id="q15-without-duplicates">Q15: Without Duplicates</h3>
+
+
+<p>Implement <code>without&#x2d;duplicates</code>, which takes a list of numbers <code>lst</code> as input and returns
+a list that has all of the unique elements of <code>lst</code> in the order that they first
+appear, but without duplicates. For example, <code>(without&#x2d;duplicates (list 5 4 5 4 2 2))</code>
+evaluates to <code>(5 4 2)</code>.</p>
+
+<p><em>Hints</em>: To test if two numbers are equal, use the <code>=</code> procedure. To test if
+two numbers are not equal, use the <code>not</code> procedure in combination with <code>=</code>.
+You may find it helpful to use the <code>my&#x2d;filter</code> procedure with a helper <code>lambda</code> function to use as a filter.</p>
+
+<solution>
+
+<pre><code class="scheme">(define (without&#x2d;duplicates lst)
+  'YOUR-CODE-HERE
+)</code></pre>
+
+
+</solution>
+
+<p>Use Ok to unlock and test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q without_duplicates -u
+python3 ok -q without_duplicates<button id="copy-code-python3ok-qwithout_duplicates-upython3ok-qwithout_duplicates" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qwithout_duplicates-upython3ok-qwithout_duplicates").onclick = () => copyCode('python3 ok -q without_duplicates -u\npython3 ok -q without_duplicates', "copy-code-python3ok-qwithout_duplicates-upython3ok-qwithout_duplicates");
+        </script>
+        <br/>
+
+
+<h3 id="q16-reverse">Q16: Reverse</h3>
+
+
+<p>Write the procedure <code>reverse</code>, which takes in a list <code>lst</code> and outputs a reversed list.</p>
+
+<blockquote><p><em>Hint</em>: you may find the <a href="../../articles/scheme-builtins/index.html#append">built-in append procedure</a> useful.</p></blockquote>
+
+<solution>
+
+<pre><code class="scheme">(define (reverse lst)
+    'YOUR-CODE-HERE
+)</code></pre>
+
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q reverse-simple<button id="copy-code-python3ok-qreverse-simple" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qreverse-simple").onclick = () => copyCode('python3 ok -q reverse-simple', "copy-code-python3ok-qreverse-simple");
+        </script>
+        <br/>
+
+
+<h1 id="sql">SQL</h1>
+
+
+
+<h3 id="self-restraint">Self Restraint</h3>
+
+
+<p>Tragically, many people find themselves overeating during Thanksgiving. With
+your new knowledge from 61A, you resolve to use SQL and plan a healthier meal!</p>
+
+<p>You are given a table <code>main_course</code> where each row corresponds to a possible
+Thanksgiving meal with two components: the meat and the side dish (in an amazing
+display of restraint, you are limiting yourself to just one side dish). You are
+also given a second table <code>pies</code> containing different types of pies as well as
+their caloric content. The idea is that you will pair the two items consisting
+of your main course (a row of the table <code>main_course</code>) with a pie that you will
+have for dessert. Use SQL's aggregation features to answer the following
+questions.</p>
+
+
+<h3 id="q17-self-restraint-part-i">Q17: Self Restraint, Part I</h3>
+
+
+<p>For this first part, we want to know how many selections of meats we have for
+our meal. Use a select statement to see how many different types of meats we
+have in our list of main courses (we would like to point out that the 61A staff
+is inclusive, and we have included tofurky as the "meat" in some meals 🙂).</p>
+
+<p>Store this answer in a one column, one row table called <code>number_of_options</code>.</p>
+
+<solution>
+
+<pre><code>CREATE TABLE number_of_options AS
+  SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
+</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q meals-part1<button id="copy-code-python3ok-qmeals-part1" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qmeals-part1").onclick = () => copyCode('python3 ok -q meals-part1', "copy-code-python3ok-qmeals-part1");
+        </script>
+        <br/>
+
+
+
+
+<h3 id="q18-self-restraint-part-ii">Q18: Self Restraint, Part II</h3>
+
+
+<p>Use aggregation in a select statement to count the number of "full" meals (i.e
+main course plus a pie) we can make with under 2500 calories total. For example,
+if you have turkey and cranberries along with pumpkin pie, you will have 2000 +
+500 = 2500 calories total (2000 from the main course, 500 from the pie).</p>
+
+<p>Store this answer in a one column, one row table called <code>calories</code>.</p>
+
+<solution>
+
+<pre><code>CREATE TABLE calories AS
+  SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
+</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q meals-part2<button id="copy-code-python3ok-qmeals-part2" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qmeals-part2").onclick = () => copyCode('python3 ok -q meals-part2', "copy-code-python3ok-qmeals-part2");
+        </script>
+        <br/>
+
+
+
+
+<h3 id="q19-self-restraint-part-iii">Q19: Self Restraint, Part III</h3>
+
+
+<p>We are mainly concerned with what meat is in our planned meal.
+For every type of meat, we want to see how healthy a meal exists with this meat
+(healthier means fewer calories for our purposes). Include this information for
+each meat in a table <code>healthiest_meats</code>.</p>
+
+<p>Also, if it is possible to make ANY full meal of more than 3000 calories (even
+just one) using a certain type of meat, then temptation will take over. For this
+reason, <strong>exclude such types of meat from your table.</strong></p>
+
+<p>In summary:</p>
+
+<ul>
+  <li>The <code>healthiest_meats</code> table should have two columns: meat and total calories.</li>
+  <li>Each row should have a meat and the number of calories of the full meal with
+  the least calories (full meals include pie) involving that type of meat.
+  Finally, exclude meats that are in <strong>any</strong> full meals of more than 3000
+  calories.</li>
+</ul>
+
+<blockquote><p><strong>Note:</strong> Remember that a <code>HAVING</code> clause requires an aggregate function!</p></blockquote>
+
+<solution>
+
+<pre><code>CREATE TABLE main_course AS
+  SELECT &quot;turkey&quot; AS meat, &quot;cranberries&quot; AS side, 2000 AS calories UNION
+  SELECT &quot;turducken&quot;     , &quot;potatoes&quot;           , 4000             UNION
+  SELECT &quot;tofurky&quot;       , &quot;cranberries&quot;        , 1000             UNION
+  SELECT &quot;tofurky&quot;       , &quot;stuffing&quot;           , 1000             UNION
+  SELECT &quot;tofurky&quot;       , &quot;yams&quot;               , 1000             UNION
+  SELECT &quot;turducken&quot;     , &quot;turducken&quot;          , 9000             UNION
+  SELECT &quot;turkey&quot;        , &quot;potatoes&quot;           , 2000             UNION
+  SELECT &quot;turkey&quot;        , &quot;bread&quot;              , 1500             UNION
+  SELECT &quot;tofurky&quot;       , &quot;soup&quot;               , 1200             UNION
+  SELECT &quot;chicken&quot;       , &quot;cranberries&quot;        , 2500             UNION
+  SELECT &quot;turducken&quot;     , &quot;butter&quot;             , 10000            UNION
+  SELECT &quot;turducken&quot;     , &quot;more_butter&quot;        , 15000                 ;
+
+CREATE TABLE pies AS
+  SELECT &quot;pumpkin&quot; AS pie, 500 AS calories UNION
+  SELECT &quot;apple&quot;         , 400             UNION
+  SELECT &quot;chocolate&quot;     , 600             UNION
+  SELECT &quot;cherry&quot;        , 550                  ;</code></pre>
+
+</solution>
+
+<solution>
+
+<pre><code>CREATE TABLE healthiest_meats AS
+  SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
+</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q meals-part3<button id="copy-code-python3ok-qmeals-part3" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qmeals-part3").onclick = () => copyCode('python3 ok -q meals-part3', "copy-code-python3ok-qmeals-part3");
+        </script>
+        <br/>
+
+
+
+<!-- <include topics/local-score.md> -->
+<script>
+    $('.alwaystoggle').css('display', 'inline-block');
+    $('.alwaystoggle').click(function() {
+      var solution_id = $(this).attr('id');
+      $('div.' + solution_id).slideToggle(600);
+    });
+</script>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="index.html#recursion-and-tree-recursion">Recursion and Tree Recursion</a></li>
+  <ul>
+    <li><a href="index.html#q1-subsequences">Q1: Subsequences</a></li>
+    <li><a href="index.html#q2-non-decreasing-subsequences">Q2: Non-Decreasing Subsequences</a></li>
+    <li><a href="index.html#q3-number-of-trees">Q3: Number of Trees</a></li>
+  </ul>
+  <li><a href="index.html#generators">Generators</a></li>
+  <ul>
+    <li><a href="index.html#q4-partition-generator">Q4: Partition Generator</a></li>
+  </ul>
+  <li><a href="index.html#object-oriented-programming">Object-Oriented Programming</a></li>
+  <ul>
+    <li><a href="index.html#q5-cucumber">Q5: Cucumber</a></li>
+    <li><a href="index.html#q6-miss-manners">Q6: Miss Manners</a></li>
+  </ul>
+  <li><a href="index.html#mutable-lists">Mutable Lists</a></li>
+  <ul>
+    <li><a href="index.html#q7-trade">Q7: Trade</a></li>
+    <li><a href="index.html#q8-shuffle">Q8: Shuffle</a></li>
+  </ul>
+  <li><a href="index.html#linked-lists">Linked Lists</a></li>
+  <ul>
+    <li><a href="index.html#q9-link-pop">Q9: Link Pop</a></li>
+    <li><a href="index.html#q10-deep-linked-list-length">Q10: Deep Linked List Length</a></li>
+    <li><a href="index.html#q11-every-other">Q11: Every Other</a></li>
+  </ul>
+  <li><a href="index.html#trees">Trees</a></li>
+  <ul>
+    <li><a href="index.html#q12-reverse-other">Q12: Reverse Other</a></li>
+  </ul>
+  <li><a href="index.html#efficiency">Efficiency</a></li>
+  <ul>
+    <li><a href="index.html#q13-efficiency-practice">Q13: Efficiency Practice</a></li>
+  </ul>
+  <li><a href="index.html#scheme">Scheme</a></li>
+  <ul>
+    <li><a href="index.html#q14-no-repeats">Q14: No Repeats</a></li>
+  </ul>
+  <li><a href="index.html#scheme-lists">Scheme Lists</a></li>
+  <ul>
+    <li><a href="index.html#q15-without-duplicates">Q15: Without Duplicates</a></li>
+    <li><a href="index.html#q16-reverse">Q16: Reverse</a></li>
+  </ul>
+  <li><a href="index.html#sql">SQL</a></li>
+  <ul>
+    <li><a href="index.html#self-restraint">Self Restraint</a></li>
+    <li><a href="index.html#q17-self-restraint-part-i">Q17: Self Restraint, Part I</a></li>
+    <li><a href="index.html#q18-self-restraint-part-ii">Q18: Self Restraint, Part II</a></li>
+    <li><a href="index.html#q19-self-restraint-part-iii">Q19: Self Restraint, Part III</a></li>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <!-- <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer> -->
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="../../assets/js/network_storage.js"></script>
+    <script src="../../assets/js/storable.js"></script>
+    <script src="../../assets/js/editor.js"></script>
+    <script src="../../assets/js/copy-button.js"></script>
+    <script src="../../assets/js/env-diagram.js"></script>
+    
+<!-- <script src="/assets/js/sketchy.js"></script> -->
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

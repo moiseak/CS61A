@@ -1,0 +1,763 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="Laryn Qi, Charlotte Le, Raymond Tan" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/hl.js"></script>
+    <script src="../../assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="../../assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/mono-blue.css">
+    <link rel="icon" href="../../assets/images/favicon.ico">
+
+    
+
+    <title>
+Lab 3: Recursion, Tree Recursion | CS 61A Summer 2024
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../index.html">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="../../assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="../../office-hours.html">Weekly Schedule</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                External Websites
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://oh.cs61a.org/">Office Hours Queue</a></li>
+                <li><a href="https://pythontutor.com/cp/composingprograms.html">Python Tutor</a></li>
+                <li><a href="https://code.cs61a.org/">Online Code Editor</a></li>
+                <li><a href="https://www.composingprograms.com/">Textbook</a></li>
+                <li><a href="https://edstem.org/us/courses/59836/discussion/">Ed</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Forms
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/regrades">Request a Regrade</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/debugging-guide">Debugging Guide</a></li>
+                <li><a href="../../articles/studying.html">Studying Guide</a></li>
+                <li><a href="../../articles/composition.html">Composition Guide</a></li>
+                <li><a href="../../articles/pair-programming.html">Pair Programming Guide</a></li>
+                <li><a href="../../resources.html">Past Exams & Websites</a></li>
+                <li><a href="../../articles/campus-res/index.html">Department and Campus</a></li>
+                <li><a href="../../articles/advice/index.html">Advice from Former Students</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="../../instructor.html">Instructors</a></li>
+                <li><a href="../../staff.html">TAs & Tutors</a></li>
+                <li><a href="../../contact/index.html">Contact</a></li>
+              </ul>
+            </li>
+            <li><a href="../../articles/about.html">Syllabus</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Lab 3: Recursion, Tree Recursion
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="lab03.zip" class="label label-outline">lab03.zip</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+
+<p><i>Due by 11:59pm on Tuesday, July 2.</i></p>
+
+
+
+
+
+
+<h2 id='starter-files'>Starter Files</h2>
+
+<p>Download <a href="lab03.zip">lab03.zip</a>.
+Inside the archive, you will find starter files for the questions in this lab,
+  along with a copy of the <a href="ok">Ok</a> autograder.</p>
+
+
+
+
+
+
+
+
+    
+<h1 id="topics">Topics</h1>
+
+
+<p>Consult this section if you need a refresher on the material for this lab. It's
+okay to skip directly to <a href="index.html#required-questions">the questions</a> and refer back
+here should you get stuck.</p>
+
+
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Recursion<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+
+
+<h2 id="recursion" class="no-toc">Recursion</h2>
+
+
+<p>A recursive function is a function that calls itself in its body,
+either directly or indirectly.</p>
+
+<p>Let's look at the canonical example, <code>factorial</code>.</p>
+
+<blockquote><p>Factorial, denoted with the <code>!</code> operator, is defined as:</p>
+
+<pre><code>n! = n * (n&#x2d;1) * ... * 1</code></pre>
+
+<p>For example, <code>5! = 5 * 4 * 3 * 2 * 1 = 120</code></p></blockquote>
+
+<p>The recursive implementation for factorial is as follows:</p>
+
+<pre><code>def factorial(n):
+    if n == 0:
+        return 1
+    return n * factorial(n &#x2d; 1)</code></pre>
+
+<p>We know from its definition that 0! is 1. Since <code>n == 0</code> is the smallest number we
+can compute the factorial of, we use it as our base case.
+The recursive step also follows from the definition of factorial, i.e., <code>n! =
+n * (n&#x2d;1)!</code>.</p>
+
+<p>Recursive functions have three important components:</p>
+
+<ol>
+  <li><p><strong>Base case.</strong>
+  You can think of the base case as the case of the simplest function input,
+  or as the stopping condition for the recursion.</p>
+
+  <p>In our example, <code>factorial(0)</code> is our base case for the <code>factorial</code>
+  function.</p></li>
+  <li><p><strong>Recursive call on a smaller problem.</strong>
+  You can think of this step as calling the function on a smaller problem
+  that our current problem depends on. We assume that a recursive call on
+  this smaller problem will give us the expected result; we call this idea
+  the "recursive leap of faith".</p>
+
+  <p>In our example, <code>factorial(n)</code> depends on the smaller problem of
+  <code>factorial(n&#x2d;1)</code>.</p></li>
+  <li><p><strong>Solve the larger problem.</strong>
+  In step 2, we found the result of a smaller problem.
+  We want to now use that result to figure out what the result of our current
+  problem should be, which is what we want to return from our current
+  function call.</p>
+
+  <p>In our example, we can compute <code>factorial(n)</code> by multiplying the result
+  of our smaller problem <code>factorial(n&#x2d;1)</code> (which represents <code>(n&#x2d;1)!</code>)
+  by <code>n</code> (the reasoning being that <code>n! = n * (n&#x2d;1)!</code>).</p></li>
+</ol>
+
+<p>The next few questions in lab will have you writing recursive
+functions.  Here are some general tips:</p>
+
+<ul>
+  <li>Paradoxically, to write a recursive function, you must assume that the function
+  is fully functional before you finish writing it; this is called the
+  <em>recursive leap of faith</em>.</li>
+  <li>Consider how you can solve the current problem using the solution to
+  a simpler version of the problem. The amount of work done in a recursive function
+  can be deceptively little: remember to take the leap of faith and <em>trust the recursion</em>
+  to solve the slightly smaller problem without worrying about how.</li>
+  <li>Think about what the answer would be in the simplest possible
+  case(s). These will be your base cases - the stopping points for your
+  recursive calls. Make sure to consider the possibility that you're
+  missing base cases (this is a common way recursive solutions fail).</li>
+  <li>It may help to write an iterative version first.</li>
+</ul>
+
+<!-- <table class='table table-bordered'>
+
+<pre><code>&lt;tr&gt;
+    &lt;th&gt;Function Type:&lt;/th&gt;
+    &lt;th&gt;Recusive&lt;/th&gt;
+    &lt;th&gt;Iterative&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;Function&lt;/td&gt;
+    &lt;td&gt;&lt;pre&gt; def factorial(n):
+    if n == 0:
+        return 1
+    return n * factorial(n &#x2d; 1)&lt;pre&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;pre&gt; def factorial(n):
+    total = 1
+    while n &gt; 0:
+        total *= n
+        n &#x2d;= 1
+    return total
+    &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;Ends calculations&lt;/td&gt;
+    &lt;td&gt;When it hits the base case&lt;/td&gt;
+    &lt;td&gt;When n !&gt; 0, it will end.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;Means of traversal&lt;/td&gt;
+    &lt;td&gt;&lt;code&gt;factorial(&lt;strong&gt;n &#x2d; 1&lt;/strong&gt;&lt;/code&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;code&gt;&lt;strong&gt;n &#x2d;= 1&lt;/strong&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;/tr&gt;</code></pre>
+
+</table> -->
+
+</div>
+
+
+        <button id='toggle-2' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Tree Recursion<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-2">
+
+
+<h2 id="tree-recursion" class="no-toc">Tree Recursion</h2>
+
+
+<p>A tree recursive function is a recursive function that makes more than one call to itself, resulting in a tree-like series of calls.</p>
+
+<p>For example, this is the <a href="https://en.wikipedia.org/wiki/Fibonacci_number">Virahanka-Fibonacci</a> sequence:
+<code>0, 1, 1, 2, 3, 5, 8, 13, ...</code>.</p>
+
+<p>Each term is the sum of the previous two terms. This tree-recursive function calculates the <code>n</code>th Virahanka-Fibonacci number.</p>
+
+<pre><code>def virfib(n):
+    if n == 0 or n == 1:
+        return n
+    return virfib(n &#x2d; 1) + virfib(n &#x2d; 2)</code></pre>
+
+<p>Calling <code>virfib(6)</code> results in a call structure that resembles
+an upside-down tree (where <code>f</code> is <code>virfib</code>):</p>
+
+<p><img class="img-responsive center-block" src="assets/f6-call-tree.png" alt="Virahanka-Fibonacci tree." title="Virahanka-Fibonacci Tree" width="" height=""></p>
+
+<p>Each recursive call <code>f(i)</code> makes a call to <code>f(i&#x2d;1)</code> and a call to <code>f(i&#x2d;2)</code>.
+Whenever we reach an <code>f(0)</code> or <code>f(1)</code> call, we can directly return <code>0</code> or <code>1</code>
+without making more recursive calls. These calls are our base cases.</p>
+
+<p>A base case returns an answer without depending on the results of other calls.
+Once we reach a base case, we can go back and answer the
+recursive calls that led to the base case.</p>
+
+<p>As we will see, tree recursion is often effective for problems with branching choices.
+In these problems, you make a recursive call for each branching choice.</p>
+
+</div>
+
+<br>
+
+
+<h1 id="required-questions">Required Questions</h1>
+
+
+<br>
+
+
+<h2 id="recursion">Recursion</h2>
+
+
+
+<h3 id="q1-double-eights">Q1: Double Eights</h3>
+
+
+<p>Write a <strong>recursive</strong> function that takes in a positive integer <code>n</code> and determines if its
+digits contain two adjacent <code>8</code>s (that is, two <code>8</code>s right next to each other). Do not use <code>for</code> or <code>while</code>.</p>
+
+<blockquote><p><strong>Hint:</strong> Start by coming up with a recursive plan: the digits of a number have double eights if either <strong></strong> (think of something that is straightforward to check) or double eights appear in the rest of the digits.</p></blockquote>
+
+<solution>
+
+<pre><code>def double_eights(n):
+    &quot;&quot;&quot; Returns whether or not n has two digits in row that
+    are the number 8. Assume n has at least two digits in it.
+
+    &gt;&gt;&gt; double_eights(1288)
+    True
+    &gt;&gt;&gt; double_eights(880)
+    True
+    &gt;&gt;&gt; double_eights(538835)
+    True
+    &gt;&gt;&gt; double_eights(284682)
+    False
+    &gt;&gt;&gt; double_eights(588138)
+    True
+    &gt;&gt;&gt; double_eights(78)
+    False
+    &gt;&gt;&gt; from construct_check import check
+    &gt;&gt;&gt; # ban iteration
+    &gt;&gt;&gt; check(LAB_SOURCE_FILE, &#x27;double_eights&#x27;, [&#x27;While&#x27;, &#x27;For&#x27;])
+    True
+    &quot;&quot;&quot;
+    "*** YOUR CODE HERE ***"
+</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q double_eights<button id="copy-code-python3ok-qdouble_eights" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qdouble_eights").onclick = () => copyCode('python3 ok -q double_eights', "copy-code-python3ok-qdouble_eights");
+        </script>
+        <br/>
+
+
+<h3 id="q2-making-onions">Q2: Making Onions</h3>
+
+
+<p>Write a function <code>make_onion</code> that takes in two one-argument functions, <code>f</code> and
+<code>g</code>. It returns a function that takes in three arguments: <code>x</code>, <code>y</code>, and
+<code>limit</code>. The returned function returns <code>True</code> if it is possible to reach <code>y</code>
+from <code>x</code> using up to <code>limit</code> calls to <code>f</code> and <code>g</code>, and <code>False</code> otherwise.</p>
+
+<p>For example, if <code>f</code> adds 1 and <code>g</code> doubles, then it is possible to reach 25 from
+5 in four calls: <code>f(g(g(f(5))))</code>.</p>
+
+<solution>
+
+<pre><code>def make_onion(f, g):
+    &quot;&quot;&quot;Return a function can_reach(x, y, limit) that returns
+    whether some call expression containing only f, g, and x with
+    up to limit calls will give the result y.
+
+    &gt;&gt;&gt; up = lambda x: x + 1
+    &gt;&gt;&gt; double = lambda y: y * 2
+    &gt;&gt;&gt; can_reach = make_onion(up, double)
+    &gt;&gt;&gt; can_reach(5, 25, 4)      # 25 = up(double(double(up(5))))
+    True
+    &gt;&gt;&gt; can_reach(5, 25, 3)      # Not possible
+    False
+    &gt;&gt;&gt; can_reach(1, 1, 0)      # 1 = 1
+    True
+    &gt;&gt;&gt; add_ing = lambda x: x + &quot;ing&quot;
+    &gt;&gt;&gt; add_end = lambda y: y + &quot;end&quot;
+    &gt;&gt;&gt; can_reach_string = make_onion(add_ing, add_end)
+    &gt;&gt;&gt; can_reach_string(&quot;cry&quot;, &quot;crying&quot;, 1)      # &quot;crying&quot; = add_ing(&quot;cry&quot;)
+    True
+    &gt;&gt;&gt; can_reach_string(&quot;un&quot;, &quot;unending&quot;, 3)     # &quot;unending&quot; = add_ing(add_end(&quot;un&quot;))
+    True
+    &gt;&gt;&gt; can_reach_string(&quot;peach&quot;, &quot;folding&quot;, 4)   # Not possible
+    False
+    &quot;&quot;&quot;
+    def can_reach(x, y, limit):
+        if limit &lt; 0:
+            return ____
+        elif x == y:
+            return ____
+        else:
+            return can_reach(____, ____, limit &#x2d; 1) or can_reach(____, ____, limit &#x2d; 1)
+    return can_reach</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q make_onion<button id="copy-code-python3ok-qmake_onion" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qmake_onion").onclick = () => copyCode('python3 ok -q make_onion', "copy-code-python3ok-qmake_onion");
+        </script>
+        <br/>
+
+
+<h2 id="tree-recursion">Tree Recursion</h2>
+
+
+
+<h3 id="q3-super-mario">Q3: Super Mario</h3>
+
+
+<p>Mario needs to jump over a sequence of Piranha plants called <code>level</code>. <code>level</code> is represented as a string of empty spaces (<code>&#x27; &#x27;</code>), indicating <strong>no plant</strong>, and P's (<code>&#x27;P&#x27;</code>), indicating the presence of <strong>a plant</strong>. Mario only moves forward and can either <em>step</em> (move forward one spot) or <em>jump</em> (move forward two spots) from each position. How many different ways can Mario traverse a <code>level</code> without stepping or jumping into a Piranha plant (<code>&#x27;P&#x27;</code>)? Assume that every <code>level</code> begins with an empty space (<code>&#x27; &#x27;</code>), where Mario starts, and ends with an empty space (<code>&#x27; &#x27;</code>), where Mario must end up.</p>
+
+<blockquote><p><strong>Hint</strong>: You can access the <em>i</em>th character in a string <code>s</code> by using <code>s[i]</code>. For example:</p>
+
+<pre><code>&gt;&gt;&gt; s = &#x27;abcdefg&#x27;
+&gt;&gt;&gt; s[0]
+&#x27;a&#x27;
+&gt;&gt;&gt; s[2]
+&#x27;c&#x27;</code></pre>
+
+<p><strong>Hint</strong>: You can find the total number of characters in a string using the built-in <code>len</code> function:</p>
+
+<pre><code>&gt;&gt;&gt; s = &#x27;abcdefg&#x27;
+&gt;&gt;&gt; len(s)
+7
+&gt;&gt;&gt; len(&#x27;&#x27;)
+0</code></pre></blockquote>
+
+<solution>
+
+<pre><code>def mario_number(level):
+    &quot;&quot;&quot;Return the number of ways that Mario can perform a sequence of steps
+    or jumps to reach the end of the level without ever landing in a Piranha
+    plant. Assume that every level begins and ends with a space.
+
+    &gt;&gt;&gt; mario_number(&#x27; P P &#x27;)   # jump, jump
+    1
+    &gt;&gt;&gt; mario_number(&#x27; P P  &#x27;)   # jump, jump, step
+    1
+    &gt;&gt;&gt; mario_number(&#x27;  P P &#x27;)  # step, jump, jump
+    1
+    &gt;&gt;&gt; mario_number(&#x27;   P P &#x27;) # step, step, jump, jump or jump, jump, jump
+    2
+    &gt;&gt;&gt; mario_number(&#x27; P PP &#x27;)  # Mario cannot jump two plants
+    0
+    &gt;&gt;&gt; mario_number(&#x27;    &#x27;)    # step, jump ; jump, step ; step, step, step
+    3
+    &gt;&gt;&gt; mario_number(&#x27;    P    &#x27;)
+    9
+    &gt;&gt;&gt; mario_number(&#x27;   P    P P   P  P P    P     P &#x27;)
+    180
+    &quot;&quot;&quot;
+    "*** YOUR CODE HERE ***"
+</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q mario_number<button id="copy-code-python3ok-qmario_number" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qmario_number").onclick = () => copyCode('python3 ok -q mario_number', "copy-code-python3ok-qmario_number");
+        </script>
+        <br/>
+
+<!-- In the context of this problem, a <code>level</code> is represented by
+a string that includes only empty spaces (<code>&#x27; &#x27;</code>) and P's (<code>&#x27;P&#x27;</code>).
+If Mario is on an <code>&#x27; &#x27;</code>, then he is safe. Contrastingly, if he is
+on a <code>&#x27;P&#x27;</code>, then he loses the <code>level</code>. Every <code>level</code> begins with
+a <code>&#x27; &#x27;</code> because that is where Mario's starting position is (it would
+not make sense for the first character in the string to be a <code>&#x27;P&#x27;</code>
+because then Mario would immediately be eaten by the plant). As such,
+every <code>level</code> also ends with a <code>&#x27; &#x27;</code> (because if not, then Mario
+could never finish a <code>level</code> because he would always end up being
+eaten by a plant).
+In order to solve this problem, it is important to think about how 
+we can check if Mario is done with a <code>level</code>. Also, take into account 
+the possible moves he can make to progress throughout the <code>level</code> given 
+that he can only move forward by either taking a step (moving forward 
+one spot in the string) or jumping (landing two spots in front of where
+he jumped from and completely skipping over the spot that was originally 
+in front of him when he jumped in the string).-->
+
+
+<h3 id="q4-maximum-subsequence">Q4: Maximum Subsequence</h3>
+
+
+<p>A <em>subsequence</em> of a number is a series of digits from the number (not necessarily contiguous). For example, 12345 has subsequences like 123, 234, 124, 245, etc. Your task is to find the <strong>largest subsequence</strong> that is under a specified length.</p>
+
+<blockquote><p><strong>Hint:</strong> To add a digit (<code>d</code>) to an existing number (<code>n</code>), calculate: <code>n * 10 + d</code>. For instance, to add <code>8</code> to <code>15</code> to get <code>158</code>, compute <code>15 * 10 + 8</code>.</p></blockquote>
+
+<solution>
+
+<pre><code>def max_subseq(n, t):
+    &quot;&quot;&quot;
+    Return the maximum subsequence of length at most t that can be found in the given number n.
+    For example, for n = 2012 and t = 2, we have that the subsequences are
+        2
+        0
+        1
+        2
+        20
+        21
+        22
+        01
+        02
+        12
+    and of these, the maxumum number is 22, so our answer is 22.
+
+    &gt;&gt;&gt; max_subseq(2012, 2)
+    22
+    &gt;&gt;&gt; max_subseq(20125, 3)
+    225
+    &gt;&gt;&gt; max_subseq(20125, 5)
+    20125
+    &gt;&gt;&gt; max_subseq(20125, 6) # note that 20125 == 020125
+    20125
+    &gt;&gt;&gt; max_subseq(12345, 3)
+    345
+    &gt;&gt;&gt; max_subseq(12345, 0) # 0 is of length 0
+    0
+    &gt;&gt;&gt; max_subseq(12345, 1)
+    5
+    &quot;&quot;&quot;
+    "*** YOUR CODE HERE ***"
+</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q max_subseq<button id="copy-code-python3ok-qmax_subseq" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qmax_subseq").onclick = () => copyCode('python3 ok -q max_subseq', "copy-code-python3ok-qmax_subseq");
+        </script>
+        <br/>
+
+<!--**There are two key insights for this problem:**
+You need to split into the case where the ones digit is used and the case where it is not.
+  In the case where it is, we want to reduce <code>t</code> since we used one of the digits; in the
+  case where it isn't used, we keep <code>t</code> the same. Finally, given these two possibilities,
+  how can we continue this process of splitting into two cases to grow the subsequence and
+  find the maximum of all of the different subsequences that are below a certain length?
+In the case where we are using the ones digit, we need to attach the digit onto the end of
+  the number/subsequence that is being built (and eventually returned). For example, the way
+  to attach a digit <code>d</code> to the end of a number <code>n</code> is to do <code>10 * n + d</code>. To see this in use,
+  think about what we would need to do if we wanted to attach <code>8</code>(<code>d</code>) to the end of <code>15</code> (<code>n</code>)
+  to make <code>158</code>. We cannot just do <code>15 + 8</code> (because that is <code>23</code>), instead we need to do
+  <code>(10 * 15) + 8</code> (which is <code>150 + 8</code>, giving us <code>158</code> like we wanted). -->
+
+
+<h2 id="check-your-score-locally">Check Your Score Locally</h2>
+
+<p>You can locally check your score on each question of this assignment by running</p>
+
+<pre><code>python3 ok &#x2d;&#x2d;score</code></pre>
+
+<p><strong>This does NOT submit the assignment!</strong> When you are satisfied with your score, submit the assignment to Gradescope to receive credit for it.</p>
+
+
+<h1 id="submit-assignment">Submit Assignment</h1>
+
+
+<p>Submit this assignment by uploading any files you've edited <strong>to the appropriate Gradescope assignment.</strong> <a href="../lab00.html#submit-with-gradescope">Lab 00</a> has detailed instructions.</p>
+
+<p>In addition, all students who are <strong>not</strong> in the mega lab must submit the attendance form for credit. Ask your section TA for the link! Submit this form for each section, whether you attended lab or missed it for a good reason. The attendance form is not required for mega section students.</p>
+
+
+<h1 id="optional-questions">Optional Questions</h1>
+
+
+<br>
+
+
+<h3 id="q5-recursive-prime">Q5: Recursive Prime</h3>
+
+
+<p>Below is the iterative version of <code>is_prime</code>, which returns <code>True</code> if positive
+integer <code>n</code> is a prime number and <code>False</code> otherwise:</p>
+
+<pre><code>def is_prime(n):
+    if n == 1:
+        return False
+    k = 2
+    while k &lt; n:
+        if n % k == 0:
+            return False
+        k += 1
+    return True</code></pre>
+
+<p>Implement the recursive <code>is_prime</code> function. Do not use a while loop, <strong>use recursion</strong>.
+As a reminder, an integer is considered <em>prime</em> if it has <strong>exactly two</strong> unique factors: 1 and itself.</p>
+
+<solution>
+
+<pre><code>def is_prime(n):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; is_prime(7)
+    True
+    &gt;&gt;&gt; is_prime(10)
+    False
+    &gt;&gt;&gt; is_prime(1)
+    False
+    &quot;&quot;&quot;
+    "*** YOUR CODE HERE ***"
+</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q is_prime<button id="copy-code-python3ok-qis_prime" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qis_prime").onclick = () => copyCode('python3 ok -q is_prime', "copy-code-python3ok-qis_prime");
+        </script>
+        <br/>
+
+<!-- The goal of this question was to demonstrate how to use a helper function, as well as how to translate between iteration and recursion. -->
+<script>
+    $('.alwaystoggle').css('display', 'inline-block');
+    $('.alwaystoggle').click(function() {
+      var solution_id = $(this).attr('id');
+      $('div.' + solution_id).slideToggle(600);
+    });
+</script>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="index.html#topics">Topics</a></li>
+  <li><a href="index.html#required-questions">Required Questions</a></li>
+  <ul>
+    <li><a href="index.html#recursion">Recursion</a></li>
+    <ul>
+      <li><a href="index.html#q1-double-eights">Q1: Double Eights</a></li>
+      <li><a href="index.html#q2-making-onions">Q2: Making Onions</a></li>
+    </ul>
+    <li><a href="index.html#tree-recursion">Tree Recursion</a></li>
+    <ul>
+      <li><a href="index.html#q3-super-mario">Q3: Super Mario</a></li>
+      <li><a href="index.html#q4-maximum-subsequence">Q4: Maximum Subsequence</a></li>
+    </ul>
+    <li><a href="index.html#check-your-score-locally">Check Your Score Locally</a></li>
+  </ul>
+  <li><a href="index.html#submit-assignment">Submit Assignment</a></li>
+  <li><a href="index.html#optional-questions">Optional Questions</a></li>
+  <ul>
+    <li><a href="index.html#q5-recursive-prime">Q5: Recursive Prime</a></li>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <!-- <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer> -->
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="../../assets/js/network_storage.js"></script>
+    <script src="../../assets/js/storable.js"></script>
+    <script src="../../assets/js/editor.js"></script>
+    <script src="../../assets/js/copy-button.js"></script>
+    <script src="../../assets/js/env-diagram.js"></script>
+    
+<!-- <script src="/assets/js/sketchy.js"></script> -->
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

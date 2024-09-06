@@ -1,0 +1,1115 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="Laryn Qi, Charlotte Le, Raymond Tan" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/hl.js"></script>
+    <script src="../../assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="../../assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/mono-blue.css">
+    <link rel="icon" href="../../assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="../../assets/css/disc.css">
+
+
+    <title>
+Discussion 3 | CS 61A Summer 2024
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../index.html">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="../../assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="../../office-hours.html">Weekly Schedule</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                External Websites
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://oh.cs61a.org/">Office Hours Queue</a></li>
+                <li><a href="https://pythontutor.com/cp/composingprograms.html">Python Tutor</a></li>
+                <li><a href="https://code.cs61a.org/">Online Code Editor</a></li>
+                <li><a href="https://www.composingprograms.com/">Textbook</a></li>
+                <li><a href="https://edstem.org/us/courses/59836/discussion/">Ed</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Forms
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/regrades">Request a Regrade</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/debugging-guide">Debugging Guide</a></li>
+                <li><a href="../../articles/studying.html">Studying Guide</a></li>
+                <li><a href="../../articles/composition.html">Composition Guide</a></li>
+                <li><a href="../../articles/pair-programming.html">Pair Programming Guide</a></li>
+                <li><a href="../../resources.html">Past Exams & Websites</a></li>
+                <li><a href="../../articles/campus-res/index.html">Department and Campus</a></li>
+                <li><a href="../../articles/advice/index.html">Advice from Former Students</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="../../instructor.html">Instructors</a></li>
+                <li><a href="../../staff.html">TAs & Tutors</a></li>
+                <li><a href="../../contact/index.html">Contact</a></li>
+              </ul>
+            </li>
+            <li><a href="../../articles/about.html">Syllabus</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Discussion 3: Recursion, Tree Recursion
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="disc03.pdf" class="label label-outline">disc03.pdf</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+
+<!-- <div class="alert storable-login-status"></div> -->
+
+
+    
+<!--
+Pick someone in your group to <a href="https://cs61a.org/articles/discord">join Discord</a>.
+It's fine if multiple people join, but one is enough.
+
+Now switch to Pensieve:
+
+<ul>
+  <li><strong>Everyone</strong>: Go to <a href="http://discuss.pensieve.co">discuss.pensieve.co</a> and log in with your @berkeley.edu email, then enter your group number. (Your group number is the number of your Discord channel.)</li>
+</ul>
+
+Once you're on Pensieve, you don't need to return to this page; Pensieve has all the same content (but more features). If for some reason Penseive doesn't work, return to this page and continue with the discussion.
+
+Post in the <code>#help</code> channel on <a href="https://cs61a.org/articles/discord/">Discord</a> if you have trouble.
+-->
+
+
+<h1 id="getting-started">Getting Started</h1>
+
+
+<p>If you could change one historic event, what would it be? And what would you make happen instead?</p>
+
+<!--
+**Suggestion:** After Midterm 1, some students are looking for more effective
+ways to study. One great option is to meet up with your discussion group outside
+of class to review practice problems together. Now is a great time to schedule a
+time and place for some extra group practice of old Midterm 1 questions. This is
+optional and not everyone needs to come, but if there are Midterm 1 topics that
+haven't totally clicked yet, this weekend is a perfect time to review them.
+
+Everything in this course builds on prior topics, and it's going to be hard to
+keep up if you don't have a solid understanding of Midterm 1 material.
+
+Remember, it's ok if someone hasn't learned everything yet and needs more time
+to master the course material.  The whole point of the course is for students to
+learn things they don't already know. Please support each other in the process.
+-->
+
+
+<h1 id="recursion">Recursion</h1>
+
+
+<p>Ok, time to discuss problems! Remember to work together. Everyone in the group
+should understand a solution before the group moves on. Many students find this discussion challenging. Everything gets easier with practice. Feel free to consult the introduction/notes dropdown below if you need a refresher!</p>
+
+<p><strong>VERY IMPORTANT:</strong> In this discussion, don't check your answers until your whole group is sure that the answer is right. Figure things out and check your work by <em>thinking</em> about what your code will do. Your goal should be to have all checks pass the first time you run them! If you need help, ask.</p>
+
+
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Recursion<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+A recursive function is a function that calls itself in its body,
+either directly or indirectly.
+
+<p>Let's look at the canonical example, <code>factorial</code>.</p>
+
+<blockquote><p>Factorial, denoted with the <code>!</code> operator, is defined as:</p>
+
+<pre><code>n! = n * (n&#x2d;1) * ... * 1</code></pre>
+
+<p>For example, <code>5! = 5 * 4 * 3 * 2 * 1 = 120</code></p></blockquote>
+
+<p>The recursive implementation for factorial is as follows:</p>
+
+<pre><code>def factorial(n):
+    if n == 0:
+        return 1
+    return n * factorial(n &#x2d; 1)</code></pre>
+
+<p>We know from its definition that 0! is 1. Since <code>n == 0</code> is the smallest number we
+can compute the factorial of, we use it as our base case.
+The recursive step also follows from the definition of factorial, i.e., <code>n! =
+n * (n&#x2d;1)!</code>.</p>
+
+<p>Recursive functions have three important components:</p>
+
+<ol>
+  <li><p><strong>Base case.</strong>
+  You can think of the base case as the case of the simplest function input,
+  or as the stopping condition for the recursion.</p>
+
+  <p>In our example, <code>factorial(0)</code> is our base case for the <code>factorial</code>
+  function.</p></li>
+  <li><p><strong>Recursive call on a smaller problem.</strong>
+  You can think of this step as calling the function on a smaller problem
+  that our current problem depends on. We assume that a recursive call on
+  this smaller problem will give us the expected result; we call this idea
+  the "recursive leap of faith".</p>
+
+  <p>In our example, <code>factorial(n)</code> depends on the smaller problem of
+  <code>factorial(n&#x2d;1)</code>.</p></li>
+  <li><p><strong>Solve the larger problem.</strong>
+  In step 2, we found the result of a smaller problem.
+  We want to now use that result to figure out what the result of our current
+  problem should be, which is what we want to return from our current
+  function call.</p>
+
+  <p>In our example, we can compute <code>factorial(n)</code> by multiplying the result
+  of our smaller problem <code>factorial(n&#x2d;1)</code> (which represents <code>(n&#x2d;1)!</code>)
+  by <code>n</code> (the reasoning being that <code>n! = n * (n&#x2d;1)!</code>).</p></li>
+</ol>
+
+<p>The next few questions in lab will have you writing recursive
+functions.  Here are some general tips:</p>
+
+<ul>
+  <li>Paradoxically, to write a recursive function, you must assume that the function
+  is fully functional before you finish writing it; this is called the
+  <em>recursive leap of faith</em>.</li>
+  <li>Consider how you can solve the current problem using the solution to
+  a simpler version of the problem. The amount of work done in a recursive function
+  can be deceptively little: remember to take the leap of faith and <em>trust the recursion</em>
+  to solve the slightly smaller problem without worrying about how.</li>
+  <li>Think about what the answer would be in the simplest possible
+  case(s). These will be your base cases - the stopping points for your
+  recursive calls. Make sure to consider the possibility that you're
+  missing base cases (this is a common way recursive solutions fail).</li>
+  <li>It may help to write an iterative version first.</li>
+</ul>
+
+<!-- <table class='table table-bordered'>
+
+<pre><code>&lt;tr&gt;
+    &lt;th&gt;Function Type:&lt;/th&gt;
+    &lt;th&gt;Recusive&lt;/th&gt;
+    &lt;th&gt;Iterative&lt;/th&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;Function&lt;/td&gt;
+    &lt;td&gt;&lt;pre&gt; def factorial(n):
+    if n == 0:
+        return 1
+    return n * factorial(n &#x2d; 1)&lt;pre&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;pre&gt; def factorial(n):
+    total = 1
+    while n &gt; 0:
+        total *= n
+        n &#x2d;= 1
+    return total
+    &lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;Ends calculations&lt;/td&gt;
+    &lt;td&gt;When it hits the base case&lt;/td&gt;
+    &lt;td&gt;When n !&gt; 0, it will end.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+    &lt;td&gt;Means of traversal&lt;/td&gt;
+    &lt;td&gt;&lt;code&gt;factorial(&lt;strong&gt;n &#x2d; 1&lt;/strong&gt;&lt;/code&gt;&lt;/td&gt;
+    &lt;td&gt;&lt;code&gt;&lt;strong&gt;n &#x2d;= 1&lt;/strong&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;/tr&gt;</code></pre>
+
+</table> -->
+</div>
+
+<!-- Recursive-multiplication: Summer 24 addition -->
+
+
+<h3 id="q1-warm-up-recursive-multiplication">Q1: Warm Up: Recursive Multiplication</h3>
+
+
+<p>These exercises are meant to help refresh your memory of the topics covered in
+lecture.</p>
+
+<p>Write a function that takes two numbers <code>m</code> and <code>n</code> and returns their product.
+Assume <code>m</code> and <code>n</code> are positive integers. Use <strong>recursion</strong>, not <code>mul</code> or <code>*</code>.</p>
+
+<blockquote><p>Hint: <code>5 * 3 = 5 + (5 * 2) = 5 + 5 + (5 * 1)</code>.</p></blockquote>
+
+<p>For the base case, what is the simplest possible input for <code>multiply</code>?</p>
+
+
+            <label class="sr-only" for="recursive-multiplication-base-case-input">Your Answer:</label>
+            <input class="form-control storable" id="recursive-multiplication-base-case-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+
+<p>If one of the inputs is one, you simply return the other input.</p>
+
+</div>
+
+<p>For the recursive case, what does calling <code>multiply(m &#x2d; 1, n)</code> do?
+What does calling <code>multiply(m, n &#x2d; 1)</code> do? Do we prefer one over the other?</p>
+
+
+            <label class="sr-only" for="recursive-multiplication-recursive-case-input">Your Answer:</label>
+            <input class="form-control storable" id="recursive-multiplication-recursive-case-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+
+<p>The first call will calculate a value that is <code>n</code> less than the total,
+while the second will calculate a value that is <code>m</code> less.
+Either recursive call will work, but only <code>multiply(m, n &#x2d; 1)</code> is used
+in this solution.</p>
+
+</div>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="recursive-multiplication-input" style="height:216px;"></div>
+            <a href="javascript:void" id="modal-link-recursive-multiplication-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-recursive-multiplication-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-recursive-multiplication-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def multiply(m, n):\n    &quot;&quot;&quot;Takes two positive integers and returns their product using recursion.\n    &gt;&gt;&gt; multiply(5, 3)\n    15\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "recursive-multiplication-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def multiply(m, n):
+    &quot;&quot;&quot;Takes two positive integers and returns their product using recursion.
+    &gt;&gt;&gt; multiply(5, 3)
+    15
+    &quot;&quot;&quot;
+    if n == 1:
+        return m
+    else:
+        return m + multiply(m, n &#x2d; 1)
+</code></pre>
+
+            </div>
+        
+
+
+
+<div class="page-break"></div>
+
+
+<h3 id="q2-swipe">Q2: Swipe</h3>
+
+
+<p>Implement <code>swipe</code>, which prints the digits of argument <code>n</code>, one per line, <strong>first backward then forward</strong>. The left-most digit is printed only once. <strong>Do not use <code>while</code> or <code>for</code> or <code>str</code>.</strong> (Use recursion, of course!)</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="swipe-input" style="height:378px;"></div>
+            <a href="javascript:void" id="modal-link-swipe-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-swipe-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-swipe-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def swipe(n):\n    &quot;&quot;&quot;Print the digits of n, one per line, first backward then forward.\n\n    &gt;&gt;&gt; swipe(2837)\n    7\n    3\n    8\n    2\n    8\n    3\n    7\n    &quot;&quot;&quot;\n    if n &lt; 10:\n        print(n)\n    else:\n        "*** YOUR CODE HERE ***"\n\n', "python", "swipe-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def swipe(n):
+    &quot;&quot;&quot;Print the digits of n, one per line, first backward then forward.
+
+    &gt;&gt;&gt; swipe(2837)
+    7
+    3
+    8
+    2
+    8
+    3
+    7
+    &quot;&quot;&quot;
+    if n &lt; 10:
+        print(n)
+    else:
+        print(n % 10)
+        swipe(n // 10)
+        print(n % 10)
+</code></pre>
+
+            </div>
+        
+
+
+        <button id='toggle-2' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Hint<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-2">
+First <code>print</code> the first line of the output, then make a recursive call, then <code>print</code> the last line of the output.
+</div>
+
+<div class="page-break"></div>
+
+
+<h3 id="q3-skip-factorial">Q3: Skip Factorial</h3>
+
+
+<p>Define the base case for the <code>skip_factorial</code> function, which returns the product of <strong>every other positive integer</strong>, starting with <code>n</code>.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="skip_factorial-input" style="height:252px;"></div>
+            <a href="javascript:void" id="modal-link-skip_factorial-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-skip_factorial-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-skip_factorial-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def skip_factorial(n):\n    &quot;&quot;&quot;Return the product of positive integers n * (n &#x2d; 2) * (n &#x2d; 4) * ...\n\n    &gt;&gt;&gt; skip_factorial(5) # 5 * 3 * 1\n    15\n    &gt;&gt;&gt; skip_factorial(8) # 8 * 6 * 4 * 2\n    384\n    &quot;&quot;&quot;\n    if ___:\n        return ___\n    else:\n        return n * skip_factorial(n &#x2d; 2)\n', "python", "skip_factorial-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def skip_factorial(n):
+    &quot;&quot;&quot;Return the product of positive integers n * (n &#x2d; 2) * (n &#x2d; 4) * ...
+
+    &gt;&gt;&gt; skip_factorial(5) # 5 * 3 * 1
+    15
+    &gt;&gt;&gt; skip_factorial(8) # 8 * 6 * 4 * 2
+    384
+    &quot;&quot;&quot;
+    if n &lt;= 2:
+        return n
+    else:
+        return n * skip_factorial(n &#x2d; 2)</code></pre>
+
+            </div>
+        
+
+
+        <button id='toggle-3' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Hint<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-3">
+If <code>n</code> is even, then the base case will be 2. If <code>n</code> is odd, then the base case will be 1. Try to write a condition that handles both possibilities.
+</div>
+
+<p>The ability to describe your own code to others is very important! Practice by explaining the logic of your solution and your thought process when coding with your group.</p>
+
+<div class="page-break"></div>
+
+<!-- <include topics/recursion/easy/is_prime.md> -->
+
+<!--
+Come up with a one sentence docstring for the helper function that describes what it does.
+Don't just write, "it helps implement <code>is_prime</code>." Instead, describe its
+behavior. When you're done, paste the text of that docstring in your group's
+<a href="https://support.discord.com/hc/en-us/articles/4412085582359-Text-Channels-Text-Chat-In-Voice-Channels#h_01FMJT412WBX1MR4HDYNR8E95X">channel's text
+chat</a>.
+-->
+
+<!-- <div class="page-break"></div> -->
+
+<h3 id="q4-recursive-hailstone">Q4: Recursive Hailstone</h3>
+
+
+<p>Recall the <code>hailstone</code> function from <a href="../../hw/hw01/index.html">Homework 1</a>.
+First, pick a positive integer <code>n</code> as the start. If <code>n</code> is even, divide it by 2.
+If <code>n</code> is odd, multiply it by 3 and add 1. Repeat this process until <code>n</code> is 1.
+Complete this recursive version of <code>hailstone</code> that prints out the values of the
+sequence and returns the number of steps.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="recursive-hailstone-input" style="height:630px;"></div>
+            <a href="javascript:void" id="modal-link-recursive-hailstone-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-recursive-hailstone-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-recursive-hailstone-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def hailstone(n):\n    &quot;&quot;&quot;Print out the hailstone sequence starting at n, \n    and return the number of elements in the sequence.\n    &gt;&gt;&gt; a = hailstone(10)\n    10\n    5\n    16\n    8\n    4\n    2\n    1\n    &gt;&gt;&gt; a\n    7\n    &gt;&gt;&gt; b = hailstone(1)\n    1\n    &gt;&gt;&gt; b\n    1\n    &quot;&quot;&quot;\n    print(n)\n    if n % 2 == 0:\n        return even(n)\n    else:\n        return odd(n)\n\ndef even(n):\n    return ____\n\ndef odd(n):\n    "*** YOUR CODE HERE ***"\n\n', "python", "recursive-hailstone-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def hailstone(n):
+    &quot;&quot;&quot;Print out the hailstone sequence starting at n, 
+    and return the number of elements in the sequence.
+    &gt;&gt;&gt; a = hailstone(10)
+    10
+    5
+    16
+    8
+    4
+    2
+    1
+    &gt;&gt;&gt; a
+    7
+    &gt;&gt;&gt; b = hailstone(1)
+    1
+    &gt;&gt;&gt; b
+    1
+    &quot;&quot;&quot;
+    print(n)
+    if n % 2 == 0:
+        return even(n)
+    else:
+        return odd(n)
+
+def even(n):
+    return 1 + hailstone(n // 2)
+
+def odd(n):
+    if n == 1:
+        return 1
+    else:
+        return 1 + hailstone(3 * n + 1)
+</code></pre>
+
+            </div>
+        
+
+
+        <button id='toggle-4' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Hint<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-4">
+An even number is never a base case, so <code>even</code> always makes a recursive call to <code>hailstone</code> and returns one more than the length of the rest of the hailstone sequence.
+
+<p>An odd number might be 1 (the base case) or greater than one (the recursive case). Only the recursive case should call <code>hailstone</code>.
+</div></p>
+
+<div class="page-break"></div>
+<!-- Su24 Addition -->
+
+<h1 id="tree-recursion">Tree Recursion</h1>
+
+
+
+        <button id='toggle-5' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Tree Recursion<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-5">
+A tree recursive function is a recursive function that makes more than one call to itself, resulting in a tree-like series of calls.
+
+<p>For example, this is the <a href="https://en.wikipedia.org/wiki/Fibonacci_number">Virahanka-Fibonacci</a> sequence:
+<code>0, 1, 1, 2, 3, 5, 8, 13, ...</code>.</p>
+
+<p>Each term is the sum of the previous two terms. This tree-recursive function calculates the <code>n</code>th Virahanka-Fibonacci number.</p>
+
+<pre><code>def virfib(n):
+    if n == 0 or n == 1:
+        return n
+    return virfib(n &#x2d; 1) + virfib(n &#x2d; 2)</code></pre>
+
+<p>Calling <code>virfib(6)</code> results in a call structure that resembles
+an upside-down tree (where <code>f</code> is <code>virfib</code>):</p>
+
+<p><img class="img-responsive center-block" src="assets/f6-call-tree.png" alt="Virahanka-Fibonacci tree." title="Virahanka-Fibonacci Tree" width="" height=""></p>
+
+<p>Each recursive call <code>f(i)</code> makes a call to <code>f(i&#x2d;1)</code> and a call to <code>f(i&#x2d;2)</code>.
+Whenever we reach an <code>f(0)</code> or <code>f(1)</code> call, we can directly return <code>0</code> or <code>1</code>
+without making more recursive calls. These calls are our base cases.</p>
+
+<p>A base case returns an answer without depending on the results of other calls.
+Once we reach a base case, we can go back and answer the
+recursive calls that led to the base case.</p>
+
+<p>As we will see, tree recursion is often effective for problems with branching choices.
+In these problems, you make a recursive call for each branching choice.
+</div></p>
+
+<div class="page-break"></div>
+
+<h3 id="q5-count-stair-ways">Q5: Count Stair Ways</h3>
+
+
+<p>Imagine that you want to go up a flight of stairs that has <code>n</code> steps,
+where <code>n</code> is a positive integer.
+You can take either <strong>one</strong> or <strong>two steps</strong> each time you move. In how many ways can you go up the entire flight of stairs?</p>
+
+<p>You'll write a function <code>count_stair_ways</code> to answer this question.
+Before you write any code, consider:</p>
+
+<ul>
+  <li>How many ways are there to go up a flight of stairs with <code>n = 1</code> step? What about <code>n = 2</code> steps? Try writing or drawing out some other examples and see if you notice any patterns.</li>
+</ul>
+
+
+            <label class="sr-only" for="count-stair-ways-howmany-input">Your Answer:</label>
+            <input class="form-control storable" id="count-stair-ways-howmany-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+
+<p><strong>Solution</strong>:
+When there is only one step, there is only one way to go up.
+When there are two steps, we can go up in two ways:
+take a single 2-step, or take two 1-steps.</p>
+
+</div>
+
+<ul>
+  <li>What is the base case for this question? What is the smallest input?</li>
+</ul>
+
+
+            <label class="sr-only" for="count-stair-ways-basecase-input">Your Answer:</label>
+            <input class="form-control storable" id="count-stair-ways-basecase-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+
+<p><strong>Solution</strong>:
+We actually have two base cases! Our first base case is when there is one step left.
+<code>n = 1</code> is the smallest input because 1 is the smallest positive integer.</p>
+
+<p>Our second base case is when there are two steps left.
+The primary solution (found below) cannot solve <code>count_stair_ways(2)</code> recursively because <code>count_stair_ways(0)</code> is undefined.</p>
+
+<p>(<code>virfib</code> has two base cases for a similar reason: <code>virfib(1)</code> cannot be solved recursively because <code>virfib(&#x2d;1)</code> is undefined.)</p>
+
+<p><strong>Alternate solution</strong>:
+Our first base case is when there are no steps left.
+This means we reached the top of the stairs with our last action.</p>
+
+<p>Our second base case is when we have overstepped.
+This means our last action was invalid; in other words, we took two steps when only one step remained.</p>
+
+</div>
+
+
+
+<ul>
+  <li>What do <code>count_stair_ways(n &#x2d; 1)</code> and <code>count_stair_ways(n &#x2d; 2)</code> represent?</li>
+</ul>
+
+
+            <label class="sr-only" for="count-stair-ways-represent-input">Your Answer:</label>
+            <input class="form-control storable" id="count-stair-ways-represent-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+
+<p><strong>Solution</strong>:
+<code>count_stair_ways(n &#x2d; 1)</code> is the number of ways to go up <code>n &#x2d; 1</code> stairs. Equivalently, <code>count_stair_ways(n &#x2d; 1)</code> is the number of ways to go up <code>n</code> stairs if our first action is taking one step.</p>
+
+<p><code>count_stair_ways(n &#x2d; 2)</code> is the number of ways to go up <code>n &#x2d; 2</code> stairs. Equivalently, <code>count_stair_ways(n &#x2d; 2)</code> is the number of ways to go up <code>n</code> stairs if our first action is taking two steps.</p>
+
+</div>
+
+<p>Now, fill in the code for <code>count_stair_ways</code>:</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="count_stair_ways-input" style="height:324px;"></div>
+            <a href="javascript:void" id="modal-link-count_stair_ways-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-count_stair_ways-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-count_stair_ways-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def count_stair_ways(n):\n    &quot;&quot;&quot;Returns the number of ways to climb up a flight of\n    n stairs, moving either one step or two steps at a time.\n    &gt;&gt;&gt; count_stair_ways(1)\n    1\n    &gt;&gt;&gt; count_stair_ways(2)\n    2\n    &gt;&gt;&gt; count_stair_ways(4)\n    5\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "count_stair_ways-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def count_stair_ways(n):
+    &quot;&quot;&quot;Returns the number of ways to climb up a flight of
+    n stairs, moving either one step or two steps at a time.
+    &gt;&gt;&gt; count_stair_ways(1)
+    1
+    &gt;&gt;&gt; count_stair_ways(2)
+    2
+    &gt;&gt;&gt; count_stair_ways(4)
+    5
+    &quot;&quot;&quot;
+    if n == 1:
+        return 1
+    elif n == 2:
+        return 2
+    return count_stair_ways(n&#x2d;1) + count_stair_ways(n&#x2d;2)
+</code></pre>
+
+            </div>
+        
+
+<div class="sol-highlight">
+Here's an alternate solution that corresponds to the alternate base cases:
+
+<pre><code class="{python}">def count_stair_ways_alt(n):
+    &quot;&quot;&quot;Returns the number of ways to climb up a flight of
+    n stairs, moving either 1 step or 2 steps at a time.
+    &gt;&gt;&gt; count_stair_ways_alt(4)
+    5
+    &quot;&quot;&quot;
+    if n == 0:
+        return 1
+    elif n &lt; 0:
+        return 0
+    return count_stair_ways_alt(n&#x2d;1) + count_stair_ways_alt(n&#x2d;2)</code></pre>
+
+
+
+<p>You can use <a href="https://www.recursionvisualizer.com/?function_definition=def%20count_stair_ways(n)%3A%0A%20%20%20%20if%20n%20%3D%3D%201%3A%0A%20%20%20%20%20%20%20%20return%201%0A%20%20%20%20elif%20n%20%3D%3D%202%3A%0A%20%20%20%20%20%20%20%20return%202%0A%20%20%20%20return%20count_stair_ways(n-1)%20%2B%20count_stair_ways(n-2)&function_call=count_stair_ways(4)">Recursion Visualizer</a> to step through the call structure of <code>count_stair_ways(4)</code> for the primary solution.</p>
+
+<!--Check out these video walkthroughs explaining the approach:
+
+<ul>
+  <li><a href="https://youtu.be/VcZPTlE56G8?t=1h7m6s">Leap of faith</a></li>
+  <li><a href="https://www.youtube.com/watch?v=sgNGso3LhD8&index=6&list=PLx38hZJ5RLZd35oDi3TGz5p9DyyxU3WwA">Diagramming trees</a>
+  -->
+  </div></li>
+</ul>
+
+
+
+<!-- Once your group has converged on a solution, it's time to practice your ability
+to describe your own code. Pick a presenter, then send a message to the
+<code>discuss&#x2d;queue</code> channel with the @discuss tag, your discussion group number, and
+the message "Hailing all course staff!" and a member of the course staff will
+join your voice channel to hear your description. -->
+
+<div class="page-break"></div>
+
+<!-- # Document the Occasion -->
+
+<h1 id="submit-attendance">Submit Attendance</h1>
+
+
+<p>You're done! Excellent work this week. Please be sure to ask your section TA for the attendance form link and fill it out for credit. (one submission per person per section).</p>
+
+
+<h1 id="extra-challenge">Extra Challenge</h1>
+
+
+<p>You'll need your whole discussion group for this question. At least try it out. You might have fun. <!-- We'll review the question in lecture on Friday. --></p>
+
+
+<h3 id="q6-sevens">Q6: Sevens</h3>
+
+
+<p><strong>The Game of Sevens</strong>: Players in a circle count up from 1 in the clockwise
+direction. (The starting player says 1, the player to their left says 2, etc.) If a
+number is divisible by 7 or contains a 7 (or both), switch directions. Numbers
+must be said on the beat at <a href="https://www.youtube.com/watch?v=ymJIXzvDvj4">60 beats per
+minute</a>. If someone says a number
+when it's not their turn or someone misses the beat on their turn, the game
+ends.</p>
+
+<p>For example, 5 people would count to 20 like this:</p>
+
+<pre><code>Player 1 says 1
+Player 2 says 2
+Player 3 says 3
+Player 4 says 4
+Player 5 says 5
+Player 1 says 6  # All the way around the circle
+Player 2 says 7  # Switch to counterclockwise
+Player 1 says 8
+Player 5 says 9  # Back around the circle counterclockwise
+Player 4 says 10
+Player 3 says 11
+Player 2 says 12
+Player 1 says 13
+Player 5 says 14 # Switch back to clockwise
+Player 1 says 15
+Player 2 says 16
+Player 3 says 17 # Switch back to counterclockwise
+Player 2 says 18
+Player 1 says 19
+Player 5 says 20</code></pre>
+
+
+
+<p>Play a few games. Post the highest score your group reached on Discord.</p>
+
+<p>Then, implement <code>sevens</code> which takes a positive integer <code>n</code> and a number of
+players <code>k</code>. It returns which of the <code>k</code> players says <code>n</code>. You may call
+<code>has_seven</code>.</p>
+
+<p>An effective approach to this problem is to simulate the game, stopping on turn
+<code>n</code>. The implementation must keep track of the final number <code>n</code>, the current
+number <code>i</code>, the player <code>who</code> will say <code>i</code>, and the current <code>direction</code> that
+determines the next player (either increasing or decreasing). It works well to
+use integers to represent all of these, with <code>direction</code> switching between <code>1</code>
+(increase) and <code>&#x2d;1</code> (decreasing).</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="sevens-input" style="height:702px;"></div>
+            <a href="javascript:void" id="modal-link-sevens-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-sevens-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-sevens-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def sevens(n, k):\n    &quot;&quot;&quot;Return the (clockwise) position of who says n among k players.\n\n    &gt;&gt;&gt; sevens(2, 5)\n    2\n    &gt;&gt;&gt; sevens(6, 5)\n    1\n    &gt;&gt;&gt; sevens(7, 5)\n    2\n    &gt;&gt;&gt; sevens(8, 5)\n    1\n    &gt;&gt;&gt; sevens(9, 5)\n    5\n    &gt;&gt;&gt; sevens(18, 5)\n    2\n    &quot;&quot;&quot;\n    def f(i, who, direction):\n        if i == n:\n            return who\n        "*** YOUR CODE HERE ***"\n    return f(1, 1, 1)\n\ndef has_seven(n):\n    if n == 0:\n        return False\n    elif n % 10 == 7:\n        return True\n    else:\n        return has_seven(n // 10)\n', "python", "sevens-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def sevens(n, k):
+    &quot;&quot;&quot;Return the (clockwise) position of who says n among k players.
+
+    &gt;&gt;&gt; sevens(2, 5)
+    2
+    &gt;&gt;&gt; sevens(6, 5)
+    1
+    &gt;&gt;&gt; sevens(7, 5)
+    2
+    &gt;&gt;&gt; sevens(8, 5)
+    1
+    &gt;&gt;&gt; sevens(9, 5)
+    5
+    &gt;&gt;&gt; sevens(18, 5)
+    2
+    &quot;&quot;&quot;
+    def f(i, who, direction):
+        if i == n:
+            return who
+        if i % 7 == 0 or has_seven(i):
+            direction = &#x2d;direction
+        who = who + direction
+        if who &gt; k:
+            who = 1
+        if who &lt; 1:
+            who = k
+        return f(i + 1, who, direction)
+    return f(1, 1, 1)
+
+def has_seven(n):
+    if n == 0:
+        return False
+    elif n % 10 == 7:
+        return True
+    else:
+        return has_seven(n // 10)</code></pre>
+
+            </div>
+        
+
+
+        <button id='toggle-6' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Hint<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-6">
+
+<p>First check if <code>i</code> is a multiple of 7 or contains a 7, and if so, switch
+directions. Then, add the direction to <code>who</code> and ensure that <code>who</code> has not
+become smaller than 1 or greater than <code>k</code>.</p>
+
+</div>
+
+
+<h3 id="q7-karel-the-robot">Q7: Karel the Robot</h3>
+
+
+<p><a href="https://compedu.stanford.edu/karel-reader/docs/python/en/chapter1.html">Karel the
+robot</a>
+starts in the corner of an <code>n</code> by <code>n</code> square for some unknown
+number <code>n</code>. Karel responds to only four functions:</p>
+
+<ul>
+  <li><code>move()</code> moves Karel one square forward if there is no wall in front of Karel and errors if there is.</li>
+  <li><code>turn_left()</code> turns Karel 90 degrees to the left.</li>
+  <li><code>front_is_blocked()</code> returns whether there is a wall in front of Karel.</li>
+  <li><code>front_is_clear()</code> returns whether there is no wall in front of Karel.</li>
+</ul>
+
+<p>Implement a <code>main()</code> function that will leave Karel stopped halfway in the
+middle of the bottom row. For example, if the square is 7 x 7 and Karel starts
+in position (1, 1), the bottom left, then Karel should end in position (1, 4)
+(three steps from either side on the bottom row). Karel can be facing in any
+direction at the end. If the bottom row length is even, Karel can stop in either
+position (1, <code>n // 2</code>) or (1, <code>n // 2 + 1</code>).</p>
+
+<p><strong>Important</strong> You can only write <code>if</code> or <code>if</code>/<code>else</code> statements and function
+calls in the body of <code>main()</code>. You may not write assignment statements, def
+statements, lambda expressions, or while/for statements.</p>
+
+<iframe width=960 height=600 src="https://compedu.stanford.edu/karel-reader/docs/python/en/ide.html">
+</iframe>
+
+
+        <button id='toggle-7' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Hint<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-7">
+For every two steps forward, take one step back to end up in the middle.
+</div>
+<script>
+    $('.alwaystoggle').css('display', 'inline-block');
+    $('.alwaystoggle').click(function() {
+      var solution_id = $(this).attr('id');
+      $('div.' + solution_id).slideToggle(600);
+    });
+</script>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="index.html#getting-started">Getting Started</a></li>
+  <li><a href="index.html#recursion">Recursion</a></li>
+  <ul>
+    <li><a href="index.html#q1-warm-up-recursive-multiplication">Q1: Warm Up: Recursive Multiplication</a></li>
+    <li><a href="index.html#q2-swipe">Q2: Swipe</a></li>
+    <li><a href="index.html#q3-skip-factorial">Q3: Skip Factorial</a></li>
+    <li><a href="index.html#q4-recursive-hailstone">Q4: Recursive Hailstone</a></li>
+  </ul>
+  <li><a href="index.html#tree-recursion">Tree Recursion</a></li>
+  <ul>
+    <li><a href="index.html#q5-count-stair-ways">Q5: Count Stair Ways</a></li>
+  </ul>
+  <li><a href="index.html#submit-attendance">Submit Attendance</a></li>
+  <li><a href="index.html#extra-challenge">Extra Challenge</a></li>
+  <ul>
+    <li><a href="index.html#q6-sevens">Q6: Sevens</a></li>
+    <li><a href="index.html#q7-karel-the-robot">Q7: Karel the Robot</a></li>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <!-- <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer> -->
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="../../assets/js/network_storage.js"></script>
+    <script src="../../assets/js/storable.js"></script>
+    <script src="../../assets/js/editor.js"></script>
+    <script src="../../assets/js/copy-button.js"></script>
+    <script src="../../assets/js/env-diagram.js"></script>
+    
+<!-- <script src="/assets/js/sketchy.js"></script> -->
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

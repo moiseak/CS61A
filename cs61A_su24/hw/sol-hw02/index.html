@@ -1,0 +1,862 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="Laryn Qi, Charlotte Le, Raymond Tan" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/hl.js"></script>
+    <script src="../../assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="../../assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/mono-blue.css">
+    <link rel="icon" href="../../assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="../../assets/css/hw.css">
+
+
+    <title>
+Homework 2 Solutions | CS 61A Summer 2024
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../index.html">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="../../assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="../../office-hours.html">Weekly Schedule</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                External Websites
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://oh.cs61a.org/">Office Hours Queue</a></li>
+                <li><a href="https://pythontutor.com/cp/composingprograms.html">Python Tutor</a></li>
+                <li><a href="https://code.cs61a.org/">Online Code Editor</a></li>
+                <li><a href="https://www.composingprograms.com/">Textbook</a></li>
+                <li><a href="https://edstem.org/us/courses/59836/discussion/">Ed</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Forms
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/regrades">Request a Regrade</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/debugging-guide">Debugging Guide</a></li>
+                <li><a href="../../articles/studying.html">Studying Guide</a></li>
+                <li><a href="../../articles/composition.html">Composition Guide</a></li>
+                <li><a href="../../articles/pair-programming.html">Pair Programming Guide</a></li>
+                <li><a href="../../resources.html">Past Exams & Websites</a></li>
+                <li><a href="../../articles/campus-res/index.html">Department and Campus</a></li>
+                <li><a href="../../articles/advice/index.html">Advice from Former Students</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="../../instructor.html">Instructors</a></li>
+                <li><a href="../../staff.html">TAs & Tutors</a></li>
+                <li><a href="../../contact/index.html">Contact</a></li>
+              </ul>
+            </li>
+            <li><a href="../../articles/about.html">Syllabus</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Homework 2 Solutions
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="hw02.zip" class="label label-outline">hw02.zip</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+<h2>Solution Files</h2>
+<p>You can find solutions for all questions in <a href="hw02.py">hw02.py</a>.</p>
+
+    
+<h1 id="required-questions">Required Questions</h1>
+
+
+<br>
+
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Getting Started Videos<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+
+<h2 id="getting-started-videos" class="no-toc">Getting Started Videos</h2>
+
+
+<p>These videos may provide some helpful direction for tackling the coding
+problems on this assignment.</p>
+
+<blockquote><p>To see these videos, you should be logged into your berkeley.edu email.</p></blockquote>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZee3uSDB7HOpyT2bhOkzGZG"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZee3uSDB7HOpyT2bhOkzGZG'> YouTube link </a></p>
+</div>
+
+<p>Several doctests refer to these functions:</p>
+
+<pre><code>from operator import add, mul
+
+square = lambda x: x * x
+
+identity = lambda x: x
+
+triple = lambda x: 3 * x
+
+increment = lambda x: x + 1</code></pre>
+
+<br>
+
+<!-- Spring 2024 Questions -->
+
+<!-- ## Higher-Order Functions -->
+
+<!-- <include topics/hof/easy/product.md> -->
+
+<!-- <include topics/hof/easy/accumulate.md> -->
+
+<!-- <include topics/hof/medium/make_repeater.md> -->
+
+<!-- <include topics/local-score.md> -->
+
+<!-- <include topics/reminder-submit-hw.md> -->
+
+<!-- Summer 2024 Questions -->
+
+
+<h2 id="higher-order-functions">Higher-Order Functions</h2>
+
+
+
+<h3 id="q1-product">Q1: Product</h3>
+
+
+<p>Write a function called <code>product</code> that returns the product of the first <code>n</code> terms of a sequence.
+Specifically, <code>product</code> takes in an integer <code>n</code> and <code>term</code>, a single-argument function that determines a sequence. 
+(That is, <code>term(i)</code> gives the <code>i</code>th term of the sequence.)
+<code>product(n, term)</code> should return <code>term(1) * ... * term(n)</code>.</p>
+
+<pre><code>def product(n, term):
+    &quot;&quot;&quot;Return the product of the first n terms in a sequence.
+
+    n: a positive integer
+    term:  a function that takes one argument to produce the term
+
+    &gt;&gt;&gt; product(3, identity)  # 1 * 2 * 3
+    6
+    &gt;&gt;&gt; product(5, identity)  # 1 * 2 * 3 * 4 * 5
+    120
+    &gt;&gt;&gt; product(3, square)    # 1^2 * 2^2 * 3^2
+    36
+    &gt;&gt;&gt; product(5, square)    # 1^2 * 2^2 * 3^2 * 4^2 * 5^2
+    14400
+    &gt;&gt;&gt; product(3, increment) # (1+1) * (2+1) * (3+1)
+    24
+    &gt;&gt;&gt; product(3, triple)    # 1*3 * 2*3 * 3*3
+    162
+    &quot;&quot;&quot;
+<div class="sol-highlight">    prod, k = 1, 1
+    while k &lt;= n:
+        prod, k = term(k) * prod, k + 1
+    return prod</div></code></pre>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q product<button id="copy-code-python3ok-qproduct" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qproduct").onclick = () => copyCode('python3 ok -q product', "copy-code-python3ok-qproduct");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>The <code>prod</code> variable is used to keep track of the product so far. We 
+start with <code>prod = 1</code> since we will be multiplying, and anything multiplied 
+by 1 is itself. We then initialize the counter variable <code>k</code> to use in the while
+loop to ensures that we get through all values <code>1</code> through <code>k</code>.</p>
+
+</div>
+
+
+<h3 id="q2-accumulate">Q2: Accumulate</h3>
+
+
+<p>Let's take a look at how <code>product</code> is an instance of a more
+general function called <code>accumulate</code>, which we would like to implement:</p>
+
+<pre><code>def accumulate(fuse, start, n, term):
+    &quot;&quot;&quot;Return the result of fusing together the first n terms in a sequence 
+    and start.  The terms to be fused are term(1), term(2), ..., term(n). 
+    The function fuse is a two&#x2d;argument commutative &amp; associative function.
+
+    &gt;&gt;&gt; accumulate(add, 0, 5, identity)  # 0 + 1 + 2 + 3 + 4 + 5
+    15
+    &gt;&gt;&gt; accumulate(add, 11, 5, identity) # 11 + 1 + 2 + 3 + 4 + 5
+    26
+    &gt;&gt;&gt; accumulate(add, 11, 0, identity) # 11 (fuse is never used)
+    11
+    &gt;&gt;&gt; accumulate(add, 11, 3, square)   # 11 + 1^2 + 2^2 + 3^2
+    25
+    &gt;&gt;&gt; accumulate(mul, 2, 3, square)    # 2 * 1^2 * 2^2 * 3^2
+    72
+    &gt;&gt;&gt; # 2 + (1^2 + 1) + (2^2 + 1) + (3^2 + 1)
+    &gt;&gt;&gt; accumulate(lambda x, y: x + y + 1, 2, 3, square)
+    19
+    &quot;&quot;&quot;
+<div class="sol-highlight">    total, k = start, 1
+    while k &lt;= n:
+        total, k = fuse(total, term(k)), k + 1
+    return total
+
+# Alternative solution
+def accumulate_reverse(fuse, start, n, term):
+    total, k = start, n
+    while k &gt;= 1:
+        total, k = fuse(total, term(k)), k &#x2d; 1
+    return total</div></code></pre>
+
+<p><code>accumulate</code> has the following parameters:</p>
+
+<ul>
+  <li><code>fuse</code>: a two-argument function that specifies how the current term
+  is fused with the previously accumulated terms</li>
+  <li><code>start</code>: value at which to start the accumulation</li>
+  <li><code>n</code>: a non-negative integer indicating the number of terms to fuse</li>
+  <li><code>term</code>: a single-argument function; <code>term(i)</code> is the <code>i</code>th term of the sequence</li>
+</ul>
+
+<p>Implement <code>accumulate</code>, which fuses the first <code>n</code> terms of the sequence defined
+by <code>term</code> with the <code>start</code> value using the <code>fuse</code> function.</p>
+
+<p>For example, the result of <code>accumulate(add, 11, 3, square)</code> is</p>
+
+<pre><code>add(11,  add(square(1), add(square(2),  square(3)))) =
+    11 +     square(1) +    square(2) + square(3)    =
+    11 +     1         +    4         + 9            = 25</code></pre>
+
+<blockquote><p>Assume that <code>fuse</code> is commutative, <code>fuse(a, b) == fuse(b, a)</code>, and
+associative, <code>fuse(fuse(a, b), c) == fuse(a, fuse(b, c))</code>.</p></blockquote>
+
+<p>Then, implement <code>summation</code> (from lecture) and <code>product</code> as one-line calls to
+<code>accumulate</code>.</p>
+
+<blockquote><p><strong>Important:</strong> Both <code>summation_using_accumulate</code> and <code>product_using_accumulate</code>
+should be implemented with a single line of code starting with <code>return</code>.</p></blockquote>
+
+<pre><code>def summation_using_accumulate(n, term):
+    &quot;&quot;&quot;Returns the sum: term(1) + ... + term(n), using accumulate.
+
+    &gt;&gt;&gt; summation_using_accumulate(5, square) # square(0) + square(1) + ... + square(4) + square(5)
+    55
+    &gt;&gt;&gt; summation_using_accumulate(5, triple) # triple(0) + triple(1) + ... + triple(4) + triple(5)
+    45
+    &gt;&gt;&gt; # This test checks that the body of the function is just a return statement.
+    &gt;&gt;&gt; import inspect, ast
+    &gt;&gt;&gt; [type(x).__name__ for x in ast.parse(inspect.getsource(summation_using_accumulate)).body[0].body]
+    [&#x27;Expr&#x27;, &#x27;Return&#x27;]
+    &quot;&quot;&quot;
+<div class="sol-highlight">    return accumulate(add, 0, n, term)</div>
+def product_using_accumulate(n, term):
+    &quot;&quot;&quot;Returns the product: term(1) * ... * term(n), using accumulate.
+
+    &gt;&gt;&gt; product_using_accumulate(4, square) # square(1) * square(2) * square(3) * square()
+    576
+    &gt;&gt;&gt; product_using_accumulate(6, triple) # triple(1) * triple(2) * ... * triple(5) * triple(6)
+    524880
+    &gt;&gt;&gt; # This test checks that the body of the function is just a return statement.
+    &gt;&gt;&gt; import inspect, ast
+    &gt;&gt;&gt; [type(x).__name__ for x in ast.parse(inspect.getsource(product_using_accumulate)).body[0].body]
+    [&#x27;Expr&#x27;, &#x27;Return&#x27;]
+    &quot;&quot;&quot;
+<div class="sol-highlight">    return accumulate(mul, 1, n, term)</div></code></pre>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q accumulate
+python3 ok -q summation_using_accumulate
+python3 ok -q product_using_accumulate<button id="copy-code-python3ok-qaccumulatepython3ok-qsummation_using_accumulatepython3ok-qproduct_using_accumulate" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qaccumulatepython3ok-qsummation_using_accumulatepython3ok-qproduct_using_accumulate").onclick = () => copyCode('python3 ok -q accumulate\npython3 ok -q summation_using_accumulate\npython3 ok -q product_using_accumulate', "copy-code-python3ok-qaccumulatepython3ok-qsummation_using_accumulatepython3ok-qproduct_using_accumulate");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>We want to abstract the logic of <code>product</code> and <code>summation</code> into <code>accumulate</code>.
+The differences between <code>product</code> and <code>summation</code> are:</p>
+
+<ul>
+  <li>How to fuse terms. For <code>product</code>, we fuse via <code>*</code> (<code>mul</code>).
+  For <code>summation</code>, we fuse via <code>+</code> (<code>add</code>).</li>
+  <li>The starting value. For <code>product</code>, we want to start off with 1 since
+  starting with 0 means that our result (via multiplying with the start)
+  will always be 0. For <code>summation</code>, we want to start off with 0.
+  </div></li>
+</ul>
+
+
+<h3 id="q3-make-repeater">Q3: Make Repeater</h3>
+
+
+<p>Implement the function <code>make_repeater</code> which takes a one-argument function <code>f</code>
+and a positive integer <code>n</code>. It returns a one-argument function, where
+<code>make_repeater(f, n)(x)</code> returns the value of <code>f(f(...f(x)...))</code> in which <code>f</code> is
+applied <code>n</code> times to <code>x</code>. For example, <code>make_repeater(square, 3)(5)</code> squares 5
+three times and returns 390625, just like <code>square(square(square(5)))</code>.</p>
+
+<pre><code>def make_repeater(f, n):
+    &quot;&quot;&quot;Returns the function that computes the nth application of f.
+
+    &gt;&gt;&gt; add_three = make_repeater(increment, 3)
+    &gt;&gt;&gt; add_three(5)
+    8
+    &gt;&gt;&gt; make_repeater(triple, 5)(1) # 3 * (3 * (3 * (3 * (3 * 1))))
+    243
+    &gt;&gt;&gt; make_repeater(square, 2)(5) # square(square(5))
+    625
+    &gt;&gt;&gt; make_repeater(square, 3)(5) # square(square(square(5)))
+    390625
+    &quot;&quot;&quot;
+<div class="sol-highlight">    def repeater(x):
+        k = 0
+        while k &lt; n:
+            x, k = f(x), k + 1
+        return x
+    return repeater</div></code></pre>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q make_repeater<button id="copy-code-python3ok-qmake_repeater" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qmake_repeater").onclick = () => copyCode('python3 ok -q make_repeater', "copy-code-python3ok-qmake_repeater");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>There are many correct ways to implement <code>make_repeater</code>.  This solution
+repeatedly applies <code>h</code>.</p>
+
+</div>
+
+
+<h2 id="recursion">Recursion</h2>
+
+
+
+<h3 id="q4-digit-distance">Q4: Digit Distance</h3>
+
+
+<p>For a given integer, the <em>digit distance</em> is the sum of the absolute differences between
+consecutive digits. For example:</p>
+
+<ul>
+  <li>The digit distance of <code>6</code> is <code>0</code>.</li>
+  <li>The digit distance of <code>61</code> is <code>5</code>, as the absolute value of <code>6 &#x2d; 1</code> is <code>5</code>.</li>
+  <li>The digit distance of <code>71253</code> is <code>12</code> (<code>6 + 1 + 3 + 2</code>).</li>
+</ul>
+
+<p>Write a function that determines the digit distance of a given positive integer.
+You must use recursion or the tests will fail.</p>
+
+<blockquote><p><strong>Hint:</strong> There are multiple valid ways of solving this problem!
+If you're stuck, try writing out an iterative solution
+first, and then convert your iterative solution into a recursive one.</p></blockquote>
+
+<solution>
+
+<pre><code>def digit_distance(n):
+    &quot;&quot;&quot;Determines the digit distance of n.
+
+    &gt;&gt;&gt; digit_distance(3)
+    0
+    &gt;&gt;&gt; digit_distance(777)
+    0
+    &gt;&gt;&gt; digit_distance(314)
+    5
+    &gt;&gt;&gt; digit_distance(31415926535)
+    32
+    &gt;&gt;&gt; digit_distance(3464660003)
+    16
+    &gt;&gt;&gt; from construct_check import check
+    &gt;&gt;&gt; # ban all loops
+    &gt;&gt;&gt; check(HW_SOURCE_FILE, &#x27;digit_distance&#x27;,
+    ...       [&#x27;For&#x27;, &#x27;While&#x27;])
+    True
+    &quot;&quot;&quot;
+<div class="sol-highlight">    if n &lt; 10:
+        return 0
+    return abs(n % 10 &#x2d; (n // 10) % 10) + digit_distance(n // 10)
+
+# Alternate solution 1
+def digit_distance_alt(n):
+    def helper(prev, n):
+        if n == 0:
+            return 0
+        dist = abs(prev &#x2d; n % 10)
+        return dist + helper(n % 10, n // 10)
+    return helper(n % 10, n // 10)
+
+# Alternate solution 2
+def digit_distance_alt_2(n):
+    def helper(dist, prev, n):
+        if n == 0:
+            return dist
+        dist += abs(prev &#x2d; n % 10)
+        prev = n % 10
+        n //= 10
+        return helper(dist, prev, n)
+    return helper(0, n % 10, n // 10)</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q digit_distance<button id="copy-code-python3ok-qdigit_distance" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qdigit_distance").onclick = () => copyCode('python3 ok -q digit_distance', "copy-code-python3ok-qdigit_distance");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+The equivalent iterative version of the problem might look something like this:
+
+<pre><code>def distance(n):
+    dist = 0
+    prev = n % 10
+    n //= 10
+    while n &gt; 0:
+        dist += abs(prev &#x2d; n % 10)
+        prev = n % 10
+        n //= 10
+    return dist</code></pre>
+
+
+<p>The main idea is that we take each parameter in our iterative solution and define those
+parameters as inputs into our helper function. The recursive solution otherwise follows
+the same body as above, where we take the last two digits of the number, compute the
+distance between them, then shift the number down by one digit by calculating <code>n // 10</code>.</p>
+
+<p>This skeleton can be simplified when implemented with recursion (see alternate solution),
+but reusing the above iterative body is sufficient for this problem.
+</div></p>
+
+<!--  -->
+
+
+<h3 id="q5-interleaved-sum">Q5: Interleaved Sum</h3>
+
+
+<p>Write a function <code>interleaved_sum</code>, which takes in a number <code>n</code> and
+two one-argument functions: <code>odd_func</code> and <code>even_func</code>. It applies <code>odd_func</code>
+to every odd number and <code>even_func</code> to every even number from 1 to <code>n</code> <em>inclusive</em>
+and returns the sum.</p>
+
+<p>For example, executing <code>interleaved_sum(5, lambda x: x, lambda x: x * x)</code>
+returns <code>1 + 2*2 + 3 + 4*4 + 5 = 29</code>.</p>
+
+<blockquote><p><strong>Important:</strong> Implement this function without using any loops or directly testing if a number
+is odd or even -- aka modulos (<code>%</code>) are not allowed! Instead of directly checking whether a number
+is even or odd, start with 1, which you know is an odd number.</p>
+
+<p><strong>Hint:</strong> Introduce an inner helper function that takes an odd number <code>k</code> and
+computes an interleaved sum from <code>k</code> to <code>n</code> (including <code>n</code>).</p></blockquote>
+
+<solution>
+
+<pre><code>def interleaved_sum(n, odd_func, even_func):
+    &quot;&quot;&quot;Compute the sum odd_func(1) + even_func(2) + odd_func(3) + ..., up
+    to n.
+
+    &gt;&gt;&gt; identity = lambda x: x
+    &gt;&gt;&gt; square = lambda x: x * x
+    &gt;&gt;&gt; triple = lambda x: x * 3
+    &gt;&gt;&gt; interleaved_sum(5, identity, square) # 1   + 2*2 + 3   + 4*4 + 5
+    29
+    &gt;&gt;&gt; interleaved_sum(5, square, identity) # 1*1 + 2   + 3*3 + 4   + 5*5
+    41
+    &gt;&gt;&gt; interleaved_sum(4, triple, square)   # 1*3 + 2*2 + 3*3 + 4*4
+    32
+    &gt;&gt;&gt; interleaved_sum(4, square, triple)   # 1*1 + 2*3 + 3*3 + 4*3
+    28
+    &gt;&gt;&gt; from construct_check import check
+    &gt;&gt;&gt; check(HW_SOURCE_FILE, &#x27;interleaved_sum&#x27;, [&#x27;While&#x27;, &#x27;For&#x27;, &#x27;Mod&#x27;]) # ban loops and %
+    True
+    &gt;&gt;&gt; check(HW_SOURCE_FILE, &#x27;interleaved_sum&#x27;, [&#x27;BitAnd&#x27;, &#x27;BitOr&#x27;, &#x27;BitXor&#x27;]) # ban bitwise operators, don&#x27;t worry about these if you don&#x27;t know what they are
+    True
+    &quot;&quot;&quot;
+<div class="sol-highlight">    def sum_from(k):
+        if k &gt; n:
+            return 0
+        elif k == n:
+            return odd_func(k)
+        else:
+            return odd_func(k) + even_func(k+1) + sum_from(k + 2)
+    return sum_from(1)</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q interleaved_sum<button id="copy-code-python3ok-qinterleaved_sum" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qinterleaved_sum").onclick = () => copyCode('python3 ok -q interleaved_sum', "copy-code-python3ok-qinterleaved_sum");
+        </script>
+        <br/>
+
+
+<h3 id="q6-count-coins">Q6: Count Coins</h3>
+
+
+<p>Given a positive integer <code>total</code>, a set of coins makes change for <code>total</code> if
+the sum of the values of the coins is <code>total</code>.
+Here we will use standard US Coin values: 1, 5, 10, 25.
+For example, the following sets make change for <code>15</code>:</p>
+
+<ul>
+  <li>15 1-cent coins</li>
+  <li>10 1-cent, 1 5-cent coins</li>
+  <li>5 1-cent, 2 5-cent coins</li>
+  <li>5 1-cent, 1 10-cent coins</li>
+  <li>3 5-cent coins</li>
+  <li>1 5-cent, 1 10-cent coin</li>
+</ul>
+
+<p>Thus, there are 6 ways to make change for <code>15</code>.  Write a <strong>recursive</strong> function
+<code>count_coins</code> that takes a positive integer <code>total</code> and returns the number of
+ways to make change for <code>total</code> using coins.</p>
+
+<p>You can use <em>either</em> of the functions given to you:</p>
+
+<ul>
+  <li><code>next_larger_coin</code> will return the next larger coin denomination from the
+  input, i.e. <code>next_larger_coin(5)</code> is <code>10</code>.</li>
+  <li><code>next_smaller_coin</code> will return the next smaller coin denomination from the
+  input, i.e. <code>next_smaller_coin(5)</code> is <code>1</code>.</li>
+  <li>Either function will return <code>None</code> if the next coin value does not exist</li>
+</ul>
+
+<p>There are two main ways in which you can approach this problem.
+One way uses <code>next_larger_coin</code>, and another uses <code>next_smaller_coin</code>.
+It is up to you which one you want to use!</p>
+
+<blockquote><p><strong>Important:</strong> Use recursion; the tests will fail if you use loops.</p>
+
+<p><strong>Hint:</strong>
+Refer to the <a href="https://www.composingprograms.com/pages/17-recursive-functions.html#example-partitions">implementation</a> of <code>count_partitions</code> for an example
+of how to count the ways to sum up to a final value with smaller parts.
+If you need to keep track of more than one value across recursive calls,
+consider writing a helper function.</p></blockquote>
+
+<solution>
+
+<pre><code>def next_larger_coin(coin):
+    &quot;&quot;&quot;Returns the next larger coin in order.
+    &gt;&gt;&gt; next_larger_coin(1)
+    5
+    &gt;&gt;&gt; next_larger_coin(5)
+    10
+    &gt;&gt;&gt; next_larger_coin(10)
+    25
+    &gt;&gt;&gt; next_larger_coin(2) # Other values return None
+    &quot;&quot;&quot;
+    if coin == 1:
+        return 5
+    elif coin == 5:
+        return 10
+    elif coin == 10:
+        return 25
+
+def next_smaller_coin(coin):
+    &quot;&quot;&quot;Returns the next smaller coin in order.
+    &gt;&gt;&gt; next_smaller_coin(25)
+    10
+    &gt;&gt;&gt; next_smaller_coin(10)
+    5
+    &gt;&gt;&gt; next_smaller_coin(5)
+    1
+    &gt;&gt;&gt; next_smaller_coin(2) # Other values return None
+    &quot;&quot;&quot;
+    if coin == 25:
+        return 10
+    elif coin == 10:
+        return 5
+    elif coin == 5:
+        return 1
+
+def count_coins(total):
+    &quot;&quot;&quot;Return the number of ways to make change using coins of value of 1, 5, 10, 25.
+    &gt;&gt;&gt; count_coins(15)
+    6
+    &gt;&gt;&gt; count_coins(10)
+    4
+    &gt;&gt;&gt; count_coins(20)
+    9
+    &gt;&gt;&gt; count_coins(100) # How many ways to make change for a dollar?
+    242
+    &gt;&gt;&gt; count_coins(200)
+    1463
+    &gt;&gt;&gt; from construct_check import check
+    &gt;&gt;&gt; # ban iteration
+    &gt;&gt;&gt; check(HW_SOURCE_FILE, &#x27;count_coins&#x27;, [&#x27;While&#x27;, &#x27;For&#x27;])
+    True
+    &quot;&quot;&quot;
+<div class="sol-highlight">    def constrained_count(total, smallest_coin):
+        if total == 0:
+            return 1
+        if total &lt; 0:
+            return 0
+        if smallest_coin == None:
+            return 0
+        without_coin = constrained_count(total, next_larger_coin(smallest_coin))
+        with_coin = constrained_count(total &#x2d; smallest_coin, smallest_coin)
+        return without_coin + with_coin
+    return constrained_count(total, 1)
+
+    # Alternate solution: using next_smaller_coin
+    def constrained_count_small(total, largest_coin):
+        if total == 0:
+            return 1
+        if total &lt; 0:
+            return 0
+        if largest_coin == None:
+            return 0
+        without_coin = constrained_count_small(total, next_smaller_coin(largest_coin))
+        with_coin = constrained_count_small(total &#x2d; largest_coin, largest_coin)
+        return without_coin + with_coin
+    return constrained_count_small(total, 25)</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q count_coins<button id="copy-code-python3ok-qcount_coins" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qcount_coins").onclick = () => copyCode('python3 ok -q count_coins', "copy-code-python3ok-qcount_coins");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>This is remarkably similar to the <code>count_partitions</code> problem, with a
+few minor differences:</p>
+
+<ul>
+  <li>A maximum partition size is not given, so we need to create a helper
+  function that takes in two arguments and also create another helper function
+  to find the max coin.</li>
+  <li>Partition size is not linear. To get the next partition you need to call
+  <code>next_larger_coin</code> if you are counting up (i.e. from the smallest coin to the
+  largest coin), or <code>next_smaller_coin</code> if you are counting down.</li>
+</ul>
+
+</div>
+
+
+<h2 id="check-your-score-locally">Check Your Score Locally</h2>
+
+<p>You can locally check your score on each question of this assignment by running</p>
+
+<pre><code>python3 ok &#x2d;&#x2d;score</code></pre>
+
+<p><strong>This does NOT submit the assignment!</strong> When you are satisfied with your score, submit the assignment to Gradescope to receive credit for it.</p>
+
+
+<h1 id="submit-assignment">Submit Assignment</h1>
+
+
+<p>Submit this assignment by uploading any files you've edited <strong>to the appropriate Gradescope assignment.</strong> <a href="../../lab/lab00.html#submit-with-gradescope">Lab 00</a> has detailed instructions.</p>
+
+
+<h2 id="exam-practice">Exam Practice</h2>
+
+
+<p>Here are some related questions from past exams for you to try. These are optional.
+There is no way to submit them.</p>
+
+<blockquote><p>Note that exams from Spring 2020, Fall 2020, and Spring 2021 gave students
+access to an interpreter, so the question format may be different than other
+years. Regardless, the questions below are good problems to try <em>without</em>
+access to an interpreter.</p></blockquote>
+
+<ol>
+  <li>Fall 2019 MT1 Q3: <a href="../../exam/fa19/mt1/61a-fa19-mt1.pdf#page=4">You Again</a> [Higher-Order Functions]</li>
+  <li>Spring 2021 MT1 Q4: <a href="../../exam/sp21/mt1/61a-sp21-mt1.pdf#page=14">Domain on the Range</a> [Higher-Order Functions]</li>
+  <li>Fall 2021 MT1 Q1b: <a href="../../exam/fa21/mt1/61a-fa21-mt1.pdf#page=4">tik</a> [Functions and Expressions]</li>
+</ol>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="index.html#required-questions">Required Questions</a></li>
+  <ul>
+    <li><a href="index.html#higher-order-functions">Higher-Order Functions</a></li>
+    <ul>
+      <li><a href="index.html#q1-product">Q1: Product</a></li>
+      <li><a href="index.html#q2-accumulate">Q2: Accumulate</a></li>
+      <li><a href="index.html#q3-make-repeater">Q3: Make Repeater</a></li>
+    </ul>
+    <li><a href="index.html#recursion">Recursion</a></li>
+    <ul>
+      <li><a href="index.html#q4-digit-distance">Q4: Digit Distance</a></li>
+      <li><a href="index.html#q5-interleaved-sum">Q5: Interleaved Sum</a></li>
+      <li><a href="index.html#q6-count-coins">Q6: Count Coins</a></li>
+    </ul>
+    <li><a href="index.html#check-your-score-locally">Check Your Score Locally</a></li>
+  </ul>
+  <li><a href="index.html#submit-assignment">Submit Assignment</a></li>
+  <ul>
+    <li><a href="index.html#exam-practice">Exam Practice</a></li>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <!-- <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer> -->
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="../../assets/js/network_storage.js"></script>
+    <script src="../../assets/js/storable.js"></script>
+    <script src="../../assets/js/editor.js"></script>
+    <script src="../../assets/js/copy-button.js"></script>
+    <script src="../../assets/js/env-diagram.js"></script>
+    
+<!-- <script src="/assets/js/sketchy.js"></script> -->
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

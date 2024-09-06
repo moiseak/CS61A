@@ -1,0 +1,1156 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="Laryn Qi, Charlotte Le, Raymond Tan" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/hl.js"></script>
+    <script src="../../assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="../../assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/mono-blue.css">
+    <link rel="icon" href="../../assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="../../assets/css/lab.css">
+
+
+    <title>
+Lab 7 Solutions | CS 61A Summer 2024
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../index.html">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="../../assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="../../office-hours.html">Weekly Schedule</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                External Websites
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://oh.cs61a.org/">Office Hours Queue</a></li>
+                <li><a href="https://pythontutor.com/cp/composingprograms.html">Python Tutor</a></li>
+                <li><a href="https://code.cs61a.org/">Online Code Editor</a></li>
+                <li><a href="https://www.composingprograms.com/">Textbook</a></li>
+                <li><a href="https://edstem.org/us/courses/59836/discussion/">Ed</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Forms
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/regrades">Request a Regrade</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/debugging-guide">Debugging Guide</a></li>
+                <li><a href="../../articles/studying.html">Studying Guide</a></li>
+                <li><a href="../../articles/composition.html">Composition Guide</a></li>
+                <li><a href="../../articles/pair-programming.html">Pair Programming Guide</a></li>
+                <li><a href="../../resources.html">Past Exams & Websites</a></li>
+                <li><a href="../../articles/campus-res/index.html">Department and Campus</a></li>
+                <li><a href="../../articles/advice/index.html">Advice from Former Students</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="../../instructor.html">Instructors</a></li>
+                <li><a href="../../staff.html">TAs & Tutors</a></li>
+                <li><a href="../../contact/index.html">Contact</a></li>
+              </ul>
+            </li>
+            <li><a href="../../articles/about.html">Syllabus</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Lab 7 Solutions
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="lab07.zip" class="label label-outline">lab07.zip</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+<h2>Solution Files</h2>
+
+
+    
+<h1 id="required-questions">Required Questions</h1>
+
+
+<br>
+
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Getting Started Videos<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+
+
+<h2 id="getting-started-videos" class="no-toc">Getting Started Videos</h2>
+
+
+<p>These videos may provide some helpful direction for tackling the coding
+problems on this assignment.</p>
+
+<blockquote><p>To see these videos, you should be logged into your berkeley.edu email.</p></blockquote>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZdDSDb_kP0oSAv_XTF2qnG3&si=ZF41WsMcxhe_41M_"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZdDSDb_kP0oSAv_XTF2qnG3&si=ZF41WsMcxhe_41M_'> YouTube link </a></p>
+</div>
+
+
+<h2 id="midsemester-survey">Midsemester Survey</h2>
+
+
+
+<h3 id="q1-mid-semester-feedback">Q1: Mid-Semester Feedback</h3>
+
+
+<p>As part of this assignment, fill out the
+<a href="https://docs.google.com/forms/d/e/1FAIpQLScpyKukw9IGTl8mIRKkZJAJ6YKW8l8srYBck1Te8cyTGILYZw/viewform?usp=sf_link">Mid-Semester Feedback</a> form.</p>
+
+<blockquote><p><strong>Confidentiality</strong>:
+Your responses to the survey are confidential, and only the instructors
+will be able to see this data unanonymized.
+More specifics on confidentiality can be found on the survey itself.</p></blockquote>
+
+<p>Once you finish the survey, you will be presented with a passphrase (if you miss
+it, it should also be at the bottom of the confirmation email you receive). Put
+this passphrase, as a string, on the line that says
+<code>passphrase = &#x27;REPLACE_THIS_WITH_PASSPHRASE&#x27;</code> in the Python file for this assignment.
+E.g. if the passphrase is <code>abc</code>, then the line should be <code>passphrase = &#x27;abc&#x27;</code>.</p>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q midsem_survey<button id="copy-code-python3ok-qmidsem_survey" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qmidsem_survey").onclick = () => copyCode('python3 ok -q midsem_survey', "copy-code-python3ok-qmidsem_survey");
+        </script>
+        <br/>
+
+
+<h2 id="inheritance">Inheritance</h2>
+
+
+<p>Consult the drop-down if you need a refresher on Inheritance. It's
+okay to skip directly to the questions and refer back
+here should you get stuck.</p>
+
+
+        <button id='toggle-2' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Inheritance<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-2">
+
+<!-- This is the short version of inheritance introduction.
+A longer version can be found in inheritance-introduction.md -->
+
+<p>To avoid redefining attributes and methods for similar classes, we can write a
+single <strong>base class</strong> from which more specialized classes <strong>inherit</strong>. For
+example, we can write a class called <code>Pet</code> and define <code>Dog</code> as a <strong>subclass</strong> of
+<code>Pet</code>:</p>
+
+<pre><code class="python">class Pet:
+
+    def __init__(self, name, owner):
+        self.is_alive = True    # It&#x27;s alive!!!
+        self.name = name
+        self.owner = owner
+
+    def eat(self, thing):
+        print(self.name + &quot; ate a &quot; + str(thing) + &quot;!&quot;)
+
+    def talk(self):
+        print(self.name)
+
+class Dog(Pet):
+
+    def talk(self):
+        super().talk()
+        print(&#x27;This Dog says woof!&#x27;)</code></pre>
+
+
+
+<p>Inheritance represents a hierarchical relationship between two or more
+classes where one class <strong>is a</strong> more specific version of the other:
+a dog <strong>is a</strong> pet
+(We use <strong>is a</strong> to describe this sort of relationship in OOP languages,
+and not to refer to the Python <code>is</code> operator).</p>
+
+<p>Since <code>Dog</code> inherits from <code>Pet</code>, the <code>Dog</code> class will also inherit the
+<code>Pet</code> class's methods, so we don't have to redefine <code>__init__</code> or <code>eat</code>.
+We do want each <code>Dog</code> to <code>talk</code> in a <code>Dog</code>-specific way,
+so we can <strong>override</strong> the <code>talk</code> method.</p>
+
+<p>We can use <code>super()</code> to refer to the superclass of <code>self</code>,
+and access any superclass methods as if we were an instance of the superclass.
+For example, <code>super().talk()</code> in the <code>Dog</code> class will call the <code>talk</code>
+method from the <code>Pet</code> class, but passing the <code>Dog</code> instance as the <code>self</code>.</p>
+
+</div>
+
+
+<h3 id="q2-wwpd-inheritance-abcs">Q2: WWPD: Inheritance ABCs</h3>
+
+
+<blockquote><p><strong>Important:</strong>
+For all WWPD questions, type <code>Function</code> if you believe the answer is
+<code>&lt;function...&gt;</code>, <code>Error</code> if it errors, and <code>Nothing</code> if nothing is displayed.</p>
+
+<p>Use Ok to test your knowledge with the following "What Would Python Display?" questions:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q inheritance-abc -u<button id="copy-code-python3ok-qinheritance-abc-u" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qinheritance-abc-u").onclick = () => copyCode('python3 ok -q inheritance-abc -u', "copy-code-python3ok-qinheritance-abc-u");
+        </script>
+        <br/></blockquote>
+
+<pre><code>&gt;&gt;&gt; class A:
+...   x, y = 0, 0
+...   def __init__(self):
+...         return
+&gt;&gt;&gt; class B(A):
+...   def __init__(self):
+...         return
+&gt;&gt;&gt; class C(A):
+...   def __init__(self):
+...         return
+&gt;&gt;&gt; print(A.x, B.x, C.x)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x5f;&#x5f;&#x5f;&#x5f;&#x5f;&#x5f;</div>
+&gt;&gt;&gt; B.x = 2
+&gt;&gt;&gt; print(A.x, B.x, C.x)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x5f;&#x5f;&#x5f;&#x5f;&#x5f;&#x5f;</div>
+&gt;&gt;&gt; A.x += 1
+&gt;&gt;&gt; print(A.x, B.x, C.x)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x5f;&#x5f;&#x5f;&#x5f;&#x5f;&#x5f;</div>
+&gt;&gt;&gt; obj = C()
+&gt;&gt;&gt; obj.y = 1
+&gt;&gt;&gt; C.y == obj.y
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x5f;&#x5f;&#x5f;&#x5f;&#x5f;&#x5f;</div>
+&gt;&gt;&gt; A.y = obj.y
+&gt;&gt;&gt; print(A.y, B.y, C.y, obj.y)
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x5f;&#x5f;&#x5f;&#x5f;&#x5f;&#x5f;</div></code></pre>
+        <button id='prompt-1' class='btn btn-outline btn-lg solutiontoggle prompt'>
+        Toggle Solution<noscript> (enable JavaScript)</noscript>
+        </button>
+        
+
+
+<h2 id="class-practice">Class Practice</h2>
+
+
+<p>Let's say we'd like to model a bank account that can handle interactions
+such as depositing funds or gaining interest on current funds.
+In the following questions, we will be building off of the <code>Account</code> class.
+Here's our current definition of the class:</p>
+
+<pre><code>class Account:
+    &quot;&quot;&quot;An account has a balance and a holder.
+    &gt;&gt;&gt; a = Account(&#x27;John&#x27;)
+    &gt;&gt;&gt; a.deposit(10)
+    10
+    &gt;&gt;&gt; a.balance
+    10
+    &gt;&gt;&gt; a.interest
+    0.02
+    &gt;&gt;&gt; a.time_to_retire(10.25)  # 10 &#x2d;&gt; 10.2 &#x2d;&gt; 10.404
+    2
+    &gt;&gt;&gt; a.balance                # Calling time_to_retire method should not change the balance
+    10
+    &gt;&gt;&gt; a.time_to_retire(11)     # 10 &#x2d;&gt; 10.2 &#x2d;&gt; ... &#x2d;&gt; 11.040808032
+    5
+    &gt;&gt;&gt; a.time_to_retire(100)
+    117
+    &quot;&quot;&quot;
+    max_withdrawal = 10
+    interest = 0.02
+
+    def __init__(self, account_holder):
+        self.balance = 0
+        self.holder = account_holder
+
+    def deposit(self, amount):
+        self.balance = self.balance + amount
+        return self.balance
+
+    def withdraw(self, amount):
+        if amount &gt; self.balance:
+            return &quot;Insufficient funds&quot;
+        if amount &gt; self.max_withdrawal:
+            return &quot;Can&#x27;t withdraw that amount&quot;
+        self.balance = self.balance &#x2d; amount
+        return self.balance</code></pre>
+
+
+<h3 id="q3-retirement">Q3: Retirement</h3>
+
+
+<p>Add a <code>time_to_retire</code> method to the <code>Account</code> class.
+This method takes in an <code>amount</code> and returns how many years the holder would
+need to wait in order for the current <code>balance</code> to grow to at least <code>amount</code>,
+assuming that the bank adds the interest (calculated as the current <code>balance</code>
+multiplied by the <code>interest</code> rate) to the <code>balance</code> at the end of each year.</p>
+
+<blockquote><p><strong>Note</strong>: Calling the <code>time_to_retire</code> method should not change the account balance.</p></blockquote>
+
+<solution>
+
+<pre><code>    def time_to_retire(self, amount):
+        &quot;&quot;&quot;Return the number of years until balance would grow to amount.&quot;&quot;&quot;
+        assert self.balance &gt; 0 and amount &gt; 0 and self.interest &gt; 0
+<div class="sol-highlight">        future = self.balance
+        years = 0
+        while future &lt; amount:
+            future += self.interest * future
+            years += 1
+        return years</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q Account<button id="copy-code-python3ok-qAccount" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qAccount").onclick = () => copyCode('python3 ok -q Account', "copy-code-python3ok-qAccount");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>We take of our current balance, and simulate the growth from interest over
+many years. We stop once we hit the target value.</p>
+
+<p>Note that the problem solving procedure does not differ very much from an
+non OOP problem. The main difference here is make sure that we do not
+change the account balance while in the process of calculating the future
+balance. Therefore, something along these lines is necessary:</p>
+
+<pre><code>future = self.balance</code></pre>
+
+<p>Video walkthrough: <p><a href='https://youtu.be/fQzeZcI-4a0'> YouTube link </a></p></p>
+
+</div>
+
+
+<h3 id="q4-freechecking">Q4: FreeChecking</h3>
+
+
+<p>Implement the <code>FreeChecking</code> class, which is like the <code>Account</code> class 
+except that it charges a withdraw fee <code>withdraw_fee</code> after 
+withdrawing <code>free_withdrawals</code> number of times.
+If a withdrawal is unsuccessful, it still counts towards the number of free
+withdrawals remaining, but no fee for the withdrawal will be charged.</p>
+
+<solution>
+
+<pre><code>class FreeChecking(Account):
+    &quot;&quot;&quot;A bank account that charges for withdrawals, but the first two are free!
+    &gt;&gt;&gt; ch = FreeChecking(&#x27;Jack&#x27;)
+    &gt;&gt;&gt; ch.balance = 20
+    &gt;&gt;&gt; ch.withdraw(100)  # First one&#x27;s free. Still counts as a free withdrawal even though it was unsuccessful
+    &#x27;Insufficient funds&#x27;
+    &gt;&gt;&gt; ch.withdraw(3)    # Second withdrawal is also free
+    17
+    &gt;&gt;&gt; ch.balance
+    17
+    &gt;&gt;&gt; ch.withdraw(3)    # Ok, two free withdrawals is enough, as free_withdrawals is only 2
+    13
+    &gt;&gt;&gt; ch.withdraw(3)
+    9
+    &gt;&gt;&gt; ch2 = FreeChecking(&#x27;John&#x27;)
+    &gt;&gt;&gt; ch2.balance = 10
+    &gt;&gt;&gt; ch2.withdraw(3) # No fee
+    7
+    &gt;&gt;&gt; ch.withdraw(3)  # ch still charges a fee
+    5
+    &gt;&gt;&gt; ch.withdraw(5)  # Not enough to cover fee + withdraw
+    &#x27;Insufficient funds&#x27;
+    &quot;&quot;&quot;
+    withdraw_fee = 1
+    free_withdrawals = 2
+
+<div class="sol-highlight">    def __init__(self, account_holder):
+        super().__init__(account_holder)
+        self.withdrawals = 0
+
+    def withdraw(self, amount):
+        self.withdrawals += 1
+        fee = 0
+        if self.withdrawals &gt; self.free_withdrawals:
+            fee = self.withdraw_fee
+        return super().withdraw(amount + fee)
+
+    # Alternative solution where you don&#x27;t need to include init.
+    # Check out the video solution for more.
+    def withdraw(self, amount):
+        self.free_withdrawals &#x2d;= 1
+        if self.free_withdrawals &gt;= 0:
+            return super().withdraw(amount)
+        return super().withdraw(amount + self.withdraw_fee)</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q FreeChecking<button id="copy-code-python3ok-qFreeChecking" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qFreeChecking").onclick = () => copyCode('python3 ok -q FreeChecking', "copy-code-python3ok-qFreeChecking");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>We can take advantage of inheritance to make sure we add just what we need
+to <code>withdraw</code>.</p>
+
+<ul>
+  <li>For starters, a withdrawal with a fee is the same as the original
+  withdraw amount plus the amount from the fee. We can therefore represent
+  a <code>FreeChecking</code> withdraw as a "regular" <code>Account</code> withdraw in this way.</li>
+  <li>On top of the note from before, we need to do a little bit of extra
+  bookkeeping to make sure the first few withdrawals do not add the extra
+  fee. We can either create a new instance attribute or modify an existing
+  one.</li>
+</ul>
+
+<p>Video walkthrough: <p><a href='https://youtu.be/flIMJC2lY3M'> YouTube link </a></p></p>
+
+</div>
+
+
+<h2 id="object-oriented-programming">Object-Oriented Programming</h2>
+
+
+<p>Here's a refresher on Object-Oriented Programming. It's okay to skip directly to the questions and refer back here if you get stuck.</p>
+
+
+        <button id='toggle-3' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Object-Oriented Programming<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-3">
+
+<p><strong>Object-oriented programming</strong> (OOP) uses objects and classes to organize programs. Here's an example of a class:</p>
+
+<pre><code>class Car:
+    max_tires = 4
+
+    def __init__(self, color):
+        self.tires = Car.max_tires
+        self.color = color
+
+    def drive(self):
+        if self.tires &lt; Car.max_tires:
+            return self.color + &#x27; car cannot drive!&#x27;
+        return self.color + &#x27; car goes vroom!&#x27;
+
+    def pop_tire(self):
+        if self.tires &gt; 0:
+            self.tires &#x2d;= 1</code></pre>
+
+<p><strong>Class</strong>: The type of an object. The <code>Car</code> class (shown above) describes the characteristics of all <code>Car</code>
+  objects.</p>
+
+<p><strong>Object</strong>: A single instance of a class. In Python, a new object is created by
+  calling a class.</p>
+
+<pre><code>&gt;&gt;&gt; ferrari = Car(&#x27;red&#x27;)</code></pre>
+
+<p>Here, <code>ferrari</code> is a name bound to a <code>Car</code> object.</p>
+
+<p><strong>Class attribute</strong>: A variable that belongs to a class and is accessed via dot notation. The <code>Car</code> class has a <code>max_tires</code> attribute.</p>
+
+<pre><code>&gt;&gt;&gt; Car.max_tires
+4</code></pre>
+
+<p><strong>Instance attribute</strong>: A variable that belongs to a particular object. Each <code>Car</code> object has a <code>tires</code> attribute and a <code>color</code> attribute. Like class attributes, instance attributes are accessed via dot notation.</p>
+
+<pre><code>&gt;&gt;&gt; ferrari.color
+&#x27;red&#x27;
+&gt;&gt;&gt; ferrari.tires
+4
+&gt;&gt;&gt; ferrari.color = &#x27;green&#x27;
+&gt;&gt;&gt; ferrari.color
+&#x27;green&#x27;</code></pre>
+
+<p><strong>Method</strong>: A function that belongs to an object and is called via dot notation. By convention, the first parameter of a method is <code>self</code>.</p>
+
+<p>When one of an object's methods is called, the object is implicitly provided as the argument for <code>self</code>. For example, the <code>drive</code> method of the <code>ferrari</code> object is called with empty parentheses because <code>self</code> is implicitly bound to the <code>ferrari</code> object.</p>
+
+<pre><code>&gt;&gt;&gt; ferrari = Car(&#x27;red&#x27;)
+&gt;&gt;&gt; ferrari.drive()
+&#x27;red car goes vroom!&#x27;</code></pre>
+
+<p>We can also call the original <code>Car.drive</code> function. The original function does not belong to any particular <code>Car</code> object, so we must provide an explicit argument for <code>self</code>.</p>
+
+<pre><code>&gt;&gt;&gt; ferrari = Car(&#x27;red&#x27;)
+&gt;&gt;&gt; Car.drive(ferrari)
+&#x27;red car goes vroom!&#x27;</code></pre>
+
+<p><strong>__init__</strong>: A special function that is called automatically when a new instance of a class is created.</p>
+
+<p>Notice how the <code>drive</code> method takes in <code>self</code> as an argument, but it
+  looks like we didn't pass one in! This is because the dot notation
+  <em>implicitly</em> passes in <code>ferrari</code> as <code>self</code> for us. So in this example, <code>self</code> is bound to the
+  object called <code>ferrari</code> in the global frame.</p>
+
+<p>To evaluate the expression <code>Car(&#x27;red&#x27;)</code>, Python creates a new <code>Car</code> object. Then, Python calls the <code>__init__</code> function of the <code>Car</code> class with <code>self</code> bound to the new object and <code>color</code> bound to <code>&#x27;red&#x27;</code>.</p>
+
+</div>
+
+
+<h3 id="q5-bank-account">Q5: Bank Account</h3>
+
+
+<p>Extend the <code>BankAccount</code> class to include a <code>transactions</code> attribute. This attribute should be a list that keeps track of each transaction made on the account. Whenever the <code>deposit</code> or <code>withdraw</code> method is called, a new <code>Transaction</code> instance should be created and added to the list, <em>regardless of whether that action is successful</em>.</p>
+
+<p>The <code>Transaction</code> class should have the following attributes:</p>
+
+<ul>
+  <li><code>before</code>: The account balance before the transaction.</li>
+  <li><code>after</code>: The account balance after the transaction.</li>
+  <li><code>id</code>: The transaction ID, which is the number of previous transactions (deposits or withdrawals) made on that account. This <code>id</code> should be unique within the scope of each account, but not necessarily unique across all accounts.</li>
+</ul>
+
+<p>In addition, the <code>Transaction</code> class should have the following methods:</p>
+
+<ul>
+  <li><code>changed()</code>: Returns <code>True</code> if the balance changed (i.e., <code>before</code> is different from <code>after</code>), otherwise returns <code>False</code>.</li>
+  <li><code>report()</code>: Returns a string describing the transaction. The string should start with the transaction ID and describe the change in balance. Take a look at the doctests for the expected output.</li>
+</ul>
+
+<blockquote><p><strong>NOTE</strong>.
+The <code>BankAccount</code> class is the same as the original <code>Account</code> class, meaning that it is exactly like the <code>Account</code> class seen under the <em>Class Practice</em> section excluding the changes made in Question #2 (<em>Retirement</em>) and #3 (<em>FreeChecking</em>). We just had to have a different class name for grading purposes.</p></blockquote>
+
+<solution>
+
+<pre><code>class Transaction:
+    def __init__(self, id, before, after):
+        self.id = id
+        self.before = before
+        self.after = after
+
+    def changed(self):
+        &quot;&quot;&quot;Return whether the transaction resulted in a changed balance.&quot;&quot;&quot;
+<div class="sol-highlight">        return self.before != self.after</div>
+    def report(self):
+        &quot;&quot;&quot;Return a string describing the transaction.
+
+        &gt;&gt;&gt; Transaction(3, 20, 10).report()
+        &#x27;3: decreased 20&#x2d;&gt;10&#x27;
+        &gt;&gt;&gt; Transaction(4, 20, 50).report()
+        &#x27;4: increased 20&#x2d;&gt;50&#x27;
+        &gt;&gt;&gt; Transaction(5, 50, 50).report()
+        &#x27;5: no change&#x27;
+        &quot;&quot;&quot;
+        msg = &#x27;no change&#x27;
+        if self.changed():
+<div class="sol-highlight">            if self.after &lt; self.before:
+                verb = &#x27;decreased&#x27;
+            else:
+                verb = &#x27;increased&#x27;
+            msg = verb + &#x27; &#x27; + str(self.before) + &#x27;&#x2d;&gt;&#x27; + str(self.after)</div>        return str(self.id) + &#x27;: &#x27; + msg
+
+class BankAccount:
+    &quot;&quot;&quot;A bank account that tracks its transaction history.
+
+    &gt;&gt;&gt; a = BankAccount(&#x27;Eric&#x27;)
+    &gt;&gt;&gt; a.deposit(100)    # Transaction 0 for a
+    100
+    &gt;&gt;&gt; b = BankAccount(&#x27;Erica&#x27;)
+    &gt;&gt;&gt; a.withdraw(30)    # Transaction 1 for a
+    70
+    &gt;&gt;&gt; a.deposit(10)     # Transaction 2 for a
+    80
+    &gt;&gt;&gt; b.deposit(50)     # Transaction 0 for b
+    50
+    &gt;&gt;&gt; b.withdraw(10)    # Transaction 1 for b
+    40
+    &gt;&gt;&gt; a.withdraw(100)   # Transaction 3 for a
+    &#x27;Insufficient funds&#x27;
+    &gt;&gt;&gt; len(a.transactions)
+    4
+    &gt;&gt;&gt; len([t for t in a.transactions if t.changed()])
+    3
+    &gt;&gt;&gt; for t in a.transactions:
+    ...     print(t.report())
+    0: increased 0&#x2d;&gt;100
+    1: decreased 100&#x2d;&gt;70
+    2: increased 70&#x2d;&gt;80
+    3: no change
+    &gt;&gt;&gt; b.withdraw(100)   # Transaction 2 for b
+    &#x27;Insufficient funds&#x27;
+    &gt;&gt;&gt; b.withdraw(30)    # Transaction 3 for b
+    10
+    &gt;&gt;&gt; for t in b.transactions:
+    ...     print(t.report())
+    0: increased 0&#x2d;&gt;50
+    1: decreased 50&#x2d;&gt;40
+    2: no change
+    3: decreased 40&#x2d;&gt;10
+    &quot;&quot;&quot;
+
+    # *** YOU NEED TO MAKE CHANGES IN SEVERAL PLACES IN THIS CLASS ***
+<div class="sol-highlight">    def next_id(self):
+        # There are many ways to implement this counter, such as using an instance
+        # attribute to track the next ID.
+        return len(self.transactions)</div>
+    def __init__(self, account_holder):
+        self.balance = 0
+        self.holder = account_holder
+<div class="sol-highlight">        self.transactions = []</div>
+    def deposit(self, amount):
+        &quot;&quot;&quot;Increase the account balance by amount, add the deposit
+        to the transaction history, and return the new balance.
+        &quot;&quot;&quot;
+<div class="sol-highlight">        self.transactions.append(Transaction(self.next_id(), self.balance, self.balance + amount))</div>        self.balance = self.balance + amount
+        return self.balance
+
+    def withdraw(self, amount):
+        &quot;&quot;&quot;Decrease the account balance by amount, add the withdraw
+        to the transaction history, and return the new balance.
+        &quot;&quot;&quot;
+        if amount &gt; self.balance:
+<div class="sol-highlight">            self.transactions.append(Transaction(self.next_id(), self.balance, self.balance))</div>            return &#x27;Insufficient funds&#x27;
+<div class="sol-highlight">        self.transactions.append(Transaction(self.next_id(), self.balance, self.balance &#x2d; amount))</div>        self.balance = self.balance &#x2d; amount
+        return self.balance</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q BankAccount<button id="copy-code-python3ok-qBankAccount" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qBankAccount").onclick = () => copyCode('python3 ok -q BankAccount', "copy-code-python3ok-qBankAccount");
+        </script>
+        <br/>
+
+
+<h3 id="q6-email">Q6: Email</h3>
+
+
+<p>An email system has three classes: <code>Email</code>, <code>Server</code>, and <code>Client</code>. A <code>Client</code> can
+<code>compose</code> an email, which it will <code>send</code> to the <code>Server</code>. The <code>Server</code> then delivers it to the
+<code>inbox</code> of another <code>Client</code>. To achieve this, a <code>Server</code> has a dictionary called
+<code>clients</code> that maps the name of the <code>Client</code> to the <code>Client</code> instance.</p>
+
+<p>Assume that a client never changes the server that it uses, and it only composes
+emails using that server.</p>
+
+<p>Fill in the definitions below to finish the implementation! The <code>Email</code> class
+has been completed for you.</p>
+
+<blockquote><p><strong>Important</strong>: Before you start, make sure you read the entire code snippet to understand the relationships between the classes, and pay attention to the parameter type of the methods. Think about what varible do you have access to in each method and how can you use that to access the other classes and their methods.</p>
+
+<p><strong>Note</strong>: The <code>sender</code> parameter from the <code>__init__(self, msg, sender, recipient_name)</code> method in the <code>Email</code> class is a <code>Client</code> instance.</p>
+
+<p><strong>Note</strong>: The <code>client</code> parameter from the <code>register_client(self, client)</code> method in the <code>Server</code> class is a <code>Client</code> instance.</p>
+
+<p><strong>Note</strong>: The <code>email</code> parameter from the <code>send(self, email)</code> method in the <code>Server</code> class is an <code>Email</code> instance.</p></blockquote>
+
+<solution>
+
+<pre><code>class Email:
+    &quot;&quot;&quot;An email has the following instance attributes:
+
+        msg (str): the contents of the message
+        sender (Client): the client that sent the email
+        recipient_name (str): the name of the recipient (another client)
+    &quot;&quot;&quot;
+    def __init__(self, msg, sender, recipient_name):
+        self.msg = msg
+        self.sender = sender
+        self.recipient_name = recipient_name
+
+class Server:
+    &quot;&quot;&quot;Each Server has one instance attribute called clients that is a
+    dictionary from client names to client objects.
+    &quot;&quot;&quot;
+    def __init__(self):
+        self.clients = {}
+
+    def send(self, email):
+        &quot;&quot;&quot;Append the email to the inbox of the client it is addressed to.
+            email is an instance of the Email class.
+        &quot;&quot;&quot;
+<div class="sol-highlight">        self.clients[email.recipient_name].inbox.append(email)</div>
+    def register_client(self, client):
+        &quot;&quot;&quot;Add a client to the clients mapping (which is a 
+        dictionary from client names to client instances).
+            client is an instance of the Client class.
+        &quot;&quot;&quot;
+<div class="sol-highlight">        self.clients[client.name] = client</div>
+class Client:
+    &quot;&quot;&quot;A client has a server, a name (str), and an inbox (list).
+
+    &gt;&gt;&gt; s = Server()
+    &gt;&gt;&gt; a = Client(s, &#x27;Alice&#x27;)
+    &gt;&gt;&gt; b = Client(s, &#x27;Bob&#x27;)
+    &gt;&gt;&gt; a.compose(&#x27;Hello, World!&#x27;, &#x27;Bob&#x27;)
+    &gt;&gt;&gt; b.inbox[0].msg
+    &#x27;Hello, World!&#x27;
+    &gt;&gt;&gt; a.compose(&#x27;CS 61A Rocks!&#x27;, &#x27;Bob&#x27;)
+    &gt;&gt;&gt; len(b.inbox)
+    2
+    &gt;&gt;&gt; b.inbox[1].msg
+    &#x27;CS 61A Rocks!&#x27;
+    &gt;&gt;&gt; b.inbox[1].sender.name
+    &#x27;Alice&#x27;
+    &quot;&quot;&quot;
+    def __init__(self, server, name):
+        self.inbox = []
+        self.server = server
+        self.name = name
+<div class="sol-highlight">        server.register_client(self)</div>
+    def compose(self, message, recipient_name):
+        &quot;&quot;&quot;Send an email with the given message to the recipient.&quot;&quot;&quot;
+<div class="sol-highlight">        email = Email(message, self, recipient_name)</div>        self.server.send(email)</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q Client<button id="copy-code-python3ok-qClient" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qClient").onclick = () => copyCode('python3 ok -q Client', "copy-code-python3ok-qClient");
+        </script>
+        <br/>
+
+
+<h2 id="check-your-score-locally">Check Your Score Locally</h2>
+
+<p>You can locally check your score on each question of this assignment by running</p>
+
+<pre><code>python3 ok &#x2d;&#x2d;score</code></pre>
+
+<p><strong>This does NOT submit the assignment!</strong> When you are satisfied with your score, submit the assignment to Gradescope to receive credit for it.</p>
+
+
+<h1 id="submit-assignment">Submit Assignment</h1>
+
+
+<p>Submit this assignment by uploading any files you've edited <strong>to the appropriate Gradescope assignment.</strong> <a href="../lab00.html#submit-with-gradescope">Lab 00</a> has detailed instructions.</p>
+
+<p>In addition, all students who are <strong>not</strong> in the mega lab must submit the attendance form for credit. Ask your section TA for the link! Submit this form for each section, whether you attended lab or missed it for a good reason. The attendance form is not required for mega section students.</p>
+
+
+<h1 id="optional-questions">Optional Questions</h1>
+
+
+
+<h3 id="q7-make-change">Q7: Make Change</h3>
+
+
+<p>Implement <code>make_change</code>, which takes a positive integer <code>amount</code> and a
+dictionary of <code>coins</code>. The <code>coins</code> dictionary keys are positive integer
+denominations and its values are positive integer coin counts. For example,
+<code>{1: 4, 5: 2}</code> represents four pennies and two nickels. The <code>make_change</code>
+function returns a list of coins that sum to <code>amount</code>, where the count of
+any denomination <code>k</code> in the return value is at most <code>coins[k]</code>.</p>
+
+<p>If there are multiple ways to make change for <code>amount</code>, prefer to use as many
+of the smallest coins available and place the smallest coins first in the
+returned list.</p>
+
+<solution>
+
+<pre><code>def make_change(amount, coins):
+    &quot;&quot;&quot;Return a list of coins that sum to amount, preferring the smallest coins
+    available and placing the smallest coins first in the returned list.
+
+    The coins argument is a dictionary with keys that are positive integer
+    denominations and values that are positive integer coin counts.
+
+    &gt;&gt;&gt; make_change(2, {2: 1})
+    [2]
+    &gt;&gt;&gt; make_change(2, {1: 2, 2: 1})
+    [1, 1]
+    &gt;&gt;&gt; make_change(4, {1: 2, 2: 1})
+    [1, 1, 2]
+    &gt;&gt;&gt; make_change(4, {2: 1}) == None
+    True
+
+    &gt;&gt;&gt; coins = {2: 2, 3: 2, 4: 3, 5: 1}
+    &gt;&gt;&gt; make_change(4, coins)
+    [2, 2]
+    &gt;&gt;&gt; make_change(8, coins)
+    [2, 2, 4]
+    &gt;&gt;&gt; make_change(25, coins)
+    [2, 3, 3, 4, 4, 4, 5]
+    &gt;&gt;&gt; coins[8] = 1
+    &gt;&gt;&gt; make_change(25, coins)
+    [2, 2, 4, 4, 5, 8]
+    &quot;&quot;&quot;
+    if not coins:
+        return None
+    smallest = min(coins)
+    rest = remove_one(coins, smallest)
+    if amount &lt; smallest:
+        return None
+<div class="sol-highlight">    elif amount == smallest:
+        return [smallest]
+    else:
+        result = make_change(amount&#x2d;smallest, rest)
+        if result:
+            return [smallest] + result
+        else:
+            return make_change(amount, rest)</div></code></pre>
+
+</solution>
+
+<p>You should use the <code>remove_one</code> function in your implementation:</p>
+
+<solution>
+
+<pre><code>def remove_one(coins, coin):
+    &quot;&quot;&quot;Remove one coin from a dictionary of coins. Return a new dictionary,
+    leaving the original dictionary coins unchanged.
+
+    &gt;&gt;&gt; coins = {2: 5, 3: 2, 6: 1}
+    &gt;&gt;&gt; remove_one(coins, 2) == {2: 4, 3: 2, 6: 1}
+    True
+    &gt;&gt;&gt; remove_one(coins, 6) == {2: 5, 3: 2}
+    True
+    &gt;&gt;&gt; coins == {2: 5, 3: 2, 6: 1} # Unchanged
+    True
+    &quot;&quot;&quot;
+    copy = dict(coins)
+    count = copy.pop(coin) &#x2d; 1  # The coin denomination is removed
+    if count:
+        copy[coin] = count      # The coin denomination is added back
+    return copy</code></pre>
+
+</solution>
+
+<blockquote><p>Hint: Try using the smallest coin to make change. If it turns out that there
+is no way to make change using the smallest coin, then try making change
+without the smallest coin.</p>
+
+<p>Hint: The simplest solution does not involve defining any local functions,
+but you can define additional functions if you wish.</p></blockquote>
+
+<p>Definitely try to solve this without reading the walkthrough, but if you're
+really stuck then read the walkthrough.</p>
+
+
+        <button id='toggle-4' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Walkthrough<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-4">
+The code for <code>make_change(amount, coins)</code> should do the following:
+
+<ol>
+  <li>Check if <code>amount == smallest</code>, in which case return a one-element list containing just <code>smallest</code>.</li>
+  <li>Otherwise, call <code>make_change(amount&#x2d;smallest, rest)</code>, which returns either <code>None</code> or a list of numbers.</li>
+  <li>If the call in Step 2 returned a list, then return a longer list that includes <code>smallest</code> at the front.</li>
+  <li>If the call in Step 2 returned <code>None</code>, then there's no way to use the <code>smallest</code> coin, so just <code>make_change(amount, rest)</code>
+  </div></li>
+</ol>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q make_change<button id="copy-code-python3ok-qmake_change" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qmake_change").onclick = () => copyCode('python3 ok -q make_change', "copy-code-python3ok-qmake_change");
+        </script>
+        <br/>
+
+
+<h3 id="q8-change-machine">Q8: Change Machine</h3>
+
+
+<p>Complete the <code>change</code> method of the <code>ChangeMachine</code> class. A <code>ChangeMachine</code>
+instance holds some <code>coins</code>, which are initially all pennies. The <code>change</code>
+method takes a positive integer <code>coin</code>, adds that coin to its <code>coins</code>, and then
+returns a list that sums to <code>coin</code>. The machine prefers to return as many of
+the smallest coins available, ordered from smallest to largest. The coins
+returned by <code>change</code> are removed from the machine's <code>coins</code>.</p>
+
+<solution>
+
+<pre><code>class ChangeMachine:
+    &quot;&quot;&quot;A change machine holds a certain number of coins, initially all pennies.
+    The change method adds a single coin of some denomination X and returns a
+    list of coins that sums to X. The machine prefers to return the smallest
+    coins available. The total value in the machine never changes, and it can
+    always make change for any coin (perhaps by returning the coin passed in).
+
+    The coins attribute is a dictionary with keys that are positive integer
+    denominations and values that are positive integer coin counts.
+
+    &gt;&gt;&gt; m = ChangeMachine(2)
+    &gt;&gt;&gt; m.coins == {1: 2}
+    True
+    &gt;&gt;&gt; m.change(2)
+    [1, 1]
+    &gt;&gt;&gt; m.coins == {2: 1}
+    True
+    &gt;&gt;&gt; m.change(2)
+    [2]
+    &gt;&gt;&gt; m.coins == {2: 1}
+    True
+    &gt;&gt;&gt; m.change(3)
+    [3]
+    &gt;&gt;&gt; m.coins == {2: 1}
+    True
+
+    &gt;&gt;&gt; m = ChangeMachine(10) # 10 pennies
+    &gt;&gt;&gt; m.coins == {1: 10}
+    True
+    &gt;&gt;&gt; m.change(5) # takes a nickel &amp; returns 5 pennies
+    [1, 1, 1, 1, 1]
+    &gt;&gt;&gt; m.coins == {1: 5, 5: 1} # 5 pennies &amp; a nickel remain
+    True
+    &gt;&gt;&gt; m.change(3)
+    [1, 1, 1]
+    &gt;&gt;&gt; m.coins == {1: 2, 3: 1, 5: 1}
+    True
+    &gt;&gt;&gt; m.change(2)
+    [1, 1]
+    &gt;&gt;&gt; m.change(2) # not enough 1&#x27;s remaining; return a 2
+    [2]
+    &gt;&gt;&gt; m.coins == {2: 1, 3: 1, 5: 1}
+    True
+    &gt;&gt;&gt; m.change(8) # cannot use the 2 to make 8, so use 3 &amp; 5
+    [3, 5]
+    &gt;&gt;&gt; m.coins == {2: 1, 8: 1}
+    True
+    &gt;&gt;&gt; m.change(1) # return the penny passed in (it&#x27;s the smallest)
+    [1]
+    &gt;&gt;&gt; m.change(9) # return the 9 passed in (no change possible)
+    [9]
+    &gt;&gt;&gt; m.coins == {2: 1, 8: 1}
+    True
+    &gt;&gt;&gt; m.change(10)
+    [2, 8]
+    &gt;&gt;&gt; m.coins == {10: 1}
+    True
+
+    &gt;&gt;&gt; m = ChangeMachine(9)
+    &gt;&gt;&gt; [m.change(k) for k in [2, 2, 3]]
+    [[1, 1], [1, 1], [1, 1, 1]]
+    &gt;&gt;&gt; m.coins == {1: 2, 2: 2, 3: 1}
+    True
+    &gt;&gt;&gt; m.change(5) # Prefers [1, 1, 3] to [1, 2, 2] (more pennies)
+    [1, 1, 3]
+    &gt;&gt;&gt; m.change(7)
+    [2, 5]
+    &gt;&gt;&gt; m.coins == {2: 1, 7: 1}
+    True
+    &quot;&quot;&quot;
+    def __init__(self, pennies):
+        self.coins = {1: pennies}
+
+    def change(self, coin):
+        &quot;&quot;&quot;Return change for coin, removing the result from self.coins.&quot;&quot;&quot;
+<div class="sol-highlight">        self.coins[coin] = 1 + self.coins.get(coin, 0)  # Put the coin in the machine
+        result = make_change(coin, self.coins)
+        for c in result:
+            self.coins = remove_one(self.coins, c)
+        return result</div></code></pre>
+
+</solution>
+
+<blockquote><p>Hint: Call the <code>make_change</code> function in order to compute the result of
+<code>change</code>, but update <code>self.coins</code> before returning that result.</p></blockquote>
+
+<p>Definitely try to solve this without reading the walkthrough, but if you're
+really stuck then read the walkthrough.</p>
+
+
+        <button id='toggle-5' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Walkthrough<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-5">
+The code for <code>change(self, coin)</code> should do the following:
+
+<ol>
+  <li>Add the <code>coin</code> to the machine. This way, you can just make change and you'll always get some result, although it might just be that coin back. The simplest way is to <code>get</code> the count of that <code>coin</code> (defaulting to 0) and add 1 to it: <code>self.coins[coin] = 1 + self.coins.get(coin, 0)</code></li>
+  <li>Call <code>make_change(coin, self.coins)</code> and assign the result to a name (such as <code>result</code>). You'll return this at the end.</li>
+  <li>Before returning, reduce the count of each coin you are returning. One way is to repeatedly call <code>remove_one(self.coins, c)</code> for each coin <code>c</code> in the result of calling <code>make_change</code> in Step 2.</li>
+  <li>Return the result of calling <code>make_change</code> in Step 2.
+  </div></li>
+</ol>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q ChangeMachine<button id="copy-code-python3ok-qChangeMachine" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qChangeMachine").onclick = () => copyCode('python3 ok -q ChangeMachine', "copy-code-python3ok-qChangeMachine");
+        </script>
+        <br/>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="index.html#required-questions">Required Questions</a></li>
+  <ul>
+    <li><a href="index.html#midsemester-survey">Midsemester Survey</a></li>
+    <ul>
+      <li><a href="index.html#q1-mid-semester-feedback">Q1: Mid-Semester Feedback</a></li>
+    </ul>
+    <li><a href="index.html#inheritance">Inheritance</a></li>
+    <ul>
+      <li><a href="index.html#q2-wwpd-inheritance-abcs">Q2: WWPD: Inheritance ABCs</a></li>
+    </ul>
+    <li><a href="index.html#class-practice">Class Practice</a></li>
+    <ul>
+      <li><a href="index.html#q3-retirement">Q3: Retirement</a></li>
+      <li><a href="index.html#q4-freechecking">Q4: FreeChecking</a></li>
+    </ul>
+    <li><a href="index.html#object-oriented-programming">Object-Oriented Programming</a></li>
+    <ul>
+      <li><a href="index.html#q5-bank-account">Q5: Bank Account</a></li>
+      <li><a href="index.html#q6-email">Q6: Email</a></li>
+    </ul>
+    <li><a href="index.html#check-your-score-locally">Check Your Score Locally</a></li>
+  </ul>
+  <li><a href="index.html#submit-assignment">Submit Assignment</a></li>
+  <li><a href="index.html#optional-questions">Optional Questions</a></li>
+  <ul>
+    <li><a href="index.html#q7-make-change">Q7: Make Change</a></li>
+    <li><a href="index.html#q8-change-machine">Q8: Change Machine</a></li>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <!-- <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer> -->
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="../../assets/js/network_storage.js"></script>
+    <script src="../../assets/js/storable.js"></script>
+    <script src="../../assets/js/editor.js"></script>
+    <script src="../../assets/js/copy-button.js"></script>
+    <script src="../../assets/js/env-diagram.js"></script>
+    
+<!-- <script src="/assets/js/sketchy.js"></script> -->
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

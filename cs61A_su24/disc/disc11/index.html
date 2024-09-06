@@ -1,0 +1,1171 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="Laryn Qi, Charlotte Le, Raymond Tan" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/hl.js"></script>
+    <script src="../../assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="../../assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/mono-blue.css">
+    <link rel="icon" href="../../assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="../../assets/css/disc.css">
+
+
+    <title>
+Discussion 11 | CS 61A Summer 2024
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../index.html">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="../../assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="../../office-hours.html">Weekly Schedule</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                External Websites
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://oh.cs61a.org/">Office Hours Queue</a></li>
+                <li><a href="https://pythontutor.com/cp/composingprograms.html">Python Tutor</a></li>
+                <li><a href="https://code.cs61a.org/">Online Code Editor</a></li>
+                <li><a href="https://www.composingprograms.com/">Textbook</a></li>
+                <li><a href="https://edstem.org/us/courses/59836/discussion/">Ed</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Forms
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/regrades">Request a Regrade</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/debugging-guide">Debugging Guide</a></li>
+                <li><a href="../../articles/studying.html">Studying Guide</a></li>
+                <li><a href="../../articles/composition.html">Composition Guide</a></li>
+                <li><a href="../../articles/pair-programming.html">Pair Programming Guide</a></li>
+                <li><a href="../../resources.html">Past Exams & Websites</a></li>
+                <li><a href="../../articles/campus-res/index.html">Department and Campus</a></li>
+                <li><a href="../../articles/advice/index.html">Advice from Former Students</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="../../instructor.html">Instructors</a></li>
+                <li><a href="../../staff.html">TAs & Tutors</a></li>
+                <li><a href="../../contact/index.html">Contact</a></li>
+              </ul>
+            </li>
+            <li><a href="../../articles/about.html">Syllabus</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Discussion 11: SQL
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="disc11.pdf" class="label label-outline">disc11.pdf</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+
+<!-- <div class="alert storable-login-status"></div> -->
+
+
+    
+<!--
+**Reminder:** Use Discord for voice chat with the course staff. Write to <code>@discuss</code> in the <code>#discuss&#x2d;queue</code> channel on Discord at any time, and a member of the course staff will join your group's voice channel.
+
+Pick someone in your group to <a href="https://cs61a.org/articles/discord">join Discord</a>.
+It's fine if multiple people join, but one is enough.
+
+Now switch to Pensieve:
+
+<ul>
+  <li><strong>Everyone</strong>: Go to <a href="http://discuss.pensieve.co">discuss.pensieve.co</a> and log in with your @berkeley.edu email, then enter your group number. (Your group number is the number of your Discord channel.)</li>
+</ul>
+
+Once you're on Pensieve, you don't need to return to this page; Pensieve has all the same content (but more features). If for some reason Penseive doesn't work, return to this page and continue with the discussion.
+
+Post in the <code>#help</code> channel on <a href="https://cs61a.org/articles/discord/">Discord</a> if you have trouble.
+
+**Pro tip:** Any of you can type a question into your group's Discord <a href="https://support.discord.com/hc/en-us/articles/4412085582359-Text-Channels-Text-Chat-In-Voice-Channels#h_01FMJT412WBX1MR4HDYNR8E95X">channel's text chat</a> with the <code>@discuss</code> tag, and a member of the course staff will respond.
+
+# Getting Started
+
+If you have only 1 or 2 people in your group, you can join the other group in
+the room with you.
+
+Everybody say your name, and then share your favorite restaurant, cafe, or boba shop near campus. (Yes, Kingpin Donuts counts as a restaurant.)
+
+# Select Statements
+
+A <code>SELECT</code> statement describes an output table based on input rows. To write one:
+
+<ol>
+  <li>Describe the <strong>input rows</strong> using <code>FROM</code> and <code>WHERE</code> clauses.</li>
+  <li>Format and order the <strong>output rows</strong> and columns using <code>SELECT</code> and <code>ORDER BY</code> clauses.</li>
+</ol>
+
+<code>SELECT</code> *(Step 2)* <code>FROM</code> *(Step 1)* <code>WHERE</code> *(Step 1)* <code>ORDER BY</code> *(Step 2)*;
+
+Step 1 may involve joining tables (using commas) to form input rows that consist of two or more rows from existing tables.
+
+The <code>WHERE</code> and <code>ORDER BY</code> clauses are optional. -->
+
+
+<h1 id="sql-and-aggregation">SQL and Aggregation</h1>
+
+
+
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        SQL<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+
+
+<h2 id="sql-basics" class="no-toc">SQL Basics</h2>
+
+
+
+<h3 id="creating-tables" class="no-toc">Creating Tables</h3>
+
+
+<p>You can create SQL tables either from scratch or from existing tables.</p>
+
+<p>The following statement creates a table by specifying column names and values
+without referencing another table. Each <code>SELECT</code> clause specifies the values
+for one row, and <code>UNION</code> is used to join rows together. The <code>AS</code> clauses give a
+name to each column; it need not be repeated in subsequent rows after the
+first.</p>
+
+<pre><code>CREATE TABLE [table_name] AS
+  SELECT [val1] AS [column1], [val2] AS [column2], ... UNION
+  SELECT [val3]             , [val4]             , ... UNION
+  SELECT [val5]             , [val6]             , ...;</code></pre>
+
+<p>Let's say we want to make the following table called <code>big_game</code> which records
+the scores for the Big Game each year. This table has three columns:
+<code>berkeley</code>, <code>stanford</code>, and <code>year</code>.</p>
+
+<img class="img-responsive center-block" src="assets/big-game.png" width="300">
+
+<p>We could do so with the following <code>CREATE TABLE</code> statement:</p>
+
+<pre><code>CREATE TABLE big_game AS
+  SELECT 30 AS berkeley, 7 AS stanford, 2002 AS year UNION
+  SELECT 28,             16,            2003         UNION
+  SELECT 17,             38,            2014;</code></pre>
+
+
+<h3 id="selecting-from-tables" class="no-toc">Selecting From Tables</h3>
+
+<p>More commonly, we will create new tables by selecting specific columns that we
+want from existing tables by using a <code>SELECT</code> statement as follows:</p>
+
+<pre><code>SELECT [columns] FROM [tables] WHERE [condition] ORDER BY [columns] LIMIT [limit];</code></pre>
+
+<p>Let's break down this statement:</p>
+
+<ul>
+  <li><code>SELECT [columns]</code> tells SQL that we want to include the given columns in our
+  output table; <code>[columns]</code> is a comma-separated list of column names, and <code>*</code>
+  can be used to select all columns</li>
+  <li><code>FROM [table]</code> tells SQL that the columns we want to select are from the
+  given table; see the <a href="index.html">joins section</a> to see how to select
+  from multiple tables</li>
+  <li><code>WHERE [condition]</code> filters the output table by only including rows whose
+  values satisfy the given <code>[condition]</code>, a boolean expression</li>
+  <li><code>ORDER BY [columns]</code> orders the rows in the output table by the given
+  comma-separated list of columns</li>
+  <li><code>LIMIT [limit]</code> limits the number of rows in the output table by the integer
+  <code>[limit]</code></li>
+</ul>
+
+<!-- > <em>Note:</em> We capitalize SQL keywords purely because of style convention. It
+
+<blockquote><p>makes queries much easier to read, though they will still work if you don't
+capitalize keywords. --></p></blockquote>
+
+<p>Here are some examples:</p>
+
+<p>Select all of Berkeley's scores from the <code>big_game</code> table, but only include
+scores from years past 2002:</p>
+
+<pre><code>sqlite&gt; SELECT berkeley FROM big_game WHERE year &gt; 2002;
+28
+17</code></pre>
+
+<p>Select the scores for both schools in years that Berkeley won:</p>
+
+<pre><code>sqlite&gt; SELECT berkeley, stanford FROM big_game WHERE berkeley &gt; stanford;
+30|7
+28|16</code></pre>
+
+<p>Select the years that Stanford scored more than 15 points:</p>
+
+<pre><code>sqlite&gt; SELECT year FROM big_game WHERE stanford &gt; 15;
+2003
+2014</code></pre>
+
+
+<h3 id="sql-operators" class="no-toc">SQL operators</h3>
+
+
+<p>Expressions in the <code>SELECT</code>, <code>WHERE</code>, and <code>ORDER BY</code> clauses can contain
+one or more of the following operators:</p>
+
+<ul>
+  <li>comparison operators: <code>=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>&lt;&gt;</code> or <code>!=</code> ("not equal")</li>
+  <li>boolean operators: <code>AND</code>, <code>OR</code></li>
+  <li>arithmetic operators: <code>+</code>, <code>&#x2d;</code>, <code>*</code>, <code>/</code></li>
+  <li>concatenation operator: <code>||</code></li>
+</ul>
+
+<p>Output the ratio of Berkeley's score to Stanford's score each year:</p>
+
+<pre><code>sqlite&gt; select berkeley * 1.0 / stanford from big_game;
+0.447368421052632
+1.75
+4.28571428571429</code></pre>
+
+<p>Output the sum of scores in years where both teams scored over 10 points:</p>
+
+<pre><code>sqlite&gt; select berkeley + stanford from big_game where berkeley &gt; 10 and stanford &gt; 10;
+55
+44</code></pre>
+
+<p>Output a table with a single column and single row containing the value "hello
+world":</p>
+
+<pre><code>sqlite&gt; SELECT &quot;hello&quot; || &quot; &quot; || &quot;world&quot;;
+hello world</code></pre>
+
+</div>
+
+<div class="page-break"></div>
+
+
+        <button id='toggle-2' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Aggregation<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-2">
+
+
+<h2 id="sql-aggregation" class="no-toc">SQL Aggregation</h2>
+
+
+<p>Previously, we have been dealing with queries that process one row at a time.
+When we join, we make pairwise combinations of all of the rows. When we use
+<code>WHERE</code>, we filter out certain rows based on the condition. Alternatively,
+applying an <a href="http://www.sqlite.org/lang_aggfunc.html">aggregate function</a>
+such as <code>MAX(column)</code> combines the values in multiple rows.</p>
+
+<p>By default, we combine the values of the <em>entire</em> table. For example, if we
+wanted to count the number of flights from our <code>flights</code> table, we could use:</p>
+
+<pre><code>sqlite&gt; SELECT COUNT(*) from FLIGHTS;
+13</code></pre>
+
+<p>What if we wanted to group together the values in similar rows and perform the
+aggregation operations within those groups? We use a <code>GROUP BY</code> clause.</p>
+
+<p>Here's another example. For each unique departure, collect all the rows having
+the same departure airport into a group. Then, select the <code>price</code> column and
+apply the <code>MIN</code> aggregation to recover the price of the cheapest departure from
+that group. The end result is a table of departure airports and the cheapest
+departing flight.</p>
+
+<pre><code>sqlite&gt; SELECT departure, MIN(price) FROM flights GROUP BY departure;
+AUH|932
+LAS|50
+LAX|89
+SEA|32
+SFO|40
+SLC|42</code></pre>
+
+<p>Just like how we can filter out rows with <code>WHERE</code>, we can also filter out
+groups with <code>HAVING</code>. Typically, a <code>HAVING</code> clause should use an aggregation
+function. Suppose we want to see all airports with at least two departures:</p>
+
+<pre><code>sqlite&gt; SELECT departure FROM flights GROUP BY departure HAVING COUNT(*) &gt;= 2;
+LAX
+SFO
+SLC</code></pre>
+
+<p>Note that the <code>COUNT(*)</code> aggregate just counts the number of rows in each group.
+Say we want to count the number of <em>distinct</em> airports instead. Then, we could
+use the following query:</p>
+
+<pre><code>sqlite&gt; SELECT COUNT(DISTINCT departure) FROM flights;
+6</code></pre>
+
+<p>This enumerates all the different departure airports available in our <code>flights</code>
+table (in this case: SFO, LAX, AUH, SLC, SEA, and LAS).</p>
+
+</div>
+
+<div class="page-break"></div>
+
+
+<h2 id="cities">Cities</h2>
+
+<p>In this discussion, we will be writing SQL queries on a database containing
+information on selected cities and states. The data is not guaranteed to be precise
+or accurate. (In fact, it was obtained by a single TA quickly looking up facts
+on Wikipedia.)</p>
+
+<p>There are two main tables that you will be querying.</p>
+
+<ul>
+  <li><code>cities</code>: Selected US cities</li>
+  <li><code>states</code>: Corresponding states of the select US cities</li>
+</ul>
+
+<!-- You will write all your solutions in the starter file provided. As with other
+labs, you can test your solutions with Ok. In addition, you can use either of
+the following commands:
+
+<pre><code>sqlite3 &lt; lab13.sql
+sqlite3 &#x2d;&#x2d;init lab13.sql</code></pre>
+
+Before we start, inspect the schema of the tables that we've created for you by writing:
+
+<pre><code> sqlite&gt; .schema</code></pre>
+
+This tells you the name of each of our tables and their attributes. For
+each of the below operations on our tables <code>cities</code> and <code>states</code> write, in
+English, what the query is selecting for, then run the query yourself: -->
+
+<attach-sql location=preamble>
+
+<pre><code>create table cities as
+    select &#x27;Berkeley&#x27; as name, &#x27;CA&#x27; as state, 12000 as population, 1878 as founded, 18.0 as area union
+    select &#x27;San Francisco&#x27;   , &#x27;CA&#x27;         , 871000             , 1850           , 231.0 union
+    select &#x27;Los Angeles&#x27;     , &#x27;CA&#x27;         , 3971000            , 1850           , 503.0 union
+    select &#x27;Seattle&#x27;         , &#x27;WA&#x27;         , 609000             , 1869           , 143.0 union
+    select &#x27;Houston&#x27;         , &#x27;TX&#x27;         , 2099451            , 1837           , 667.0 union
+    select &#x27;New York City&#x27;   , &#x27;NY&#x27;         , 8550000            , 1624           , 468.0 union
+    select &#x27;Chicago&#x27;         , &#x27;IL&#x27;         , 2696000            , 1833           , 234.0 union
+    select &#x27;Philadelphia&#x27;    , &#x27;PA&#x27;         , 1567000            , 1701           , 142.0 union
+    select &#x27;Phoenix&#x27;         , &#x27;AZ&#x27;         , 1446000            , 1881           , 518.0 union
+    select &#x27;San Antonio&#x27;     , &#x27;TX&#x27;         , 1437000            , 1837           , 465.0 union
+    select &#x27;Dallas&#x27;          , &#x27;TX&#x27;         , 1300000            , 1856           , 386.0 union
+    select &#x27;Jacksonville&#x27;    , &#x27;FL&#x27;         , 822000             , 1832           , 875.0;
+
+create table states as
+    select &#x27;California&#x27; as name, &#x27;CA&#x27; as abbreviation, 39250000.0 as population union
+    select &#x27;Washington&#x27;        , &#x27;WA&#x27;                , 7288000.0 union
+    select &#x27;Texas&#x27;             , &#x27;TX&#x27;                , 27863000.0 union
+    select &#x27;New York&#x27;          , &#x27;NY&#x27;                , 19795000.0 union
+    select &#x27;Illinois&#x27;          , &#x27;IL&#x27;                , 12801000.0 union
+    select &#x27;Pennsylvania&#x27;      , &#x27;PA&#x27;                , 12802503.0 union
+    select &#x27;Arizona&#x27;           , &#x27;AZ&#x27;                , 6828000.0 union
+    select &#x27;Florida&#x27;           , &#x27;FL&#x27;                , 20612000.0;</code></pre>
+
+</attach-sql>
+
+
+<h3 id="q1-california">Q1: California</h3>
+
+
+<p>Write a query that selects all records for cities in
+California.</p>
+
+<attach-sql>
+
+<pre><code>create table california as
+    SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
+</code></pre>
+
+</attach-sql>
+
+<!-- <include cities.sql:california> -->
+
+<p>You should get the following output:</p>
+
+<pre><code>sqlite&gt; select * from california;
+Berkeley|CA|12000|1878|18.0
+Los Angeles|CA|3971000|1850|503.0
+San Francisco|CA|871000|1850|231.0</code></pre>
+
+
+
+<!-- <p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q california<button id="copy-code-python3ok-qcalifornia" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qcalifornia").onclick = () => copyCode('python3 ok -q california', "copy-code-python3ok-qcalifornia");
+        </script>
+        <br/> -->
+
+<!-- <attach-sql> -->
+<!-- <include cities.sql:california> -->
+<!-- </attach-sql> -->
+
+<!-- <attach-sql location=preamble> -->
+<!-- <include cities.sql:data> -->
+<!-- </attach-sql> -->
+
+
+<h3 id="q2-younger">Q2: Younger</h3>
+
+
+<p>Create a new table <code>younger</code>, which contains the names and populations of all
+cities founded after 1840.</p>
+
+<attach-sql>
+
+<pre><code>create table younger as
+    SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
+</code></pre>
+
+</attach-sql>
+
+<!-- <include cities.sql:younger> -->
+
+<p>The answer should be ordered by the population
+density (pop/area) of the cities.</p>
+
+<pre><code>sqlite3&gt; select * from younger;
+Berkeley|12000
+Phoenix|1446000
+Dallas|1300000
+San Francisco|871000
+Seattle|609000
+Los Angeles|3971000</code></pre>
+
+
+
+<!-- <p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q younger<button id="copy-code-python3ok-qyounger" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qyounger").onclick = () => copyCode('python3 ok -q younger', "copy-code-python3ok-qyounger");
+        </script>
+        <br/> -->
+
+<!-- <attach-sql location=preamble> -->
+<!-- <include cities.sql:data> -->
+<!-- </attach-sql> -->
+
+
+<h3 id="q3-optional-same">Q3: (Optional) Same</h3>
+
+
+<p>Write a query that lists pairs of cities that are in the same state.</p>
+
+<pre><code>create table same as
+    SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
+</code></pre>
+
+<p>To avoid duplicate pairs, display the city with the larger area first.</p>
+
+<pre><code>sqlite&gt; select * from same;
+Houston|Dallas
+Houston|San Antonio
+Los Angeles|Berkeley
+Los Angeles|San Francisco
+San Antonio|Dallas
+San Francisco|Berkeley</code></pre>
+
+
+
+<!-- <p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q same<button id="copy-code-python3ok-qsame" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qsame").onclick = () => copyCode('python3 ok -q same', "copy-code-python3ok-qsame");
+        </script>
+        <br/> -->
+
+<!-- <attach-sql> -->
+<!-- <include cities.sql:california>
+</attach-sql>
+<!-- <attach-sql location=preamble> -->
+<!-- <include cities.sql:data> -->
+<!-- </attach-sql> -->
+
+
+<h3 id="q4-optional-percentages">Q4: (Optional) Percentages</h3>
+
+
+<p>Write a query that selects the names of every city and the city's percentage of
+its state population. Order the output in order of that percentage.</p>
+
+<pre><code>create table percentages as
+    SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
+
+sqlite&gt; select * from percentages;
+Berkeley|0.0305732484076433
+San Francisco|2.21910828025478
+Jacksonville|3.98796817387929
+Dallas|4.66568567634497
+San Antonio|5.1573771668521
+Houston|7.53490650683703
+Seattle|8.35620197585071
+Los Angeles|10.1171974522293
+Philadelphia|12.2397940465236
+Chicago|21.0608546207328
+Phoenix|21.1775043936731
+New York City|43.1927254357161</code></pre>
+
+
+
+<!-- <p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q percentages<button id="copy-code-python3ok-qpercentages" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qpercentages").onclick = () => copyCode('python3 ok -q percentages', "copy-code-python3ok-qpercentages");
+        </script>
+        <br/> -->
+
+<!-- <attach-sql> -->
+<!-- <include cities.sql:california>
+</attach-sql>
+<!-- <attach-sql location=preamble> -->
+<!-- <include cities.sql:data> -->
+<!-- </attach-sql> -->
+
+<div class="page-break"></div>
+
+
+<h3 id="q5-num-meetings">Q5: Num Meetings</h3>
+
+
+<p>Here are our tables for the next two problems. We have only provided you with the headers/columns for the tables which should be sufficient:</p>
+
+<p style="text-align: center;"><b>records</b>: Employee Name Division Title Salary Supervisor</p>
+<p style="text-align: center;"><b>meetings</b>: Division Day Time</p>
+
+<p>Write a query that outputs the days of the week for which fewer than 5 employees
+have a meeting. You may assume no department has more than one meeting on a
+given day.</p>
+
+
+            <div class="monaco-storable" id="question-11 lang=sql-input" style="height:90px;"></div>
+            <a href="javascript:void" id="modal-link-question-11 lang=sql-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-question-11 lang=sql-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-question-11 lang=sql-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('SELECT &quot;YOUR CODE HERE&quot;\n\n\n', "scheme", "question-11 lang=sql-input"));
+            </script>
+        
+
+<!--  -->
+
+<div class="page-break"></div>
+
+
+<h3 id="q6-supervisor-sum-salary">Q6: Supervisor Sum Salary</h3>
+
+
+<p>Write a query that outputs each supervisor and the sum of salaries of all the employees they supervise.</p>
+
+
+            <div class="monaco-storable" id="question-10 lang=sql-input" style="height:90px;"></div>
+            <a href="javascript:void" id="modal-link-question-10 lang=sql-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-question-10 lang=sql-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-question-10 lang=sql-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('SELECT &quot;YOUR CODE HERE&quot;\n\n\n', "scheme", "question-10 lang=sql-input"));
+            </script>
+        
+
+<!--  -->
+
+
+<h1 id="submit-attendance">Submit Attendance</h1>
+
+
+<p>You're done! Excellent work this week. Please be sure to ask your section TA for the attendance form link and fill it out for credit. (one submission per person per section).</p>
+
+<div class="page-break"></div>
+
+
+<h1 id="optional">Optional</h1>
+
+
+
+<h2 id="pizza-time">Pizza Time</h2>
+
+
+<p>The <code>pizzas</code> table contains the names, opening, and closing hours of great pizza
+places in Berkeley. The <code>meals</code> table contains typical meal times (for college
+students). A pizza place is open for a meal if the meal time is at or within the
+<code>open</code> and <code>close</code> times.</p>
+
+<pre><code>CREATE TABLE pizzas AS
+  SELECT &quot;Artichoke&quot; AS name, 12 AS open, 15 AS close UNION
+  SELECT &quot;La Val&#x27;s&quot;         , 11        , 22          UNION
+  SELECT &quot;Sliver&quot;           , 11        , 20          UNION
+  SELECT &quot;Cheeseboard&quot;      , 16        , 23          UNION
+  SELECT &quot;Emilia&#x27;s&quot;         , 13        , 18;
+
+CREATE TABLE meals AS
+  SELECT &quot;breakfast&quot; AS meal, 11 AS time UNION
+  SELECT &quot;lunch&quot;            , 13         UNION
+  SELECT &quot;dinner&quot;           , 19         UNION
+  SELECT &quot;snack&quot;            , 22;</code></pre>
+
+
+
+
+<h3 id="q7-open-early">Q7: Open Early</h3>
+
+
+<p>You'd like to have pizza before 13 o'clock (1pm). Create a <code>opening</code> table with
+the names of all pizza places that <code>open</code> before 13 o'clock, listed in reverse
+alphabetical order.</p>
+
+<p><strong><code>opening</code></strong> table:</p>
+
+
+
+
+        <div class="table-responsive">
+          <table class="table table-bordered">
+          
+  <tr>
+    <th>name</th>
+  </tr>
+  <tr>
+    <td>Sliver</td>
+  </tr>
+  <tr>
+    <td>La Val's</td>
+  </tr>
+  <tr>
+    <td>Artichoke</td>
+  </tr>
+
+          </table>
+        </div>
+        
+
+
+
+<!-- <attach-sql>
+-- Pizza places that open before 1pm in alphabetical order
+SELECT "REPLACE THIS LINE WITH YOUR SOLUTION";
+</attach-sql> -->
+
+<!--  -->
+
+
+            <div class="monaco-storable" id="opening-input" style="height:126px;"></div>
+            <a href="javascript:void" id="modal-link-opening-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-opening-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-opening-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('&#x2d;&#x2d; Pizza places that open before 1pm in alphabetical order\nSELECT "REPLACE THIS LINE WITH YOUR SOLUTION";\n\n', "sql", "opening-input"));
+            </script>
+        
+
+
+        <button id='toggle-3' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Hint: Reverse Alphabetical Order<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-3">
+To order by <code>name</code> in reverse alphabitical order, write <code>ORDER BY name DESC</code>.
+</div>
+
+<!-- <p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q opening<button id="copy-code-python3ok-qopening" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qopening").onclick = () => copyCode('python3 ok -q opening', "copy-code-python3ok-qopening");
+        </script>
+        <br/> -->
+
+
+<h3 id="q8-study-session">Q8: Study Session</h3>
+
+
+<p>You're planning to study at a pizza place from the moment it opens until 14
+o'clock (2pm). Create a table <code>study</code> with two columns, the <code>name</code> of each pizza
+place and the <code>duration</code> of the study session you would have if you studied there
+(the difference between when it opens and 14 o'clock). For pizza places that are
+not open before 2pm, the <code>duration</code> should be zero. Order the
+rows by decreasing duration.</p>
+
+<p><strong>Hint:</strong> Use an expression of the form <code>MAX(_, 0)</code> to make sure a result is not below 0.</p>
+
+<p><strong><code>study</code></strong> table:</p>
+
+
+
+
+        <div class="table-responsive">
+          <table class="table table-bordered">
+          
+  <tr>
+    <th>name</th>
+    <th>duration</th>
+  </tr>
+  <tr>
+    <td>La Val's</td>
+    <td>3</td>
+  </tr>
+  <tr>
+    <td>Sliver</td>
+    <td>3</td>
+  </tr>
+  <tr>
+    <td>Artichoke</td>
+    <td>2</td>
+  </tr>
+  <tr>
+    <td>Emilia's</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td>Cheeseboard</td>
+    <td>0</td>
+  </tr>
+
+          </table>
+        </div>
+        
+
+
+
+
+            <div class="monaco-storable" id="study-input" style="height:126px;"></div>
+            <a href="javascript:void" id="modal-link-study-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-study-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-study-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('&#x2d;&#x2d; Pizza places and the duration of a study break that ends at 14 o&#x27;clock\nSELECT "REPLACE THIS LINE WITH YOUR SOLUTION";\n\n', "sql", "study-input"));
+            </script>
+        
+
+
+        <button id='toggle-4' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Hint: Order by Duration<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-4">
+To order by decreasing duration, first name the column with <code>SELECT ..., ... AS duration ...</code>, then <code>ORDER BY duration DESC</code>.
+</div>
+
+
+<h3 id="q9-late-night-snack">Q9: Late Night Snack</h3>
+
+
+<p>What's still open for a late night <code>snack</code>? Create a <code>late</code> table with one
+column named <code>status</code> that has a sentence describing the closing time of each
+pizza place that closes at or after <code>snack</code> time. <strong>Important:</strong> Don't use any
+numbers in your SQL query! Instead, use a join to compare each restaurant's
+closing time to the time of a snack. The rows may appear in any order.</p>
+
+<p><strong><code>late</code></strong> table:</p>
+
+
+
+
+        <div class="table-responsive">
+          <table class="table table-bordered">
+          
+  <tr>
+    <th>status</th>
+  </tr>
+  <tr>
+    <td>Cheeseboard closes at 23</td>
+  </tr>
+  <tr>
+    <td>La Val's closes at 22</td>
+  </tr>
+
+          </table>
+        </div>
+        
+
+
+
+
+            <div class="monaco-storable" id="late-input" style="height:126px;"></div>
+            <a href="javascript:void" id="modal-link-late-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-late-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-late-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('&#x2d;&#x2d; Pizza places that are open for late&#x2d;night&#x2d;snack time and when they close\nSELECT "REPLACE THIS LINE WITH YOUR SOLUTION";\n\n', "sql", "late-input"));
+            </script>
+        
+
+
+        <button id='toggle-5' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Hint: Referencing the Snack Time<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-5">
+To compare a pizza place's <code>close</code> time to the time of a snack:
+
+<ul>
+  <li>join the <code>pizzas</code> and <code>meals</code> tables using <code>FROM pizzas, meals</code></li>
+  <li>use only rows where the <code>meal</code> is a <code>&quot;snack&quot;</code></li>
+  <li>compare the <code>time</code> of the snack to the <code>close</code> of the pizza place.
+  </div></li>
+</ul>
+
+
+        <button id='toggle-6' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Hint: Composing a Sentence<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-6">
+Use <code>name || &quot; closes at &quot; || close</code> to create the sentences in the resulting table. The <code>||</code> operator concatenates values into strings.
+</div>
+
+
+<h3 id="q10-double-pizza">Q10: Double Pizza</h3>
+
+
+<p>If two meals are more than 6 hours apart, then there's nothing wrong with going
+to the same pizza place for both, right? Create a <code>double</code> table with three
+columns. The <code>first</code> column is the earlier meal, the <code>second</code> column is the
+later meal, and the <code>name</code> column is the name of a pizza place. Only include
+rows that describe two meals that are <strong>more than 6 hours apart</strong> and a pizza
+place that is open for both of the meals. The rows may appear in any order.</p>
+
+<p><strong><code>double</code></strong> table:</p>
+
+
+
+
+        <div class="table-responsive">
+          <table class="table table-bordered">
+          
+  <tr>
+    <th>first</th>
+    <th>second</th>
+    <th>name</th>
+  </tr>
+  <tr>
+    <td>breakfast</td>
+    <td>dinner</td>
+    <td>La Val's</td>
+  </tr>
+  <tr>
+    <td>breakfast</td>
+    <td>dinner</td>
+    <td>Sliver</td>
+  </tr>
+  <tr>
+    <td>breakfast</td>
+    <td>snack</td>
+    <td>La Val's</td>
+  </tr>
+  <tr>
+    <td>lunch</td>
+    <td>snack</td>
+    <td>La Val's</td>
+  </tr>
+
+          </table>
+        </div>
+        
+
+
+
+
+            <div class="monaco-storable" id="double-input" style="height:162px;"></div>
+            <a href="javascript:void" id="modal-link-double-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-double-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-double-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('&#x2d;&#x2d; Two meals at the same place\n  SELECT ____ AS first, ____ AS second, name\n  FROM ____, ____, pizzas\n  WHERE ____;\n\n', "sql", "double-input"));
+            </script>
+        
+
+
+        <button id='toggle-7' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Hint: Joining Tables<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-7">
+Use <code>FROM meals AS a, meals AS b, pizzas</code> so that each row has info about two meals and a pizza place. Then you can write a <code>WHERE</code> clause that compares both <code>a.time</code> and <code>b.time</code> to <code>open</code> and <code>close</code> and each other to ensure all the relevant conditions are met.
+</div>
+
+<!--  -->
+
+<!-- <p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q double<button id="copy-code-python3ok-qdouble" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qdouble").onclick = () => copyCode('python3 ok -q double', "copy-code-python3ok-qdouble");
+        </script>
+        <br/> -->
+
+<!--
+<attach-sql>
+-- Two meals at the same place
+  SELECT <strong><em>_ AS first, </em></strong>_ AS second, name
+-- BEGIN SOLUTION NO PROMPT ALT="  FROM <strong><em>_, </em></strong><em>, pizzas"
+
+<pre><code>     FROM meals AS a, meals AS b, pizzas</code></pre>
+
+<p>-- END SOLUTION
+-- BEGIN SOLUTION NO PROMPT ALT="  WHERE </em><em></em>_;"</p>
+
+<pre><code>     WHERE open &lt;= a.time AND a.time &lt;= close AND
+           open &lt;= b.time AND b.time &lt;= close AND
+           b.time &gt; a.time + 6;</code></pre>
+
+<p>-- END SOLUTION
+</attach-sql> --></p>
+
+<div class="page-break"></div>
+
+<!-- # Document the Occasion -->
+
+<!-- Please all fill out the <a href="https://docs.google.com/forms/d/e/1FAIpQLSeqlK8l6WkScGr-RHR-kM4p5bnR9cllYrG95fDqPJspSlll7A/viewform">attendance form</a> (one submission per person per week).
+
+**Important:** Please help put the furniture in the room back where you found it before you leave. Thanks!
+
+If you finish early, maybe go get pizza together... -->
+<script>
+    $('.alwaystoggle').css('display', 'inline-block');
+    $('.alwaystoggle').click(function() {
+      var solution_id = $(this).attr('id');
+      $('div.' + solution_id).slideToggle(600);
+    });
+</script>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="index.html#sql-and-aggregation">SQL and Aggregation</a></li>
+  <ul>
+    <li><a href="index.html#cities">Cities</a></li>
+    <ul>
+      <li><a href="index.html#q1-california">Q1: California</a></li>
+      <li><a href="index.html#q2-younger">Q2: Younger</a></li>
+      <li><a href="index.html#q3-optional-same">Q3: (Optional) Same</a></li>
+      <li><a href="index.html#q4-optional-percentages">Q4: (Optional) Percentages</a></li>
+      <li><a href="index.html#q5-num-meetings">Q5: Num Meetings</a></li>
+      <li><a href="index.html#q6-supervisor-sum-salary">Q6: Supervisor Sum Salary</a></li>
+    </ul>
+  </ul>
+  <li><a href="index.html#submit-attendance">Submit Attendance</a></li>
+  <li><a href="index.html#optional">Optional</a></li>
+  <ul>
+    <li><a href="index.html#pizza-time">Pizza Time</a></li>
+    <ul>
+      <li><a href="index.html#q7-open-early">Q7: Open Early</a></li>
+      <li><a href="index.html#q8-study-session">Q8: Study Session</a></li>
+      <li><a href="index.html#q9-late-night-snack">Q9: Late Night Snack</a></li>
+      <li><a href="index.html#q10-double-pizza">Q10: Double Pizza</a></li>
+    </ul>
+  </ul>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <!-- <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer> -->
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="../../assets/js/network_storage.js"></script>
+    <script src="../../assets/js/storable.js"></script>
+    <script src="../../assets/js/editor.js"></script>
+    <script src="../../assets/js/copy-button.js"></script>
+    <script src="../../assets/js/env-diagram.js"></script>
+    
+<!-- <script src="/assets/js/sketchy.js"></script> -->
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

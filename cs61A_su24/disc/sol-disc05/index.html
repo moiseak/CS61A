@@ -1,0 +1,1242 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="Laryn Qi, Charlotte Le, Raymond Tan" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/hl.js"></script>
+    <script src="../../assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="../../assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/mono-blue.css">
+    <link rel="icon" href="../../assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="../../assets/css/disc.css">
+
+
+    <title>
+Discussion 5 | CS 61A Summer 2024
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../index.html">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="../../assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="../../office-hours.html">Weekly Schedule</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                External Websites
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://oh.cs61a.org/">Office Hours Queue</a></li>
+                <li><a href="https://pythontutor.com/cp/composingprograms.html">Python Tutor</a></li>
+                <li><a href="https://code.cs61a.org/">Online Code Editor</a></li>
+                <li><a href="https://www.composingprograms.com/">Textbook</a></li>
+                <li><a href="https://edstem.org/us/courses/59836/discussion/">Ed</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Forms
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/regrades">Request a Regrade</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/debugging-guide">Debugging Guide</a></li>
+                <li><a href="../../articles/studying.html">Studying Guide</a></li>
+                <li><a href="../../articles/composition.html">Composition Guide</a></li>
+                <li><a href="../../articles/pair-programming.html">Pair Programming Guide</a></li>
+                <li><a href="../../resources.html">Past Exams & Websites</a></li>
+                <li><a href="../../articles/campus-res/index.html">Department and Campus</a></li>
+                <li><a href="../../articles/advice/index.html">Advice from Former Students</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="../../instructor.html">Instructors</a></li>
+                <li><a href="../../staff.html">TAs & Tutors</a></li>
+                <li><a href="../../contact/index.html">Contact</a></li>
+              </ul>
+            </li>
+            <li><a href="../../articles/about.html">Syllabus</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Discussion 5: Iterators, Generators, Efficiency
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="disc05.pdf" class="label label-outline">disc05.pdf</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+
+<!-- <div class="alert storable-login-status"></div> -->
+
+
+    
+<h1 id="iterators">Iterators</h1>
+
+
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Iterators<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+An <strong>iterable</strong> is any value that can be iterated through, or gone through one
+element at a time. One construct that we've used to iterate through an iterable
+is a for statement:
+
+<pre><code>for elem in iterable:
+    # do something</code></pre>
+
+<p>In general, an <strong>iterable</strong> is an object on which calling the built-in <code>iter</code>
+function returns an <em>iterator</em>. An <strong>iterator</strong> is an object on which calling
+the built-in <code>next</code> function returns the next value.</p>
+
+<p>For example, a list is an iterable value.</p>
+
+<pre><code>&gt;&gt;&gt; s = [1, 2, 3, 4]
+&gt;&gt;&gt; next(s)       # s is iterable, but not an iterator
+TypeError: &#x27;list&#x27; object is not an iterator
+&gt;&gt;&gt; t = iter(s)   # Creates an iterator
+&gt;&gt;&gt; t
+&lt;list_iterator object ...&gt;
+&gt;&gt;&gt; next(t)       # Calling next on an iterator
+1
+&gt;&gt;&gt; next(t)       # Calling next on the same iterator
+2
+&gt;&gt;&gt; next(iter(t)) # Calling iter on an iterator returns itself
+3
+&gt;&gt;&gt; t2 = iter(s)
+&gt;&gt;&gt; next(t2)      # Second iterator starts at the beginning of s
+1
+&gt;&gt;&gt; next(t)       # First iterator is unaffected by second iterator
+4
+&gt;&gt;&gt; next(t)       # No elements left!
+StopIteration
+&gt;&gt;&gt; s             # Original iterable is unaffected
+[1, 2, 3, 4]</code></pre>
+
+<p>You can also use an iterator in a <code>for</code> statement because all iterators are
+iterable. But note that since iterators keep their state, they're
+only good to iterate through an iterable once:</p>
+
+<pre><code>&gt;&gt;&gt; t = iter([4, 3, 2, 1])
+&gt;&gt;&gt; for e in t:
+...     print(e)
+4
+3
+2
+1
+&gt;&gt;&gt; for e in t:
+...     print(e)</code></pre>
+
+<p>There are built-in functions that return iterators.</p>
+
+<pre><code>&gt;&gt;&gt; m = map(lambda x: x * x, [3, 4, 5])
+&gt;&gt;&gt; next(m)
+9
+&gt;&gt;&gt; next(m)
+16
+&gt;&gt;&gt; f = filter(lambda x: x &gt; 3, [3, 4, 5])
+&gt;&gt;&gt; next(f)
+4
+&gt;&gt;&gt; next(f)
+5
+&gt;&gt;&gt; z = zip([30, 40, 50], [3, 4, 5])
+&gt;&gt;&gt; next(z)
+(30, 3)
+&gt;&gt;&gt; next(z)
+(40, 4)</code></pre>
+
+</div>
+
+<div class="page-break"></div>
+
+<h3 id="q1-wwpd-iterators">Q1: WWPD: Iterators</h3>
+
+
+<p>What would Python display?</p>
+
+<pre><code>&gt;&gt;&gt; s = &quot;cs61a&quot;
+&gt;&gt;&gt; s_iter = iter(s)
+&gt;&gt;&gt; next(s_iter)</code></pre>
+
+
+
+            <label class="sr-only" for="iter-wwpd-1-input">Your Answer:</label>
+            <input class="form-control storable" id="iter-wwpd-1-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> 'c' </div>
+
+<pre><code>&gt;&gt;&gt; next(s_iter)</code></pre>
+
+
+
+            <label class="sr-only" for="iter-wwpd-2-input">Your Answer:</label>
+            <input class="form-control storable" id="iter-wwpd-2-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> 's' </div>
+
+<pre><code>&gt;&gt;&gt; list(s_iter)</code></pre>
+
+
+
+            <label class="sr-only" for="iter-wwpd-3-input">Your Answer:</label>
+            <input class="form-control storable" id="iter-wwpd-3-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> [‘6’, ‘1’, ‘a’] </div>
+
+<pre><code>&gt;&gt;&gt; s = [[1, 2, 3, 4]]
+&gt;&gt;&gt; i = iter(s)
+&gt;&gt;&gt; j = iter(next(i))
+&gt;&gt;&gt; next(j)</code></pre>
+
+
+
+            <label class="sr-only" for="iter-wwpd-4-input">Your Answer:</label>
+            <input class="form-control storable" id="iter-wwpd-4-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> 1 </div>
+
+<pre><code>&gt;&gt;&gt; s.append(5)
+&gt;&gt;&gt; next(i)</code></pre>
+
+
+
+            <label class="sr-only" for="iter-wwpd-5-input">Your Answer:</label>
+            <input class="form-control storable" id="iter-wwpd-5-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> 5 </div>
+
+<pre><code>&gt;&gt;&gt; next(j)</code></pre>
+
+
+
+
+            <label class="sr-only" for="iter-wwpd-6-input">Your Answer:</label>
+            <input class="form-control storable" id="iter-wwpd-6-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> 2 </div>
+
+<pre><code>&gt;&gt;&gt; list(j)</code></pre>
+
+
+
+
+            <label class="sr-only" for="iter-wwpd-7-input">Your Answer:</label>
+            <input class="form-control storable" id="iter-wwpd-7-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> [3, 4] </div>
+
+<pre><code>&gt;&gt;&gt; next(i)</code></pre>
+
+
+
+            <label class="sr-only" for="iter-wwpd-8-input">Your Answer:</label>
+            <input class="form-control storable" id="iter-wwpd-8-input" type="text">
+            <div class="storable-status"></div>
+        
+<div class="sol-highlight"> StopIteration </div>
+<div class="page-break"></div>
+
+
+<h3 id="q2-repeated">Q2: Repeated</h3>
+
+
+<p>Implement <code>repeated</code>, which takes in an iterator <code>t</code> and an integer <code>k</code> greater
+than 1. It returns the first value in <code>t</code> that appears <code>k</code> times in a row.</p>
+
+<blockquote><p><strong>Important:</strong> Call <code>next</code> on <code>t</code> only the minimum number of times required.
+Assume that there is an element of <code>t</code> repeated at least <code>k</code> times in a row.</p>
+
+<p><strong>Hint</strong>:
+If you are receiving a <code>StopIteration</code> exception,
+your <code>repeated</code> function is calling <code>next</code> too many times.</p></blockquote>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="repeated-input" style="height:612px;"></div>
+            <a href="javascript:void" id="modal-link-repeated-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-repeated-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-repeated-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def repeated(t, k):\n    &quot;&quot;&quot;Return the first value in iterator t that appears k times in a row,\n    calling next on t as few times as possible.\n\n    &gt;&gt;&gt; s = iter([10, 9, 10, 9, 9, 10, 8, 8, 8, 7])\n    &gt;&gt;&gt; repeated(s, 2)\n    9\n    &gt;&gt;&gt; t = iter([10, 9, 10, 9, 9, 10, 8, 8, 8, 7])\n    &gt;&gt;&gt; repeated(t, 3)\n    8\n    &gt;&gt;&gt; u = iter([3, 2, 2, 2, 1, 2, 1, 4, 4, 5, 5, 5])\n    &gt;&gt;&gt; repeated(u, 3)\n    2\n    &gt;&gt;&gt; repeated(u, 3)\n    5\n    &gt;&gt;&gt; v = iter([4, 1, 6, 6, 7, 7, 8, 8, 2, 2, 2, 5])\n    &gt;&gt;&gt; repeated(v, 3)\n    2\n    &quot;&quot;&quot;\n    assert k &gt; 1\n    "*** YOUR CODE HERE ***"\n\n', "python", "repeated-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def repeated(t, k):
+    &quot;&quot;&quot;Return the first value in iterator t that appears k times in a row,
+    calling next on t as few times as possible.
+
+    &gt;&gt;&gt; s = iter([10, 9, 10, 9, 9, 10, 8, 8, 8, 7])
+    &gt;&gt;&gt; repeated(s, 2)
+    9
+    &gt;&gt;&gt; t = iter([10, 9, 10, 9, 9, 10, 8, 8, 8, 7])
+    &gt;&gt;&gt; repeated(t, 3)
+    8
+    &gt;&gt;&gt; u = iter([3, 2, 2, 2, 1, 2, 1, 4, 4, 5, 5, 5])
+    &gt;&gt;&gt; repeated(u, 3)
+    2
+    &gt;&gt;&gt; repeated(u, 3)
+    5
+    &gt;&gt;&gt; v = iter([4, 1, 6, 6, 7, 7, 8, 8, 2, 2, 2, 5])
+    &gt;&gt;&gt; repeated(v, 3)
+    2
+    &quot;&quot;&quot;
+    assert k &gt; 1
+    count = 0
+    last_item = None
+    while True:
+        item = next(t)
+        if item == last_item:
+            count += 1
+        else:
+            last_item = item
+            count = 1
+        if count == k:
+            return item
+</code></pre>
+
+            </div>
+        
+
+<div class="page-break"></div>
+
+
+<h1 id="generators">Generators</h1>
+
+
+<p>A <em>generator</em> is an <em>iterator</em> that is returned by calling a <em>generator function</em>, which is a function that contains <code>yield</code> statements instead of <code>return</code> statements. The ways to use an <em>iterator</em> are to call <code>next</code> on it or to use it as an iterable (for example, in a <code>for</code> statement).</p>
+
+
+        <button id='toggle-2' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Generators<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-2">
+We can create our own custom iterators by writing a <em>generator function</em>, which
+returns a special type of iterator called a <strong>generator</strong>.  Generator functions
+have <code>yield</code> statements within the body of the function instead of <code>return</code>
+statements.  Calling a generator function will return a generator object and
+will <em>not</em> execute the body of the function.
+
+<p>For example, let's consider the following generator function:</p>
+
+<pre><code>def countdown(n):
+    print(&quot;Beginning countdown!&quot;)
+    while n &gt;= 0:
+        yield n
+        n &#x2d;= 1
+    print(&quot;Blastoff!&quot;)</code></pre>
+
+<p>Calling <code>countdown(k)</code> will return a generator object that counts down from <code>k</code>
+to 0.  Since generators are iterators, we can call <code>iter</code> on the resulting
+object, which will simply return the same object.  Note that the body is not
+executed at this point; nothing is printed and no numbers are outputted.</p>
+
+<pre><code>&gt;&gt;&gt; c = countdown(5)
+&gt;&gt;&gt; c
+&lt;generator object countdown ...&gt;
+&gt;&gt;&gt; c is iter(c)
+True</code></pre>
+
+<p>So how is the counting done? Again, since generators are iterators, we call
+<code>next</code> on them to get the next element!  The first time <code>next</code> is called,
+execution begins at the first line of the function body and continues until the
+<code>yield</code> statement is reached. The result of evaluating the expression in the
+<code>yield</code> statement is returned.  The following interactive session continues
+from the one above.</p>
+
+<pre><code>&gt;&gt;&gt; next(c)
+Beginning countdown!
+5</code></pre>
+
+<p>Unlike functions we've seen before in this course, generator functions can
+remember their state. On any consecutive calls to <code>next</code>, execution picks up
+from the line after the <code>yield</code> statement that was previously executed. Like
+the first call to <code>next</code>, execution will continue until the next <code>yield</code>
+statement is reached. Note that because of this, <code>Beginning countdown!</code> doesn't
+get printed again.</p>
+
+<pre><code>&gt;&gt;&gt; next(c)
+4
+&gt;&gt;&gt; next(c)
+3</code></pre>
+
+<p>The next 3 calls to <code>next</code> will continue to yield consecutive descending
+integers until 0.  On the following call, a <code>StopIteration</code> error will be
+raised because there are no more values to yield (i.e. the end of the function
+body was reached before hitting a <code>yield</code> statement).</p>
+
+<pre><code>&gt;&gt;&gt; next(c)
+2
+&gt;&gt;&gt; next(c)
+1
+&gt;&gt;&gt; next(c)
+0
+&gt;&gt;&gt; next(c)
+Blastoff!
+StopIteration</code></pre>
+
+<p>Separate calls to <code>countdown</code> will create distinct generator objects with their
+own state. Usually, generators shouldn't restart. If you'd like to reset the
+sequence, create another generator object by calling the generator function
+again.</p>
+
+<pre><code>&gt;&gt;&gt; c1, c2 = countdown(5), countdown(5)
+&gt;&gt;&gt; c1 is c2
+False
+&gt;&gt;&gt; next(c1)
+5
+&gt;&gt;&gt; next(c2)
+5</code></pre>
+
+<p>Here is a summary of the above:</p>
+
+<ul>
+  <li>A <em>generator function</em> has a <code>yield</code> statement and returns a <em>generator object</em>.</li>
+  <li>Calling the <code>iter</code> function on a generator object returns the same object
+  without modifying its current state.</li>
+  <li>The body of a generator function is not evaluated until <code>next</code> is called on
+  a resulting generator object. Calling the <code>next</code> function on a generator
+  object computes and returns the next object in its sequence. If the sequence
+  is exhausted, <code>StopIteration</code> is raised.</li>
+  <li><p>A generator "remembers" its state for the next <code>next</code> call. Therefore,</p>
+
+  <ul>
+    <li><p>the first <code>next</code> call works like this:</p>
+
+    <ol>
+      <li>Enter the function and run until the line with <code>yield</code>.</li>
+      <li>Return the value in the <code>yield</code> statement, but remember the state of the
+      function for future <code>next</code> calls.</li>
+    </ol></li>
+    <li><p>And subsequent <code>next</code> calls work like this:</p>
+
+    <ol>
+      <li>Re-enter the function, start at <strong>the line after the <code>yield</code> statement that
+      was previously executed</strong>, and run until the next <code>yield</code> statement.</li>
+      <li>Return the value in the <code>yield</code> statement, but remember the state of the
+      function for future <code>next</code> calls.</li>
+    </ol></li>
+  </ul></li>
+  <li>Calling a generator function returns a brand new generator object (like
+  calling <code>iter</code> on an iterable object).</li>
+  <li>A generator should not restart unless it's defined that way. To start over
+  from the first element in a generator, just call the generator function again
+  to create a new generator.</li>
+</ul>
+
+<p>Another useful tool for generators is the <code>yield from</code> statement. <code>yield from</code>
+will yield all values from an iterator or iterable.</p>
+
+<pre><code>&gt;&gt;&gt; def gen_list(lst):
+...     yield from lst
+...
+&gt;&gt;&gt; g = gen_list([1, 2, 3, 4])
+&gt;&gt;&gt; next(g)
+1
+&gt;&gt;&gt; next(g)
+2
+&gt;&gt;&gt; next(g)
+3
+&gt;&gt;&gt; next(g)
+4
+&gt;&gt;&gt; next(g)
+StopIteration</code></pre>
+
+</div>
+
+<div class="page-break"></div>
+
+<p>This generator function yields all of the Fibonacci numbers.</p>
+
+<pre><code class="python">def gen_fib():
+    n, add = 0, 1
+    while True:
+        yield n
+        n, add = n + add, n</code></pre>
+
+
+
+<p>Explain the following expression to each other so that everyone
+understands how it works. (It creates a list of the first 10 Fibonacci numbers.)</p>
+
+<pre><code class="python">(lambda t: [next(t) for _ in range(10)])(gen_fib())</code></pre>
+
+
+
+<p>Then, complete the expression below by writing only names and parentheses in the
+blanks so that it evaluates to the smallest Fibonacci number that is larger than
+2024.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="fibonacci-input" style="height:180px;"></div>
+            <a href="javascript:void" id="modal-link-fibonacci-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-fibonacci-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-fibonacci-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def gen_fib():\n    n, add = 0, 1\n    while True:\n        yield n\n        n, add = n + add, n\n\n____(______(lambda n: n &gt; 2024, ________))\n\n', "python", "fibonacci-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def gen_fib():
+    n, add = 0, 1
+    while True:
+        yield n
+        n, add = n + add, n
+
+next(filter(lambda n: n &gt; 2024, gen_fib()))
+</code></pre>
+
+            </div>
+        
+
+
+        <button id='toggle-3' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Hint<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-3">
+
+<p>One solution has the form: <code>next(____(lambda n: n &gt; 2024, ____))</code> where the first
+blank uses a built-in function to create an iterator over just large numbers and the second blank creates
+an iterator over all Fibonacci numbers.</p>
+
+</div>
+
+
+<h3 id="q3-something-different">Q3: Something Different</h3>
+
+
+<p>Implement <code>differences</code>, a generator function that takes <code>t</code>, a non-empty
+iterator over numbers. It yields the differences between each pair of adjacent
+values from <code>t</code>. If <code>t</code> iterates over a positive finite number of values <code>n</code>,
+then <code>differences</code> should yield <code>n&#x2d;1</code> times.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="differences-input" style="height:270px;"></div>
+            <a href="javascript:void" id="modal-link-differences-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-differences-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-differences-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def differences(t):\n    &quot;&quot;&quot;Yield the differences between adjacent values from iterator t.\n\n    &gt;&gt;&gt; list(differences(iter([5, 2, &#x2d;100, 103])))\n    [&#x2d;3, &#x2d;102, 203]\n    &gt;&gt;&gt; next(differences(iter([39, 100])))\n    61\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "differences-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def differences(t):
+    &quot;&quot;&quot;Yield the differences between adjacent values from iterator t.
+
+    &gt;&gt;&gt; list(differences(iter([5, 2, &#x2d;100, 103])))
+    [&#x2d;3, &#x2d;102, 203]
+    &gt;&gt;&gt; next(differences(iter([39, 100])))
+    61
+    &quot;&quot;&quot;
+    last_x = next(t)
+    for x in t:
+        yield x &#x2d; last_x
+        last_x = x
+</code></pre>
+
+            </div>
+        
+
+<!-- 
+        <button id='toggle-4' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Hint<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-4">
+Add to the following implementation by initializing and updating
+<code>previous_x</code> so that it is always bound to the value of <code>t</code> that came before
+<code>x</code>.
+
+<pre><code class="python">for x in t:
+    yield x &#x2d; previous_x</code></pre>
+
+
+</div> -->
+
+<p><strong>Presentation Time.</strong> Explain why <code>differences</code> will always
+yield <code>n&#x2d;1</code> times for an iterator <code>t</code> over <code>n</code> values.</p>
+
+<div class="page-break"></div>
+
+
+<h3 id="q4-primes-generator">Q4: Primes Generator</h3>
+
+
+<p>Write a function <code>primes_gen</code> that takes a single argument <code>n</code> and yields all prime
+numbers less than or equal to <code>n</code> in decreasing order. Assume <code>n &gt;= 1</code>.
+You may use the <code>is_prime</code> function included below, which we implemented in
+<a href="../disc03/index.html">Discussion 3</a>.</p>
+
+<p>First approach this problem using a <code>for</code> loop and using <code>yield</code>.</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="primes_yield-input" style="height:522px;"></div>
+            <a href="javascript:void" id="modal-link-primes_yield-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-primes_yield-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-primes_yield-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def is_prime(n):\n    &quot;&quot;&quot;Returns True if n is a prime number and False otherwise.\n    &gt;&gt;&gt; is_prime(2)\n    True\n    &gt;&gt;&gt; is_prime(16)\n    False\n    &gt;&gt;&gt; is_prime(521)\n    True\n    &quot;&quot;&quot;\n    def helper(i):\n        if i &gt; (n ** 0.5): # Could replace with i == n\n            return True\n        elif n % i == 0:\n            return False\n        return helper(i + 1)\n    return helper(2)\n\ndef primes_gen(n):\n    &quot;&quot;&quot;Generates primes in decreasing order.\n    &gt;&gt;&gt; pg = primes_gen(7)\n    &gt;&gt;&gt; list(pg)\n    [7, 5, 3, 2]\n    &quot;&quot;&quot;\n    "*** YOUR CODE HERE ***"\n\n', "python", "primes_yield-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def is_prime(n):
+    &quot;&quot;&quot;Returns True if n is a prime number and False otherwise.
+    &gt;&gt;&gt; is_prime(2)
+    True
+    &gt;&gt;&gt; is_prime(16)
+    False
+    &gt;&gt;&gt; is_prime(521)
+    True
+    &quot;&quot;&quot;
+    def helper(i):
+        if i &gt; (n ** 0.5): # Could replace with i == n
+            return True
+        elif n % i == 0:
+            return False
+        return helper(i + 1)
+    return helper(2)
+
+def primes_gen(n):
+    &quot;&quot;&quot;Generates primes in decreasing order.
+    &gt;&gt;&gt; pg = primes_gen(7)
+    &gt;&gt;&gt; list(pg)
+    [7, 5, 3, 2]
+    &quot;&quot;&quot;
+    for num in range(n, 1, &#x2d;1):
+        if is_prime(num):
+            yield num
+</code></pre>
+
+            </div>
+        
+
+<div class="page-break"></div>
+
+<p>Now that you've done it using a <code>for</code> loop and <code>yield</code>, try using <code>yield from</code>!</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="primes_yield_from-input" style="height:558px;"></div>
+            <a href="javascript:void" id="modal-link-primes_yield_from-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-primes_yield_from-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-primes_yield_from-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def is_prime(n):\n    &quot;&quot;&quot;Returns True if n is a prime number and False otherwise.\n    &gt;&gt;&gt; is_prime(2)\n    True\n    &gt;&gt;&gt; is_prime(16)\n    False\n    &gt;&gt;&gt; is_prime(521)\n    True\n    &quot;&quot;&quot;\n    def helper(i):\n        if i &gt; (n ** 0.5): # Could replace with i == n\n            return True\n        elif n % i == 0:\n            return False\n        return helper(i + 1)\n    return helper(2)\n\ndef primes_gen(n):\n    &quot;&quot;&quot;Generates primes in decreasing order.\n    &gt;&gt;&gt; pg = primes_gen(7)\n    &gt;&gt;&gt; list(pg)\n    [7, 5, 3, 2]\n    &quot;&quot;&quot;\n    if __________________________________:\n        return\n    if __________________________________:\n        yield __________________________________\n    yield from __________________________________\n\n', "python", "primes_yield_from-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def is_prime(n):
+    &quot;&quot;&quot;Returns True if n is a prime number and False otherwise.
+    &gt;&gt;&gt; is_prime(2)
+    True
+    &gt;&gt;&gt; is_prime(16)
+    False
+    &gt;&gt;&gt; is_prime(521)
+    True
+    &quot;&quot;&quot;
+    def helper(i):
+        if i &gt; (n ** 0.5): # Could replace with i == n
+            return True
+        elif n % i == 0:
+            return False
+        return helper(i + 1)
+    return helper(2)
+
+def primes_gen(n):
+    &quot;&quot;&quot;Generates primes in decreasing order.
+    &gt;&gt;&gt; pg = primes_gen(7)
+    &gt;&gt;&gt; list(pg)
+    [7, 5, 3, 2]
+    &quot;&quot;&quot;
+    if n == 1:
+        return
+    if is_prime(n):
+        yield n
+    yield from primes_gen(n&#x2d;1)
+</code></pre>
+
+            </div>
+        
+
+</p>
+
+<div class="page-break"></div>
+
+<h3 id="q5-partitions">Q5: Partitions</h3>
+
+
+<p>Tree-recursive generator functions have a similar structure to regular
+tree-recursive functions. They are useful for iterating over all possibilities.
+Instead of building a list of results and returning it, just <code>yield</code> each
+result.</p>
+
+<p>You'll need to identify a <em>recursive decomposition</em>: how to express the answer
+in terms of recursive calls that are simpler. Ask yourself what will be yielded
+by a recursive call, then how to use those results.</p>
+
+<p><strong>Definition.</strong> For positive integers <code>n</code> and <code>m</code>, a <em>partition</em> of <code>n</code> using
+parts up to size <code>m</code> is an addition expression of positive integers up to <code>m</code> in
+non-decreasing order that sums to <code>n</code>.</p>
+
+<p>Implement <code>partition_gen</code>, a generator functon that takes positive <code>n</code> and <code>m</code>.
+It yields the partitions of <code>n</code> using parts up to size <code>m</code> as strings.</p>
+
+<p><strong>Reminder:</strong> For the <code>partitions</code> function we studied in lecture
+(<a href="https://youtu.be/DvgT4dnSMVM">video</a>), the recursive decomposition was to
+enumerate all ways of partitioning <code>n</code> using at least one <code>m</code> and then to
+enumerate all ways with no <code>m</code> (only <code>m&#x2d;1</code> and lower).</p>
+
+
+            
+            <b>Your Answer</b>
+            
+            <div class="monaco-storable" id="partition_gen-input" style="height:486px;"></div>
+            <a href="javascript:void" id="modal-link-partition_gen-input">Run in 61A Code</a>
+            <div class="modal fade" id="modal-partition_gen-input" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="padding-bottom: -5px">
+                    <iframe
+                        id="code-iframe-partition_gen-input"
+                        width="100%"
+                        height="700px"
+                        style="border: none; display:block;"
+                    ></iframe>
+                    </div>
+                </div>
+            </div>
+            <div class="storable-status"></div>
+            <script>
+                $(() => activateEditor('def partition_gen(n, m):\n    &quot;&quot;&quot;Yield the partitions of n using parts up to size m.\n\n    &gt;&gt;&gt; for partition in sorted(partition_gen(6, 4)):\n    ...     print(partition)\n    1 + 1 + 1 + 1 + 1 + 1\n    1 + 1 + 1 + 1 + 2\n    1 + 1 + 1 + 3\n    1 + 1 + 2 + 2\n    1 + 1 + 4\n    1 + 2 + 3\n    2 + 2 + 2\n    2 + 4\n    3 + 3\n    &quot;&quot;&quot;\n    assert n &gt; 0 and m &gt; 0\n    if n == m:\n        yield ____\n    if n &#x2d; m &gt; 0:\n        "*** YOUR CODE HERE ***"\n    if m &gt; 1:\n        "*** YOUR CODE HERE ***"\n\n', "python", "partition_gen-input"));
+            </script>
+        
+            <div class="sol-highlight">
+                <b>Solution</b>
+                
+<pre><code>def partition_gen(n, m):
+    &quot;&quot;&quot;Yield the partitions of n using parts up to size m.
+
+    &gt;&gt;&gt; for partition in sorted(partition_gen(6, 4)):
+    ...     print(partition)
+    1 + 1 + 1 + 1 + 1 + 1
+    1 + 1 + 1 + 1 + 2
+    1 + 1 + 1 + 3
+    1 + 1 + 2 + 2
+    1 + 1 + 4
+    1 + 2 + 3
+    2 + 2 + 2
+    2 + 4
+    3 + 3
+    &quot;&quot;&quot;
+    assert n &gt; 0 and m &gt; 0
+    if n == m:
+        yield str(n)
+    if n &#x2d; m &gt; 0:
+        for p in partition_gen(n &#x2d; m, m):
+            yield p + &#x27; + &#x27; + str(m)
+    if m &gt; 1:
+        yield from partition_gen(n, m&#x2d;1)
+</code></pre>
+
+            </div>
+        
+
+
+        <button id='toggle-5' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Hint: Base Case<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-5">
+Yield a partition with just one element, <code>n</code>. Make sure you yield a string.
+</div>
+
+
+        <button id='toggle-6' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Hint: Recursive Cases<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-6">
+The first recursive case uses at least one <code>m</code>, and so you will need to yield a string that starts with <code>p</code> but also includes <code>m</code>. The second recursive case only uses parts up to size <code>m&#x2d;1</code>. (You can implement the second case in one line using <code>yield from</code>.)
+</div>
+
+<p><strong>Presentation Time.</strong> Explain why this implementation of <code>partition_gen</code> does not include base cases for
+<code>n &lt; 0</code>, <code>n == 0</code>, or <code>m == 0</code> even though the original implementation of
+<code>partitions</code> from lecture
+(<a href="https://youtu.be/DvgT4dnSMVM?si=MEkqzloqIcbD1-09&t=515">video</a>) had all three.</p>
+
+<div class="page-break"></div>
+
+
+<h1 id="efficiency">Efficiency</h1>
+
+
+        <button id='toggle-7' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Efficiency<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-7">
+Recall that the order of growth of a function expresses how long it
+takes for the function to run, and is defined in terms of the
+function's input sizes.
+
+<p>For example, let's say that we have the function <code>get_x</code> which is
+defined as follows:</p>
+
+<pre><code>def get_x(x):
+    return x</code></pre>
+
+<p><code>get_x</code> has one expression in it. That one expression takes the same
+amount of time to run, no matter what x is, or more importantly, how
+large x gets. This is called constant time.</p>
+
+<p>The main two ways that a function in your program will get a running
+time different than just constant time is through either iteration or
+recursion. Let's start with some iteration examples!</p>
+
+<p>The (simple) way you figure out the running time of a particular while
+loop is to simply count the cost of each operation in the body of the
+while loop, and then multiply that cost by the number of times that the
+loop runs. For example, look at the following method with a loop in
+it:</p>
+
+<pre><code>def foo(n):
+    i, sum = 1, 0
+    while i &lt;= n:
+        sum,i = sum + i, i + 1
+    return sum</code></pre>
+
+<p>This loop has one statement in it <code>sum, i = sum + i, i + 1.</code> This
+statement is considered to run in constant time, as none of its
+operations rely on the size of the input.
+Individually, <code>sum = sum + 1</code> and <code>i = i + 1</code> are both constant time operations.
+However, when we're looking at order of growth, we take the maximum of
+those 2 values and use that as the running time. In 61A, we are not
+concerned with how long primitive functions, such as addition,
+multiplication, and variable assignment, take in order to run - we are
+mainly concerned with <em>how many more times a loop is
+executed</em> or <em>how many more recursive calls</em> occur as
+the input increases. In this example, we execute the loop n times, and
+for each iteration, we only execute constant time operations, so we get
+an order of growth of linear.</p>
+
+<p>Here are a couple of basic functions, along with their running times.
+Try to understand why they have the given running time.</p>
+
+<ol>
+  <li><p>Constant</p>
+
+<pre><code>def bar(n):
+    i = 0
+    while i &lt; 10:
+        n = n * 2
+        i += 1
+    return n</code></pre></li>
+  <li><p>Logarithmic</p>
+
+<pre><code>def bar(n):
+    i = 1
+    while n:
+        i = i * 3
+        n = n // 2
+    return i</code></pre></li>
+  <li><p>Linear</p>
+
+<pre><code>def bar(n):
+    i, a, b = 1, 1, 0
+    while i &lt;= n:
+        a, b, i = a + b, a, i + 1
+     return a</code></pre></li>
+  <li><p>Quadratic</p>
+
+<pre><code>def bar(n):
+    sum = 0
+    a, b = 0, 0
+    while a &lt; n:
+        while b &lt; n:
+            sum += (a*b)
+            b += 1
+        b = 0
+        a += 1
+    return sum</code></pre></li>
+  <li><p>Exponential</p>
+
+<pre><code>def bar(n):
+    if n == 0: 
+        return 1
+    else:
+        return bar(n &#x2d; 1) + bar(n &#x2d; 1)</code></pre>
+
+  </div></li>
+</ol>
+
+<div class="page-break"></div>
+
+<h3 id="q6-bonk">Q6: Bonk</h3>
+
+
+<p>Describe the order of growth of the function below.</p>
+
+<pre><code>def bonk(n):
+    sum = 0
+    while n &gt;= 2:
+        sum += n
+        n = n / 2
+    return sum</code></pre>
+
+<p>Choose one of:</p>
+
+<ul>
+  <li>Constant</li>
+  <li>Logarithmic</li>
+  <li>Linear</li>
+  <li>Quadratic</li>
+  <li>Exponential</li>
+  <li>None of these</li>
+</ul>
+
+
+            <label class="sr-only" for="bonk-input">Your Answer:</label>
+            <input class="form-control storable" id="bonk-input" type="text">
+            <div class="storable-status"></div>
+        
+
+<div class="sol-highlight">
+
+<p>Logarithmic.</p>
+
+<p><em>Explanation</em>: As we increase the value of <code>n</code>, the amount of time needed to evaluate a call to <code>bonk</code> scales logarithmically. Let's use the number of iterations of our while loop to illustrate an example. When <code>n = 1</code>, our loop iterates 0 times. When <code>n = 2</code>, our loop iterates 1 time. When <code>n = 4</code>, we have 2 iterations. And when <code>n = 8</code>, a call to <code>bonk(8)</code> results in 3 iterations of this while loop. As the value of the input scales by a factor of 2, the number of iterations increases by 1. This indicates that this function runtime has a logarithmic order of growth.</p>
+
+</div>
+
+<h3 id="q7-boom">Q7: Boom</h3>
+
+
+<p>What is the order of growth in time for the following function boom? Use big-ϴ notation.</p>
+
+<pre><code>def boom(n):
+    sum = 0
+    a, b = 1, 1
+    while a &lt;= n*n:
+        while b &lt;= n*n:
+            sum += (a*b)
+            b += 1
+        b = 0
+        a += 1
+    return sum</code></pre>
+
+<div class="sol-highlight">
+
+<p>ϴ(<em>n</em><sup>4</sup>)</p>
+
+<p>We can come to this answer by noticing that either <code>b = 0</code> or <code>b = 1</code> when we start the <code>while b &lt;= n * n</code> loop, and we increase <code>b</code> by 1 every time, so this loop takes about <code>n * n</code> time. Thus, the body of the <code>while a &lt;= n * n</code> loop takes <code>n * n</code> time, and therefore the whole function takes <code>n * n * n * n</code> time, or ϴ(<em>n</em><sup>4</sup>)</p>
+
+</div>
+<div class="page-break"></div>
+
+
+<h1 id="optional-bonus-efficiency-problem">Optional (Bonus Efficiency Problem)</h1>
+
+<p>This next one is significantly harder (a little beyond what you might expect to see on exams) but try it out for a fun challenge!</p>
+
+<h3 id="q8">Q8</h3>
+
+
+<p>This question is very challenging. This is much beyond what we expect
+you to know for the exam. This is here merely to challenge you.</p>
+
+<pre><code>def boink(n):
+    if n == 1:
+        return 1
+    sum = 0
+    i = 1
+    while i &lt; n:
+        sum += boink(i)
+        i += 1
+    return sum</code></pre>
+
+<div class="sol-highlight">
+
+<p>O(2<sup><em>n</em></sup>)</p>
+
+</div>
+
+
+<h1 id="submit-attendance">Submit Attendance</h1>
+
+
+<p>You're done! Excellent work this week. Please be sure to ask your section TA for the attendance form link and fill it out for credit. (one submission per person per section).</p>
+<script>
+    $('.alwaystoggle').css('display', 'inline-block');
+    $('.alwaystoggle').click(function() {
+      var solution_id = $(this).attr('id');
+      $('div.' + solution_id).slideToggle(600);
+    });
+</script>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="index.html#iterators">Iterators</a></li>
+  <ul>
+    <li><a href="index.html#q1-wwpd-iterators">Q1: WWPD: Iterators</a></li>
+    <li><a href="index.html#q2-repeated">Q2: Repeated</a></li>
+  </ul>
+  <li><a href="index.html#generators">Generators</a></li>
+  <ul>
+    <li><a href="index.html#q3-something-different">Q3: Something Different</a></li>
+    <li><a href="index.html#q4-primes-generator">Q4: Primes Generator</a></li>
+    <li><a href="index.html#q5-partitions">Q5: Partitions</a></li>
+  </ul>
+  <li><a href="index.html#efficiency">Efficiency</a></li>
+  <ul>
+    <li><a href="index.html#q6-bonk">Q6: Bonk</a></li>
+    <li><a href="index.html#q7-boom">Q7: Boom</a></li>
+  </ul>
+  <li><a href="index.html#optional-bonus-efficiency-problem">Optional (Bonus Efficiency Problem)</a></li>
+  <ul>
+    <li><a href="index.html#q8">Q8</a></li>
+  </ul>
+  <li><a href="index.html#submit-attendance">Submit Attendance</a></li>
+  <li><a href="index.html#document-the-occasion">Document the Occasion</a></li>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <!-- <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer> -->
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="../../assets/js/network_storage.js"></script>
+    <script src="../../assets/js/storable.js"></script>
+    <script src="../../assets/js/editor.js"></script>
+    <script src="../../assets/js/copy-button.js"></script>
+    <script src="../../assets/js/env-diagram.js"></script>
+    
+<!-- <script src="/assets/js/sketchy.js"></script> -->
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

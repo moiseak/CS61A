@@ -1,0 +1,844 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="Laryn Qi, Charlotte Le, Raymond Tan" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/hl.js"></script>
+    <script src="../../assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="../../assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/mono-blue.css">
+    <link rel="icon" href="../../assets/images/favicon.ico">
+
+    
+
+<link rel="stylesheet" type="text/css" href="../../assets/css/hw.css">
+
+
+    <title>
+Homework 4 Solutions | CS 61A Summer 2024
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../index.html">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="../../assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="../../office-hours.html">Weekly Schedule</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                External Websites
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://oh.cs61a.org/">Office Hours Queue</a></li>
+                <li><a href="https://pythontutor.com/cp/composingprograms.html">Python Tutor</a></li>
+                <li><a href="https://code.cs61a.org/">Online Code Editor</a></li>
+                <li><a href="https://www.composingprograms.com/">Textbook</a></li>
+                <li><a href="https://edstem.org/us/courses/59836/discussion/">Ed</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Forms
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/regrades">Request a Regrade</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/debugging-guide">Debugging Guide</a></li>
+                <li><a href="../../articles/studying.html">Studying Guide</a></li>
+                <li><a href="../../articles/composition.html">Composition Guide</a></li>
+                <li><a href="../../articles/pair-programming.html">Pair Programming Guide</a></li>
+                <li><a href="../../resources.html">Past Exams & Websites</a></li>
+                <li><a href="../../articles/campus-res/index.html">Department and Campus</a></li>
+                <li><a href="../../articles/advice/index.html">Advice from Former Students</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="../../instructor.html">Instructors</a></li>
+                <li><a href="../../staff.html">TAs & Tutors</a></li>
+                <li><a href="../../contact/index.html">Contact</a></li>
+              </ul>
+            </li>
+            <li><a href="../../articles/about.html">Syllabus</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Homework 4 Solutions
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="hw04.zip" class="label label-outline">hw04.zip</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+<h2>Solution Files</h2>
+<p>You can find the solutions in <a href="hw04.py">hw04.py</a>.</p>
+
+    
+<h1 id="required-questions">Required Questions</h1>
+
+
+<br>
+
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Getting Started Videos<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+
+<h2 id="getting-started-videos" class="no-toc">Getting Started Videos</h2>
+
+
+<p>These videos may provide some helpful direction for tackling the coding
+problems on this assignment.</p>
+
+<blockquote><p>To see these videos, you should be logged into your berkeley.edu email.</p></blockquote>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZfAwe4HKW5OV0uRPTITkxnn"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZfAwe4HKW5OV0uRPTITkxnn'> YouTube link </a></p>
+</div>
+
+<br>
+
+<!-- Spring 2024 Questions -->
+
+<!-- ## Sequences -->
+
+<!-- <include topics/lists/mutable/medium/deep_map.md> -->
+
+<!-- ## Data Abstraction -->
+
+<!-- <include topics/trees/adt/medium/mobile.md> -->
+
+<!-- ## Trees -->
+
+<!-- <include topics/trees/adt/easy/max-path-sum.md> -->
+
+
+<h2 id="generators">Generators</h2>
+
+
+
+<h3 id="q1-infinite-hailstone">Q1: Infinite Hailstone</h3>
+
+
+<p>Write a generator function that yields the elements of the hailstone sequence starting at number <code>n</code>.
+After reaching the end of the hailstone sequence, the generator should yield the value 1 indefinitely.</p>
+
+<p>Here's a quick reminder of how the hailstone sequence is defined:</p>
+
+<ol>
+  <li>Pick a positive integer <code>n</code> as the start.</li>
+  <li>If <code>n</code> is even, divide it by 2.</li>
+  <li>If <code>n</code> is odd, multiply it by 3 and add 1.</li>
+  <li>Continue this process until <code>n</code> is 1.</li>
+</ol>
+
+<p>Try to write this generator function recursively. If you're stuck, you can first try writing it iteratively
+and then seeing how you can turn that implementation into a recursive one.</p>
+
+<blockquote><p><strong>Hint:</strong> Since <code>hailstone</code> returns a generator, you can <code>yield from</code> a call to <code>hailstone</code>!</p></blockquote>
+
+<solution>
+
+<pre><code>def hailstone(n):
+    &quot;&quot;&quot;Q1: Yields the elements of the hailstone sequence starting at n.
+       At the end of the sequence, yield 1 infinitely.
+
+    &gt;&gt;&gt; hail_gen = hailstone(10)
+    &gt;&gt;&gt; [next(hail_gen) for _ in range(10)]
+    [10, 5, 16, 8, 4, 2, 1, 1, 1, 1]
+    &gt;&gt;&gt; next(hail_gen)
+    1
+    &quot;&quot;&quot;
+<div class="sol-highlight">    yield n
+    if n == 1:
+        yield from hailstone(n)
+    elif n % 2 == 0:
+        yield from hailstone(n // 2)
+    else:
+        yield from hailstone(n * 3 + 1)</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q hailstone<button id="copy-code-python3ok-qhailstone" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qhailstone").onclick = () => copyCode('python3 ok -q hailstone', "copy-code-python3ok-qhailstone");
+        </script>
+        <br/>
+
+
+<h3 id="q2-merge">Q2: Merge</h3>
+
+<p>Write a generator function <code>merge</code> that takes in two infinite generators <code>a</code> and <code>b</code> that are in increasing order without duplicates and returns a generator that has all the elements of both generators, in increasing order, without duplicates.</p>
+
+<solution>
+
+<pre><code>def merge(a, b):
+    &quot;&quot;&quot;Q2:
+    &gt;&gt;&gt; def sequence(start, step):
+    ...     while True:
+    ...         yield start
+    ...         start += step
+    &gt;&gt;&gt; a = sequence(2, 3) # 2, 5, 8, 11, 14, ...
+    &gt;&gt;&gt; b = sequence(3, 2) # 3, 5, 7, 9, 11, 13, 15, ...
+    &gt;&gt;&gt; result = merge(a, b) # 2, 3, 5, 7, 8, 9, 11, 13, 14, 15
+    &gt;&gt;&gt; [next(result) for _ in range(10)]
+    [2, 3, 5, 7, 8, 9, 11, 13, 14, 15]
+    &quot;&quot;&quot;
+<div class="sol-highlight">    first_a, first_b = next(a), next(b)
+    while True:
+        if first_a == first_b:
+            yield first_a
+            first_a, first_b = next(a), next(b)
+        elif first_a &lt; first_b:
+            yield first_a
+            first_a = next(a)
+        else:
+            yield first_b
+            first_b = next(b)</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q merge<button id="copy-code-python3ok-qmerge" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qmerge").onclick = () => copyCode('python3 ok -q merge', "copy-code-python3ok-qmerge");
+        </script>
+        <br/>
+
+
+<h3 id="q3-generate-permutations">Q3: Generate Permutations</h3>
+
+
+<p>Given a sequence of unique elements, a <em>permutation</em> of the sequence is a list
+containing the elements of the sequence in some arbitrary order. For example,
+<code>[2, 1, 3]</code>, <code>[1, 3, 2]</code>, and <code>[3, 2, 1]</code> are some of the permutations of the
+sequence <code>[1, 2, 3]</code>.</p>
+
+<p>Implement <code>perms</code>, a generator function that takes in a sequence <code>seq</code>
+and returns a generator that yields all permutations of <code>seq</code>. For this question,
+assume that <code>seq</code> will not be empty.</p>
+
+<p>Permutations may be yielded in any order.  Note that the doctests test whether
+you are yielding all possible permutations, but not in any particular order.
+The built-in <code>sorted</code> function takes in an iterable object and returns a list
+containing the elements of the iterable in non-decreasing order.</p>
+
+<blockquote><p><em>Hint:</em> If you had the permutations of all but one of the elements in <code>seq</code>,
+how could you use that to generate the permutations
+of the full <code>seq</code>? For example, you can use <code>perms([1,2])</code>
+to generate permutations for <code>perms([1,2,3])</code>:</p>
+
+<p><img class="img-responsive center-block" src="assets/list-permutations.png" alt="Permutation example" width="" height=""></p>
+
+<p>Try drawing a similar diagram for <code>perms([1,2,3,4])</code>.</p></blockquote>
+
+<!-- hack for blockquotes -->
+
+<blockquote><p><em>Hint:</em>
+Remember, it's possible to loop over generator objects because generators are iterators!</p></blockquote>
+
+<!--
+
+<blockquote><p><em>Hint:</em> If you're having trouble getting started, see the hints video
+for this question for tips on how to approach this question.
+--></p></blockquote>
+
+<solution>
+
+<pre><code>def perms(seq):
+    &quot;&quot;&quot;Q3: Generates all permutations of the given sequence. Each permutation is a
+    list of the elements in SEQ in a different order. The permutations may be
+    yielded in any order.
+
+    &gt;&gt;&gt; p = perms([100])
+    &gt;&gt;&gt; type(p)
+    &lt;class &#x27;generator&#x27;&gt;
+    &gt;&gt;&gt; next(p)
+    [100]
+    &gt;&gt;&gt; try: # Prints &quot;No more permutations!&quot; if calling next would cause an error
+    ...     next(p)
+    ... except StopIteration:
+    ...     print(&#x27;No more permutations!&#x27;)
+    No more permutations!
+    &gt;&gt;&gt; sorted(perms([1, 2, 3])) # Returns a sorted list containing elements of the generator
+    [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]]
+    &gt;&gt;&gt; sorted(perms((10, 20, 30)))
+    [[10, 20, 30], [10, 30, 20], [20, 10, 30], [20, 30, 10], [30, 10, 20], [30, 20, 10]]
+    &gt;&gt;&gt; sorted(perms(&quot;ab&quot;))
+    [[&#x27;a&#x27;, &#x27;b&#x27;], [&#x27;b&#x27;, &#x27;a&#x27;]]
+    &quot;&quot;&quot;
+<div class="sol-highlight">    if not seq:
+        yield []
+    else:
+        for p in perms(seq[1:]):
+            for i in range(len(seq)):
+                yield p[:i] + [seq[0]] + p[i:]</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q perms<button id="copy-code-python3ok-qperms" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qperms").onclick = () => copyCode('python3 ok -q perms', "copy-code-python3ok-qperms");
+        </script>
+        <br/>
+
+
+<h3 id="q4-yield-paths">Q4: Yield Paths</h3>
+
+
+<p>Define a generator function <code>yield_paths</code> which takes in a tree <code>t</code>, a value
+<code>value</code>, and returns a generator object which yields each path from the root
+of <code>t</code> to a node that has label <code>value</code>.</p>
+
+<p>Each path should be represented as a list of the labels along that path in the
+tree. You may yield the paths in any order.</p>
+
+<pre><code>def yield_paths(t, value):
+    &quot;&quot;&quot;Q4: Yields all possible paths from the root of t to a node with the label
+    value as a list.
+
+    &gt;&gt;&gt; t1 = tree(1, [tree(2, [tree(3), tree(4, [tree(6)]), tree(5)]), tree(5)])
+    &gt;&gt;&gt; print_tree(t1)
+    1
+      2
+        3
+        4
+          6
+        5
+      5
+    &gt;&gt;&gt; next(yield_paths(t1, 6))
+    [1, 2, 4, 6]
+    &gt;&gt;&gt; path_to_5 = yield_paths(t1, 5)
+    &gt;&gt;&gt; sorted(list(path_to_5))
+    [[1, 2, 5], [1, 5]]
+
+    &gt;&gt;&gt; t2 = tree(0, [tree(2, [t1])])
+    &gt;&gt;&gt; print_tree(t2)
+    0
+      2
+        1
+          2
+            3
+            4
+              6
+            5
+          5
+    &gt;&gt;&gt; path_to_2 = yield_paths(t2, 2)
+    &gt;&gt;&gt; sorted(list(path_to_2))
+    [[0, 2], [0, 2, 1, 2]]
+    &quot;&quot;&quot;
+    if label(t) == value:
+<div class="sol-highlight">        yield [value]</div>    for b in branches(t):
+<div class="sol-highlight">        for path in yield_paths(b, value):</div><div class="sol-highlight">            yield [label(t)] + path</div></code></pre>
+
+<blockquote><p><em>Hint:</em> If you're having trouble getting started, think about how you'd approach this
+problem if it wasn't a generator function. What would your recursive calls be?
+With a generator function, what happens if you make a "recursive call" within its body?</p></blockquote>
+
+<!-- hack for blockquotes -->
+
+<blockquote><p><em>Hint:</em> Try coming up with a few simple cases of your own! How should this function work when <code>t</code> is a leaf node?</p></blockquote>
+
+<!-- hack for blockquotes -->
+
+<blockquote><p><em>Hint:</em> Remember, it's possible to loop over generator objects because generators are iterators!</p></blockquote>
+
+<!-- hack for blockquotes -->
+
+<blockquote><p>Note: Remember that this problem should <strong>yield paths</strong> -- do not return a list of paths!</p></blockquote>
+
+<!--
+<br />
+
+<p>Watch the hints video below for somewhere to start:
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/43rVEl9ev7M"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/43rVEl9ev7M'> YouTube link </a></p></p>
+
+<br />
+-->
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q yield_paths<button id="copy-code-python3ok-qyield_paths" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qyield_paths").onclick = () => copyCode('python3 ok -q yield_paths', "copy-code-python3ok-qyield_paths");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>If our current label is equal to <code>value</code>, we've found a path from the root to a node
+containing <code>value</code> containing only our current label, so we should yield that. From there,
+we'll see if there are any paths starting from one of our branches that ends at a
+node containing <code>value</code>. If we find these "partial paths" we can simply add our current
+label to the beinning of a path to obtain a path starting from the root.</p>
+
+<p>In order to do this, we'll create a generator for each of the branches which yields
+these "partial paths". By calling <code>yield_paths</code> on each of the branches, we'll create
+exactly this generator! Then, since a generator is also an iterable, we can iterate over
+the paths in this generator and yield the result of concatenating it with our current label.</p>
+
+</div>
+
+
+<h2 id="oop">OOP</h2>
+
+
+
+<h3 id="q5-minty">Q5: Minty</h3>
+
+
+<p>A mint is a place where coins are made. In this question, you'll implement a <code>Minty</code> class that can output a <code>Coin</code> with the correct year and worth.</p>
+
+<ul>
+  <li>Each <code>Minty</code> instance has a <code>year</code> stamp. The <code>update</code> method sets the
+  <code>year</code> stamp to the <code>present_year</code> class attribute of the <code>Minty</code> class.</li>
+  <li>The <code>create</code> method in <code>Minty</code> returns an instance of <code>Coin</code> stamped with the <code>Minty</code> instance's year (which may be different from <code>Minty.present_year</code> if the stamp has not been updated.)</li>
+  <li>The <code>Coin</code> constructor should ensure that each coin has the correct year and denomination value (<code>cents</code>),
+  specific to the type of coin (in our case, just 'Dime' or 'Nickel').</li>
+  <li>A <code>Coin</code>'s <code>worth</code> method returns its <code>cents</code> value plus an additional cent for each year of age beyond 50 years.
+  A coin's age can be determined by subtracting the coin's year from the <code>present_year</code> class attribute of
+  the <code>Minty</code> class.</li>
+</ul>
+
+<blockquote><p><strong>Note</strong>: The getting started video for this problem covers a version that includes inheritance, but this problem does not involve
+inheritance.</p></blockquote>
+
+<solution>
+
+<pre><code>class Minty:
+    &quot;&quot;&quot;A mint creates coins by stamping on years. The update method sets the mint&#x27;s stamp to Minty.present_year.
+    &gt;&gt;&gt; mint = Minty()
+    &gt;&gt;&gt; mint.year
+    2021
+    &gt;&gt;&gt; dime = mint.create(&#x27;Dime&#x27;)
+    &gt;&gt;&gt; dime.year
+    2021
+    &gt;&gt;&gt; Minty.present_year = 2101  # Time passes
+    &gt;&gt;&gt; nickel = mint.create(&#x27;Nickel&#x27;)
+    &gt;&gt;&gt; nickel.year     # The mint has not updated its stamp yet
+    2021
+    &gt;&gt;&gt; nickel.worth()  # 5 cents + (80 &#x2d; 50 years)
+    35
+    &gt;&gt;&gt; mint.update()   # The mint&#x27;s year is updated to 2101
+    &gt;&gt;&gt; Minty.present_year = 2176     # More time passes
+    &gt;&gt;&gt; mint.create(&#x27;Dime&#x27;).worth()    # 10 cents + (75 &#x2d; 50 years)
+    35
+    &gt;&gt;&gt; Minty().create(&#x27;Dime&#x27;).worth()  # A new mint has the current year
+    10
+    &gt;&gt;&gt; dime.worth()     # 10 cents + (155 &#x2d; 50 years)
+    115
+    &quot;&quot;&quot;
+    present_year = 2021
+
+    def __init__(self):
+        self.update()
+
+    def create(self, type):
+<div class="sol-highlight">        return Coin(self.year, type)</div>
+    def update(self):
+<div class="sol-highlight">        self.year = Minty.present_year</div>
+class Coin:
+    cents = 50
+
+    def __init__(self, year, type):
+<div class="sol-highlight">        self.year = year
+        if type == (&#x27;Dime&#x27;):
+            self.cents = 10
+        elif type == (&#x27;Nickel&#x27;):
+            self.cents = 5</div>
+    def worth(self):
+<div class="sol-highlight">        return self.cents + max(0, Minty.present_year &#x2d; self.year &#x2d; 50)</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q Minty<button id="copy-code-python3ok-qMinty" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qMinty").onclick = () => copyCode('python3 ok -q Minty', "copy-code-python3ok-qMinty");
+        </script>
+        <br/>
+
+
+<h3 id="q6-vending-machine">Q6: Vending Machine</h3>
+
+
+<p>In this question you'll create a <a href="https://en.wikipedia.org/wiki/Vending_machine">vending machine</a> that sells a single product and provides change when needed.</p>
+
+<p>Create a class called <code>VendingMachine</code> that represents a vending
+machine for some product. A <code>VendingMachine</code> object returns strings
+describing its interactions. Make sure your output <em>exactly</em> matches the strings in the doctests including punctuation and spacing!</p>
+
+<blockquote><p>You may find Python's formatted string literals, or <a href="https://docs.python.org/3/tutorial/inputoutput.html#fancier-output-formatting">f-strings</a> useful.
+A quick example:</p>
+
+<pre><code>&gt;&gt;&gt; feeling = &#x27;love&#x27;
+&gt;&gt;&gt; course = &#x27;61A!&#x27;
+&gt;&gt;&gt; f&#x27;I {feeling} {course}&#x27;
+&#x27;I love 61A!&#x27;</code></pre></blockquote>
+
+<p>Fill in the <code>VendingMachine</code> class, <em>adding attributes and methods as appropriate</em>, such that its behavior matches the following doctests:</p>
+
+<solution>
+
+<pre><code>class VendingMachine:
+    &quot;&quot;&quot;A vending machine that vends some product for some price.
+
+    &gt;&gt;&gt; v = VendingMachine(&#x27;candy&#x27;, 10)
+    &gt;&gt;&gt; v.vend()
+    &#x27;Nothing left to vend. Please restock.&#x27;
+    &gt;&gt;&gt; v.add_funds(15)
+    &#x27;Nothing left to vend. Please restock. Here is your $15.&#x27;
+    &gt;&gt;&gt; v.restock(2)
+    &#x27;Current candy stock: 2&#x27;
+    &gt;&gt;&gt; v.vend()
+    &#x27;Please add $10 more funds.&#x27;
+    &gt;&gt;&gt; v.add_funds(7)
+    &#x27;Current balance: $7&#x27;
+    &gt;&gt;&gt; v.vend()
+    &#x27;Please add $3 more funds.&#x27;
+    &gt;&gt;&gt; v.add_funds(5)
+    &#x27;Current balance: $12&#x27;
+    &gt;&gt;&gt; v.vend()
+    &#x27;Here is your candy and $2 change.&#x27;
+    &gt;&gt;&gt; v.add_funds(10)
+    &#x27;Current balance: $10&#x27;
+    &gt;&gt;&gt; v.vend()
+    &#x27;Here is your candy.&#x27;
+    &gt;&gt;&gt; v.add_funds(15)
+    &#x27;Nothing left to vend. Please restock. Here is your $15.&#x27;
+
+    &gt;&gt;&gt; w = VendingMachine(&#x27;soda&#x27;, 2)
+    &gt;&gt;&gt; w.restock(3)
+    &#x27;Current soda stock: 3&#x27;
+    &gt;&gt;&gt; w.restock(3)
+    &#x27;Current soda stock: 6&#x27;
+    &gt;&gt;&gt; w.add_funds(2)
+    &#x27;Current balance: $2&#x27;
+    &gt;&gt;&gt; w.vend()
+    &#x27;Here is your soda.&#x27;
+    &quot;&quot;&quot;
+<div class="sol-highlight">    def __init__(self, product, price):
+        self.product = product
+        self.price = price
+        self.stock = 0
+        self.balance = 0
+
+    def restock(self, n):
+        self.stock += n
+        return f&#x27;Current {self.product} stock: {self.stock}&#x27;
+
+    def add_funds(self, n):
+        if self.stock == 0:
+            return f&#x27;Nothing left to vend. Please restock. Here is your ${n}.&#x27;
+            # Alternatively, we could have:
+            # return self.vend() + f&#x27; Here is your ${n}.&#x27;
+        self.balance += n
+        return f&#x27;Current balance: ${self.balance}&#x27;
+
+    def vend(self):
+        if self.stock == 0:
+            return &#x27;Nothing left to vend. Please restock.&#x27;
+        difference = self.price &#x2d; self.balance
+        if difference &gt; 0:
+            return f&#x27;Please add ${difference} more funds.&#x27;
+        message = f&#x27;Here is your {self.product}&#x27;
+        if difference != 0:
+            message += f&#x27; and ${&#x2d;difference} change&#x27;
+        self.balance = 0
+        self.stock &#x2d;= 1
+        return message + &#x27;.&#x27;</div></code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q VendingMachine<button id="copy-code-python3ok-qVendingMachine" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qVendingMachine").onclick = () => copyCode('python3 ok -q VendingMachine', "copy-code-python3ok-qVendingMachine");
+        </script>
+        <br/>
+
+<div class="sol-highlight">
+
+<p>Reading through the doctests, it should be clear which functions we should add
+to ensure that the vending machine class behaves correctly.</p>
+
+<p><code>__init__</code></p>
+
+<ul>
+  <li>This can be difficult to fill out at first. Both <code>product</code> and <code>price</code> seem
+  pretty obvious to keep around, but <code>stock</code> and <code>balance</code> are quantities that
+  are needed only after attempting other functions.</li>
+</ul>
+
+<p><code>restock</code></p>
+
+<ul>
+  <li>Even though <code>v.restock(2)</code> takes only one argument in the doctest, remember
+  that <code>self</code> is bound to the object the <code>restock</code> method is invoked on.
+  Therefore, this function has two parameters.</li>
+  <li>While implementing this function, you will probably realize that you would
+  like to keep track of the stock somewhere. While it might be possible to set
+  the stock in this function as an instance attribute, it would lose whatever
+  the old stock was.
+  Therefore, the natural solution is to initialize stock in the constructor, and
+  then update it in <code>restock</code>.</li>
+</ul>
+
+<p><code>add_funds</code></p>
+
+<ul>
+  <li>This behaves very similarly to <code>restock</code>. See comments above.</li>
+  <li>Also yes, this is quite the expensive vending machine.</li>
+</ul>
+
+<p><code>vend</code></p>
+
+<ul>
+  <li><p>The trickiest thing here is to make sure we handle all the cases. You may find
+  it helpful when implementing a problem like this to keep track of all the
+  errors we run into in the doctest.</p>
+
+  <ol>
+    <li>No stock</li>
+    <li>Not enough balance</li>
+    <li>Leftover balance after purchase (return change to customer)</li>
+    <li>No leftover balance after purchase</li>
+  </ol></li>
+  <li><p>We use some string concatenation at the end when handling case 3 and 4 to try
+  and reduce the amount of code. This isn't necessary for correctness -- it's ok
+  to have something like:</p>
+
+<pre><code>if difference != 0:
+    return ...
+else:
+    return ...</code></pre>
+
+  <p>Of course, that would require decrementing the balance and stock beforehand.</p></li>
+</ul>
+
+</div>
+
+
+<h2 id="check-your-score-locally">Check Your Score Locally</h2>
+
+<p>You can locally check your score on each question of this assignment by running</p>
+
+<pre><code>python3 ok &#x2d;&#x2d;score</code></pre>
+
+<p><strong>This does NOT submit the assignment!</strong> When you are satisfied with your score, submit the assignment to Gradescope to receive credit for it.</p>
+
+
+<h1 id="submit-assignment">Submit Assignment</h1>
+
+
+<p>Submit this assignment by uploading any files you've edited <strong>to the appropriate Gradescope assignment.</strong> <a href="../../lab/lab00.html#submit-with-gradescope">Lab 00</a> has detailed instructions.</p>
+
+
+<h1 id="exam-practice">Exam Practice</h1>
+
+<p>Homework assignments will also contain prior exam-level questions for you to take a look at.
+These questions have no submission component; feel free to attempt them if you'd like a challenge!</p>
+
+<!-- Spring 2024 Exam Practice for HW 4 -->
+<!-- 1. Summer 2021 MT Q4: <a href="https://cs61a.org/exam/su21/midterm/61a-su21-midterm.pdf#page=10">Maximum Exponen-tree-ation</a> -->
+<!-- 2. Summer 2019 MT Q8: <a href="https://inst.eecs.berkeley.edu/~cs61a/sp20/exam/su19/mt/61a-su19-mt.pdf#page=9">Leaf It To Me</a> -->
+<!-- 3. Summer 2017 MT Q9: <a href="https://inst.eecs.berkeley.edu//~cs61a/su17/assets/pdfs/61a-su17-mt.pdf#page=11">Temmie Flakes</a> -->
+<!-- Summer 2024 Exam Practice for HW 4 taken from Spring 2024 Exam Practice from HW 5 -->
+
+<p>Generators</p>
+
+<ol>
+  <li>Summer 2018 Final Q7a,b: <a href="https://inst.eecs.berkeley.edu/~cs61a/su18/assets/pdfs/61a-su18-final.pdf#page=9">Streams and Jennyrators</a></li>
+  <li>Spring 2019 Final Q1: <a href="../../exam/sp19/final/61a-sp19-final.pdf#page=2">Iterators are inevitable</a></li>
+  <li>Spring 2021 MT2 Q8: <a href="../../exam/sp21/mt2/61a-sp21-mt2.pdf#page=18">The Tree of L-I-F-E</a></li>
+  <li>Summer 2016 Final Q8: <a href="https://inst.eecs.berkeley.edu//~cs61a/su16/assets/pdfs/61a-su16-final.pdf#page=13">Zhen-erators Produce Power</a></li>
+  <li>Spring 2018 Final Q4a: <a href="https://inst.eecs.berkeley.edu/~cs61a/sp18/assets/pdfs/61a-sp18-final.pdf#page=5">Apply Yourself</a></li>
+</ol>
+
+<p>Object-Oriented Programming</p>
+
+<ol>
+  <li>Spring 2022 MT2 Q8: <a href="../../exam/sp22/mt2/61a-sp22-mt2.pdf#page=17">CS61A Presents The Game of Hoop.</a></li>
+  <li>Fall 2020 MT2 Q3: <a href="../../exam/fa20/mt2/61a-fa20-mt2.pdf#page=9">Sparse Lists</a></li>
+</ol>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="index.html#required-questions">Required Questions</a></li>
+  <ul>
+    <li><a href="index.html#generators">Generators</a></li>
+    <ul>
+      <li><a href="index.html#q1-infinite-hailstone">Q1: Infinite Hailstone</a></li>
+      <li><a href="index.html#q2-merge">Q2: Merge</a></li>
+      <li><a href="index.html#q3-generate-permutations">Q3: Generate Permutations</a></li>
+      <li><a href="index.html#q4-yield-paths">Q4: Yield Paths</a></li>
+    </ul>
+    <li><a href="index.html#oop">OOP</a></li>
+    <ul>
+      <li><a href="index.html#q5-minty">Q5: Minty</a></li>
+      <li><a href="index.html#q6-vending-machine">Q6: Vending Machine</a></li>
+    </ul>
+    <li><a href="index.html#check-your-score-locally">Check Your Score Locally</a></li>
+  </ul>
+  <li><a href="index.html#submit-assignment">Submit Assignment</a></li>
+  <li><a href="index.html#exam-practice">Exam Practice</a></li>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <!-- <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer> -->
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="../../assets/js/network_storage.js"></script>
+    <script src="../../assets/js/storable.js"></script>
+    <script src="../../assets/js/editor.js"></script>
+    <script src="../../assets/js/copy-button.js"></script>
+    <script src="../../assets/js/env-diagram.js"></script>
+    
+<!-- <script src="/assets/js/sketchy.js"></script> -->
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>

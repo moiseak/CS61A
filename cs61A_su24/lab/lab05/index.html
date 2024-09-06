@@ -1,0 +1,814 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="description" content ="CS 61A: Structure and Interpretation of Computer Programs" />
+    <meta name="keywords" content ="CS 61A, Computer Science, CS, 61A, Programming, John DeNero, Berkeley, EECS" />
+    <meta name="author" content ="Laryn Qi, Charlotte Le, Raymond Tan" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../../assets/js/hl.js"></script>
+    <script src="../../assets/js/toggledarkmode.js"></script>
+    <script>
+        // we aren't registering builtins since
+        //      (1) they don't render differently in the current CSS from other names
+        //      (2) it's a mess to list all of them. You can extract from the site but that takes effort
+        // if (1) ceases to be true, (2) might be worth the effort. For now, we're leaving as is
+        hljsRegister({
+            'keyword': "define if cond and or let begin lambda mu quote delay cons-stream set! quasiquote unquote unquote-splicing define-macro"
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    <script src="../../assets/js/dark-mode.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata|Roboto:300,400,500|Work+Sans:400,700">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/mono-blue.css">
+    <link rel="icon" href="../../assets/images/favicon.ico">
+
+    
+
+    <title>
+Lab 5: Data Abstraction, Mutability | CS 61A Summer 2024
+</title>
+  </head>
+
+  <body id="index" class="home">
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container noselect">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-section">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../index.html">
+            <img style="max-width:60px; margin-top: -20px;" class="logo" src="../../assets/images/logo.png"/>
+          </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-section">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="../../office-hours.html">Weekly Schedule</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                External Websites
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://oh.cs61a.org/">Office Hours Queue</a></li>
+                <li><a href="https://pythontutor.com/cp/composingprograms.html">Python Tutor</a></li>
+                <li><a href="https://code.cs61a.org/">Online Code Editor</a></li>
+                <li><a href="https://www.composingprograms.com/">Textbook</a></li>
+                <li><a href="https://edstem.org/us/courses/59836/discussion/">Ed</a></li>
+                <li><a href="https://sections.cs61a.org">Sections Tool</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Forms
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/extensions">Request an Extension</a></li>
+                <li><a href="https://go.cs61a.org/regrades">Request a Regrade</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Resources
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="https://go.cs61a.org/debugging-guide">Debugging Guide</a></li>
+                <li><a href="../../articles/studying.html">Studying Guide</a></li>
+                <li><a href="../../articles/composition.html">Composition Guide</a></li>
+                <li><a href="../../articles/pair-programming.html">Pair Programming Guide</a></li>
+                <li><a href="../../resources.html">Past Exams & Websites</a></li>
+                <li><a href="../../articles/campus-res/index.html">Department and Campus</a></li>
+                <li><a href="../../articles/advice/index.html">Advice from Former Students</a></li>
+              </ul>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="index.html#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Staff
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a href="../../instructor.html">Instructors</a></li>
+                <li><a href="../../staff.html">TAs & Tutors</a></li>
+                <li><a href="../../contact/index.html">Contact</a></li>
+              </ul>
+            </li>
+            <li><a href="../../articles/about.html">Syllabus</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main id="content" class="container">
+      
+<div class='row'>
+  <div class='col-md-9'>
+    <header>
+      <h1>
+        
+Lab 5: Data Abstraction, Mutability
+
+        
+        
+        <ul class="inline-block list-inline">
+          <li><a href="lab05.zip" class="label label-outline">lab05.zip</a></li>
+        </ul>
+        
+        
+      </h1>
+    </header>
+    
+
+<p><i>Due by 11:59pm on Tuesday, July 9.</i></p>
+
+
+
+
+
+
+<h2 id='starter-files'>Starter Files</h2>
+
+<p>Download <a href="lab05.zip">lab05.zip</a>.
+Inside the archive, you will find starter files for the questions in this lab,
+  along with a copy of the <a href="ok">Ok</a> autograder.</p>
+
+
+
+
+
+
+
+
+    
+<h1 id="required-questions">Required Questions</h1>
+
+
+<br>
+
+        <button id='toggle-1' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Getting Started Videos<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-1">
+
+
+<h2 id="getting-started-videos" class="no-toc">Getting Started Videos</h2>
+
+
+<p>These videos may provide some helpful direction for tackling the coding
+problems on this assignment.</p>
+
+<blockquote><p>To see these videos, you should be logged into your berkeley.edu email.</p></blockquote>
+
+
+            <iframe width="560" height="315" src="https://youtube.com/embed/videoseries?list=PLx38hZJ5RLZe2TzUIRUPRUFm0e8BI35-l&si=xLVCh3LE94wfWaeg"
+                frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe><p><a href='https://youtu.be/playlist?list=PLx38hZJ5RLZe2TzUIRUPRUFm0e8BI35-l&si=xLVCh3LE94wfWaeg'> YouTube link </a></p>
+</div>
+
+
+<h2 id="mutability">Mutability</h2>
+
+
+<p>Consult the drop-down if you need a refresher on mutability. It's
+okay to skip directly to the questions and refer back
+here should you get stuck.</p>
+
+
+        <button id='toggle-2' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        List Mutation<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-2">
+
+<p>Some objects in Python, such as lists and dictionaries, are <strong>mutable</strong>,
+meaning that their contents or state can be changed.
+Other objects, such as numeric types, tuples, and strings, are <strong>immutable</strong>,
+meaning they cannot be changed once they are created.</p>
+
+<p>The two most common mutation operations for lists are item assignment and the
+<code>append</code> method.</p>
+
+<pre><code>&gt;&gt;&gt; s = [1, 3, 4]
+&gt;&gt;&gt; t = s  # A second name for the same list
+&gt;&gt;&gt; t[0] = 2  # this changes the first element of the list to 2, affecting both s and t
+&gt;&gt;&gt; s
+[2, 3, 4]
+&gt;&gt;&gt; s.append(5)  # this adds 5 to the end of the list, affecting both s and t
+&gt;&gt;&gt; t
+[2, 3, 4, 5]</code></pre>
+
+<p>There are many other list mutation methods:</p>
+
+<ul>
+  <li><code>append(elem)</code>:
+  Add <code>elem</code> to the end of the list. Return <code>None</code>.</li>
+  <li><code>extend(s)</code>:
+  Add all elements of iterable <code>s</code> to the end of the list. Return <code>None</code>.</li>
+  <li><code>insert(i, elem)</code>:
+  Insert <code>elem</code> at index <code>i</code>. If <code>i</code> is greater than or equal to the length of
+  the list, then <code>elem</code> is inserted at the end. This does not replace any
+  existing elements, but only adds the new element <code>elem</code>. Return <code>None</code>.</li>
+  <li><code>remove(elem)</code>:
+  Remove the first occurrence of <code>elem</code> in list. Return <code>None</code>.
+  Errors if <code>elem</code> is not in the list.</li>
+  <li><code>pop(i)</code>:
+  Remove and return the element at index <code>i</code>.</li>
+  <li><code>pop()</code>:
+  Remove and return the last element.</li>
+</ul>
+
+<p>Dictionaries also have item assignment (often used) and <code>pop</code> (rarely used).</p>
+
+<pre><code>&gt;&gt;&gt; d = {2: 3, 4: 16}
+&gt;&gt;&gt; d[2] = 4
+&gt;&gt;&gt; d[3] = 9
+&gt;&gt;&gt; d
+{2: 4, 4: 16, 3: 9}
+&gt;&gt;&gt; d.pop(4)
+16
+&gt;&gt;&gt; d
+{2: 4, 3: 9}</code></pre>
+
+</div>
+
+
+        <button id='toggle-3' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Dictionary Mutation<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-3">
+
+<p>Dictionaries are data structures which map keys to values.
+Dictionaries in Python are unordered, unlike real-world dictionaries --- in
+other words, key-value pairs are not arranged in the dictionary in any
+particular order. Let's look at an example:</p>
+
+<pre><code>&gt;&gt;&gt; pokemon = {&#x27;pikachu&#x27;: 25, &#x27;dragonair&#x27;: 148, &#x27;mew&#x27;: 151}
+&gt;&gt;&gt; pokemon[&#x27;pikachu&#x27;]
+25
+&gt;&gt;&gt; pokemon[&#x27;jolteon&#x27;] = 135
+&gt;&gt;&gt; pokemon
+{&#x27;jolteon&#x27;: 135, &#x27;pikachu&#x27;: 25, &#x27;dragonair&#x27;: 148, &#x27;mew&#x27;: 151}
+&gt;&gt;&gt; pokemon[&#x27;ditto&#x27;] = 25
+&gt;&gt;&gt; pokemon
+{&#x27;jolteon&#x27;: 135, &#x27;pikachu&#x27;: 25, &#x27;dragonair&#x27;: 148,
+&#x27;ditto&#x27;: 25, &#x27;mew&#x27;: 151}</code></pre>
+
+<p>The <em>keys</em> of a dictionary can be any <em>immutable</em> value, such as
+numbers, strings, and tuples.[1]
+Dictionaries themselves are mutable; we can add,
+remove, and change entries after creation. There is only one value per key,
+however --- if we assign a new value to the same key, it overrides any previous
+value which might have existed.</p>
+
+<p>To access the value of <code>dictionary</code> at <code>key</code>, use the syntax
+<code>dictionary[key]</code>.</p>
+
+<p>Element selection and reassignment work similarly to sequences, except the
+square brackets contain the key, not an index.</p>
+
+<p>[1]To be exact, keys must be 
+<em>hashable</em>, which is out of scope for this course. This means that some
+mutable objects, such as classes, can be used as dictionary keys.</p>
+
+</div>
+
+
+<h3 id="q1-wwpd-list-mutation">Q1: WWPD: List-Mutation</h3>
+
+
+<blockquote><p><strong>Important:</strong>
+For all WWPD questions, type <code>Function</code> if you believe the answer is
+<code>&lt;function...&gt;</code>, <code>Error</code> if it errors, and <code>Nothing</code> if nothing is displayed.</p></blockquote>
+
+<!-- separate block quotes -->
+
+<blockquote><p>Use Ok to test your knowledge with the following "What Would Python Display?" questions:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q list-mutation -u<button id="copy-code-python3ok-qlist-mutation-u" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qlist-mutation-u").onclick = () => copyCode('python3 ok -q list-mutation -u', "copy-code-python3ok-qlist-mutation-u");
+        </script>
+        <br/></blockquote>
+
+<pre><code>&gt;&gt;&gt; s = [6, 7, 8]
+&gt;&gt;&gt; print(s.append(6))
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x4e;&#x6f;&#x6e;&#x65;</div>
+&gt;&gt;&gt; s
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x5b;&#x36;&#x2c;&#x20;&#x37;&#x2c;&#x20;&#x38;&#x2c;&#x20;&#x36;&#x5d;</div>
+&gt;&gt;&gt; s.insert(0, 9)
+&gt;&gt;&gt; s
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x5b;&#x39;&#x2c;&#x20;&#x36;&#x2c;&#x20;&#x37;&#x2c;&#x20;&#x38;&#x2c;&#x20;&#x36;&#x5d;</div>
+&gt;&gt;&gt; x = s.pop(1)
+&gt;&gt;&gt; s
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x5b;&#x39;&#x2c;&#x20;&#x37;&#x2c;&#x20;&#x38;&#x2c;&#x20;&#x36;&#x5d;</div>
+&gt;&gt;&gt; s.remove(x)
+&gt;&gt;&gt; s
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x5b;&#x39;&#x2c;&#x20;&#x37;&#x2c;&#x20;&#x38;&#x5d;</div>
+&gt;&gt;&gt; a, b = s, s[:]
+&gt;&gt;&gt; a is s
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x54;&#x72;&#x75;&#x65;</div>
+&gt;&gt;&gt; b == s
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x54;&#x72;&#x75;&#x65;</div>
+&gt;&gt;&gt; b is s
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x46;&#x61;&#x6c;&#x73;&#x65;</div>
+&gt;&gt;&gt; a.pop()
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x38;</div>
+&gt;&gt;&gt; a + b
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x5b;&#x39;&#x2c;&#x20;&#x37;&#x2c;&#x20;&#x39;&#x2c;&#x20;&#x37;&#x2c;&#x20;&#x38;&#x5d;</div>
+&gt;&gt;&gt; s = [3]
+&gt;&gt;&gt; s.extend([4, 5])
+&gt;&gt;&gt; s
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x5b;&#x33;&#x2c;&#x20;&#x34;&#x2c;&#x20;&#x35;&#x5d;</div>
+&gt;&gt;&gt; a
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x5b;&#x39;&#x2c;&#x20;&#x37;&#x5d;</div>
+&gt;&gt;&gt; s.extend([s.append(9), s.append(10)])
+&gt;&gt;&gt; s
+<div class="alt prompt-1">______</div><div class="solution prompt-1">&#x5b;&#x33;&#x2c;&#x20;&#x34;&#x2c;&#x20;&#x35;&#x2c;&#x20;&#x39;&#x2c;&#x20;&#x31;&#x30;&#x2c;&#x20;&#x4e;&#x6f;&#x6e;&#x65;&#x2c;&#x20;&#x4e;&#x6f;&#x6e;&#x65;&#x5d;</div></code></pre>
+        <button id='prompt-1' class='btn btn-outline btn-lg solutiontoggle prompt'>
+        Toggle Solution<noscript> (enable JavaScript)</noscript>
+        </button>
+        
+
+
+<h3 id="q2-wwpd-dictionary-mutation">Q2: WWPD: Dictionary Mutation</h3>
+
+
+<blockquote><p><strong>Important:</strong>
+For all WWPD questions, type <code>Function</code> if you believe the answer is
+<code>&lt;function...&gt;</code>, <code>Error</code> if it errors, and <code>Nothing</code> if nothing is displayed.</p></blockquote>
+
+<!-- separate block quotes -->
+
+<blockquote><p>Use Ok to test your knowledge with the following "What Would Python Display?" questions:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q dictionaries-wwpd -u<button id="copy-code-python3ok-qdictionaries-wwpd-u" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qdictionaries-wwpd-u").onclick = () => copyCode('python3 ok -q dictionaries-wwpd -u', "copy-code-python3ok-qdictionaries-wwpd-u");
+        </script>
+        <br/></blockquote>
+
+<pre><code>&gt;&gt;&gt; pokemon = {&#x27;pikachu&#x27;: 25, &#x27;dragonair&#x27;: 148}
+&gt;&gt;&gt; pokemon
+<div class="alt prompt-2">______</div><div class="solution prompt-2">&#x7b;&#x27;&#x70;&#x69;&#x6b;&#x61;&#x63;&#x68;&#x75;&#x27;&#x3a;&#x20;&#x32;&#x35;&#x2c;&#x20;&#x27;&#x64;&#x72;&#x61;&#x67;&#x6f;&#x6e;&#x61;&#x69;&#x72;&#x27;&#x3a;&#x20;&#x31;&#x34;&#x38;&#x7d;</div>
+&gt;&gt;&gt; &#x27;mewtwo&#x27; in pokemon
+<div class="alt prompt-2">______</div><div class="solution prompt-2">&#x46;&#x61;&#x6c;&#x73;&#x65;</div>
+&gt;&gt;&gt; len(pokemon)  
+<div class="alt prompt-2">______</div><div class="solution prompt-2">&#x32;</div>
+&gt;&gt;&gt; pokemon[&#x27;mew&#x27;] = pokemon[&#x27;pikachu&#x27;]   #If this errors, just type Error
+&gt;&gt;&gt; pokemon[25] = &#x27;pikachu&#x27;
+&gt;&gt;&gt; pokemon
+<div class="alt prompt-2">______</div><div class="solution prompt-2">&#x7b;&#x27;&#x70;&#x69;&#x6b;&#x61;&#x63;&#x68;&#x75;&#x27;&#x3a;&#x20;&#x32;&#x35;&#x2c;&#x20;&#x27;&#x64;&#x72;&#x61;&#x67;&#x6f;&#x6e;&#x61;&#x69;&#x72;&#x27;&#x3a;&#x20;&#x31;&#x34;&#x38;&#x2c;&#x20;&#x27;&#x6d;&#x65;&#x77;&#x27;&#x3a;&#x20;&#x32;&#x35;&#x2c;&#x20;&#x32;&#x35;&#x3a;&#x20;&#x27;&#x70;&#x69;&#x6b;&#x61;&#x63;&#x68;&#x75;&#x27;&#x7d;</div>
+&gt;&gt;&gt; pokemon[&#x27;mewtwo&#x27;] = pokemon[&#x27;mew&#x27;] * 2  
+&gt;&gt;&gt; pokemon
+<div class="alt prompt-2">______</div><div class="solution prompt-2">&#x7b;&#x27;&#x70;&#x69;&#x6b;&#x61;&#x63;&#x68;&#x75;&#x27;&#x3a;&#x20;&#x32;&#x35;&#x2c;&#x20;&#x27;&#x64;&#x72;&#x61;&#x67;&#x6f;&#x6e;&#x61;&#x69;&#x72;&#x27;&#x3a;&#x20;&#x31;&#x34;&#x38;&#x2c;&#x20;&#x27;&#x6d;&#x65;&#x77;&#x27;&#x3a;&#x20;&#x32;&#x35;&#x2c;&#x20;&#x32;&#x35;&#x3a;&#x20;&#x27;&#x70;&#x69;&#x6b;&#x61;&#x63;&#x68;&#x75;&#x27;&#x2c;&#x20;&#x27;&#x6d;&#x65;&#x77;&#x74;&#x77;&#x6f;&#x27;&#x3a;&#x20;&#x35;&#x30;&#x7d;</div>
+&gt;&gt;&gt; pokemon[[&#x27;firetype&#x27;, &#x27;flying&#x27;]] = 146  # If this errors, just type Error. Note that dictionary keys must be hashable.
+<div class="alt prompt-2">______</div><div class="solution prompt-2">&#x45;&#x72;&#x72;&#x6f;&#x72;</div></code></pre>
+        <button id='prompt-2' class='btn btn-outline btn-lg solutiontoggle prompt'>
+        Toggle Solution<noscript> (enable JavaScript)</noscript>
+        </button>
+        
+
+
+<h3 id="q3-partial-reverse">Q3: Partial Reverse</h3>
+
+
+<p>When working with lists, it is often useful to reverse the list. For example,
+reversing the list <code>[1, 2, 3, 4, 5]</code> will give <code>[5, 4, 3, 2, 1]</code>. However, in
+some situations, it may be more useful to only partially reverse the list and
+keep some of its elements in the same order. For example, partially reversing
+the list <code>[1, 2, 3, 4, 5]</code> starting from index 2 until the end of the list will
+give <code>[1, 2, 5, 4, 3]</code>.</p>
+
+<p>Implement the function <code>partial_reverse</code> which reverses a list starting
+from <code>start</code> until the end of the list. This reversal should be
+<em>in-place</em>, meaning that the original list is modified. Do not create a
+new list inside your function, even if you do not return it.
+The <code>partial_reverse</code> function returns <code>None</code>.</p>
+
+<blockquote><p><strong>Hint:</strong> You can swap elements at index <code>i</code> and <code>j</code> in list <code>s</code> with multiple
+assignment: <code>s[i], s[j] = s[j], s[i]</code></p></blockquote>
+
+<solution>
+
+<pre><code>def partial_reverse(s, start):
+    &quot;&quot;&quot;Reverse part of a list in&#x2d;place, starting with start up to the end of
+    the list.
+
+    &gt;&gt;&gt; a = [1, 2, 3, 4, 5, 6, 7]
+    &gt;&gt;&gt; partial_reverse(a, 2)
+    &gt;&gt;&gt; a
+    [1, 2, 7, 6, 5, 4, 3]
+    &gt;&gt;&gt; partial_reverse(a, 5)
+    &gt;&gt;&gt; a
+    [1, 2, 7, 6, 5, 3, 4]
+    &quot;&quot;&quot;
+    "*** YOUR CODE HERE ***"
+</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q partial_reverse<button id="copy-code-python3ok-qpartial_reverse" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qpartial_reverse").onclick = () => copyCode('python3 ok -q partial_reverse', "copy-code-python3ok-qpartial_reverse");
+        </script>
+        <br/>
+
+
+<h3 id="q4-group-by">Q4: Group By</h3>
+
+<p>Write a function that takes in a list <code>s</code> and a function <code>fn</code>, and returns a dictionary.</p>
+
+<p>In this dictionary, each key should be the result of applying <code>fn</code> to the elements in <code>s</code>, and each corresponding value should be a list of elements from <code>s</code> that produce the same result when <code>fn</code> is applied to them.</p>
+
+<p>For example, if an element <code>e</code> in <code>s</code> results in <code>fn(e)</code>, then <code>e</code> should be added to the list corresponding to the key <code>fn(e)</code> in the dictionary.</p>
+
+<solution>
+
+<pre><code>def group_by(s, fn):
+    &quot;&quot;&quot;Return a dictionary of lists that together contain the elements of s.
+    The key for each list is the value that fn returns when called on any of the
+    values of that list.
+
+    &gt;&gt;&gt; group_by([12, 23, 14, 45], lambda p: p // 10)
+    {1: [12, 14], 2: [23], 4: [45]}
+    &gt;&gt;&gt; group_by(range(&#x2d;3, 4), lambda x: x * x)
+    {9: [&#x2d;3, 3], 4: [&#x2d;2, 2], 1: [&#x2d;1, 1], 0: [0]}
+    &quot;&quot;&quot;
+    grouped = {}
+    for ____ in ____:
+        key = ____
+        if key in grouped:
+            ____
+        else:
+            grouped[key] = ____
+    return grouped</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q group_by<button id="copy-code-python3ok-qgroup_by" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qgroup_by").onclick = () => copyCode('python3 ok -q group_by', "copy-code-python3ok-qgroup_by");
+        </script>
+        <br/>
+
+
+
+
+<h2 id="data-abstraction">Data Abstraction</h2>
+
+
+<p>Consult the drop-down if you need a refresher on data abstraction. It's
+okay to skip directly to the questions and refer back
+here should you get stuck.</p>
+
+
+        <button id='toggle-4' class='btn btn-outline btn-lg alwaystoggle toggle'>
+        Data Abstraction<noscript> (enable JavaScript)</noscript>
+        </button>
+        <div class="solution toggle-4">
+
+<p>A <em>data abstraction</em> is a set of functions that compose and decompose compound
+values. One function called the <em>constructor</em> puts together two or more parts
+into a whole (such as a rational number; also known as a fraction), and other
+functions called <em>selectors</em> return parts of that whole (such as the numerator
+or denominator).</p>
+
+<pre><code>def rational(n, d):
+    &quot;Return a fraction n / d for integers n and d.&quot;
+
+def numer(r):
+    &quot;Return the numerator of rational number r.&quot;
+
+def denom(r):
+    &quot;Return the denominator of rational number r.&quot;</code></pre>
+
+<p>Crucially, one can use a data abstraction without knowing how these functions are
+implemented. For example, we (humans) can verify that <code>mul_rationals</code> is
+implemented correctly just by knowing what <code>rational</code>, <code>numer</code>, and <code>denom</code> do
+without knowing how they are implemented.</p>
+
+<pre><code>def mul_rationals(r1, r2):
+    &quot;Return the rational number r1 * r2.&quot;
+    return rational(numer(r1) * numer(r2), denom(r1) * denom(r2))</code></pre>
+
+<p>However, for Python to run the program, the data abstraction requires an
+implementation. Using knowledge of the implementation crosses the abstraction barrier, which separates the part of a program that depends on the
+implementation of the data abstraction from the part that does not. A
+well-written program typically will minimize the amount of code that depends on
+the implementation so that the implementation can be changed later on without
+requiring much code to be rewritten.</p>
+
+<p>When using a data abstraction that has been provided, write your program so that
+it will still be correct even if the implementation of the data abstraction
+changes.</p>
+
+</div>
+
+
+<h3 id="cities">Cities</h3>
+
+
+<p>Say we have a data abstraction for cities. A city has a name, a latitude
+coordinate, and a longitude coordinate.</p>
+
+<p>Our data abstraction has one <strong>constructor</strong>:</p>
+
+<ul>
+  <li><code>make_city(name, lat, lon)</code>: Creates a city object with the given name,
+  latitude, and longitude.</li>
+</ul>
+
+<p>We also have the following <strong>selectors</strong> in order to get the information for
+each city:</p>
+
+<ul>
+  <li><code>get_name(city)</code>: Returns the city's name</li>
+  <li><code>get_lat(city)</code>: Returns the city's latitude</li>
+  <li><code>get_lon(city)</code>: Returns the city's longitude</li>
+</ul>
+
+<p>Here is how we would use the constructor and selectors to create cities and
+extract their information:</p>
+
+<pre><code>&gt;&gt;&gt; berkeley = make_city(&#x27;Berkeley&#x27;, 122, 37)
+&gt;&gt;&gt; get_name(berkeley)
+&#x27;Berkeley&#x27;
+&gt;&gt;&gt; get_lat(berkeley)
+122
+&gt;&gt;&gt; new_york = make_city(&#x27;New York City&#x27;, 74, 40)
+&gt;&gt;&gt; get_lon(new_york)
+40</code></pre>
+
+<p>All of the selector and constructor functions can be found in the lab file if
+you are curious to see how they are implemented. However, the point of data
+abstraction is that, when writing a program about cities, we do not need to know
+the implementation.</p>
+
+
+<h3 id="q5-distance">Q5: Distance</h3>
+
+
+<p>We will now implement the function <code>distance</code>, which computes the
+distance between two city objects. Recall that the distance between two
+coordinate pairs <code>(x1, y1)</code> and <code>(x2, y2)</code> can be found by calculating
+the <code>sqrt</code> of <code>(x1 &#x2d; x2)**2 + (y1 &#x2d; y2)**2</code>. We have already imported
+<code>sqrt</code> for your convenience. Use the latitude and longitude of a city as
+its coordinates; you'll need to use the selectors to access this info!</p>
+
+<solution>
+
+<pre><code>from math import sqrt
+def distance(city_a, city_b):
+    &quot;&quot;&quot;
+    &gt;&gt;&gt; city_a = make_city(&#x27;city_a&#x27;, 0, 1)
+    &gt;&gt;&gt; city_b = make_city(&#x27;city_b&#x27;, 0, 2)
+    &gt;&gt;&gt; distance(city_a, city_b)
+    1.0
+    &gt;&gt;&gt; city_c = make_city(&#x27;city_c&#x27;, 6.5, 12)
+    &gt;&gt;&gt; city_d = make_city(&#x27;city_d&#x27;, 2.5, 15)
+    &gt;&gt;&gt; distance(city_c, city_d)
+    5.0
+    &quot;&quot;&quot;
+    "*** YOUR CODE HERE ***"
+</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q distance<button id="copy-code-python3ok-qdistance" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qdistance").onclick = () => copyCode('python3 ok -q distance', "copy-code-python3ok-qdistance");
+        </script>
+        <br/>
+
+
+<h3 id="q6-closer-city">Q6: Closer City</h3>
+
+
+<p>Next, implement <code>closer_city</code>, a function that takes a latitude,
+longitude, and two cities, and returns the <em>name</em> of the city that is
+closer to the provided latitude and longitude.</p>
+
+<p>You may only use the selectors and constructors introduced above and the
+<code>distance</code> function you just defined for this question.</p>
+
+<blockquote><p><strong>Hint</strong>: How can you use your <code>distance</code> function to find the distance between
+the given location and each of the given cities?</p></blockquote>
+
+<solution>
+
+<pre><code>def closer_city(lat, lon, city_a, city_b):
+    &quot;&quot;&quot;
+    Returns the name of either city_a or city_b, whichever is closest to
+    coordinate (lat, lon). If the two cities are the same distance away
+    from the coordinate, consider city_b to be the closer city.
+
+    &gt;&gt;&gt; berkeley = make_city(&#x27;Berkeley&#x27;, 37.87, 112.26)
+    &gt;&gt;&gt; stanford = make_city(&#x27;Stanford&#x27;, 34.05, 118.25)
+    &gt;&gt;&gt; closer_city(38.33, 121.44, berkeley, stanford)
+    &#x27;Stanford&#x27;
+    &gt;&gt;&gt; bucharest = make_city(&#x27;Bucharest&#x27;, 44.43, 26.10)
+    &gt;&gt;&gt; vienna = make_city(&#x27;Vienna&#x27;, 48.20, 16.37)
+    &gt;&gt;&gt; closer_city(41.29, 174.78, bucharest, vienna)
+    &#x27;Bucharest&#x27;
+    &quot;&quot;&quot;
+    "*** YOUR CODE HERE ***"
+</code></pre>
+
+</solution>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q closer_city<button id="copy-code-python3ok-qcloser_city" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qcloser_city").onclick = () => copyCode('python3 ok -q closer_city', "copy-code-python3ok-qcloser_city");
+        </script>
+        <br/>
+
+
+<h3 id="q7-don-t-violate-the-abstraction-barrier">Q7: Don't violate the abstraction barrier!</h3>
+
+
+<blockquote><p>Note:
+this question has no code-writing component
+(if you implemented the previous two questions correctly).</p></blockquote>
+
+<p>When writing functions that use a data abstraction, we should use the
+constructor(s) and selector(s) whenever possible instead of assuming the
+data abstraction's implementation.
+Relying on a data abstraction's underlying implementation is known as
+<em>violating the abstraction barrier</em>.</p>
+
+<p>It's possible that you passed the doctests for the previous questions
+even if you violated the abstraction barrier. To check whether or not you
+did so, run the following command:</p>
+
+<p>Use Ok to test your code:</p><pre style="margin-bottom:0;"><code class="nohighlight">python3 ok -q check_city_abstraction<button id="copy-code-python3ok-qcheck_city_abstraction" class="inline-copy-button"><div class="copy-tooltip"><span>Copy</span></div>✂️</a></code></pre>
+        <script>
+        document.getElementById("copy-code-python3ok-qcheck_city_abstraction").onclick = () => copyCode('python3 ok -q check_city_abstraction', "copy-code-python3ok-qcheck_city_abstraction");
+        </script>
+        <br/>
+
+<p>The <code>check_city_abstraction</code> function exists only for the doctest, which swaps
+out the implementations of the original abstraction with something else, runs
+the tests from the previous two parts, then restores the original abstraction.</p>
+
+<p>The nature of the abstraction barrier guarantees that changing the
+implementation of an data abstraction shouldn't affect the functionality of
+any programs that use that data abstraction, as long as the constructors and
+selectors were used properly.</p>
+
+<p>If you passed the Ok tests for the previous questions but not this one,
+the fix is simple! Just replace any code that violates the abstraction
+barrier with the appropriate constructor or selector.</p>
+
+<p>Make sure that your functions pass the tests with both the first and the
+second implementations of the data abstraction and that you understand why
+they should work for both before moving on.</p>
+
+
+<h2 id="check-your-score-locally">Check Your Score Locally</h2>
+
+<p>You can locally check your score on each question of this assignment by running</p>
+
+<pre><code>python3 ok &#x2d;&#x2d;score</code></pre>
+
+<p><strong>This does NOT submit the assignment!</strong> When you are satisfied with your score, submit the assignment to Gradescope to receive credit for it.</p>
+
+
+<h1 id="submit-assignment">Submit Assignment</h1>
+
+
+<p>Submit this assignment by uploading any files you've edited <strong>to the appropriate Gradescope assignment.</strong> <a href="../lab00.html#submit-with-gradescope">Lab 00</a> has detailed instructions.</p>
+
+<p>In addition, all students who are <strong>not</strong> in the mega lab must submit the attendance form for credit. Ask your section TA for the link! Submit this form for each section, whether you attended lab or missed it for a good reason. The attendance form is not required for mega section students.</p>
+<script>
+    $('.alwaystoggle').css('display', 'inline-block');
+    $('.alwaystoggle').click(function() {
+      var solution_id = $(this).attr('id');
+      $('div.' + solution_id).slideToggle(600);
+    });
+</script>
+
+  </div>
+
+  <div class='col-md-3 sticky'>
+    <nav class='hidden-print hidden-sm hidden-xs sidebar'>
+      <ul>
+  <li><a href="index.html#required-questions">Required Questions</a></li>
+  <ul>
+    <li><a href="index.html#mutability">Mutability</a></li>
+    <ul>
+      <li><a href="index.html#q1-wwpd-list-mutation">Q1: WWPD: List-Mutation</a></li>
+      <li><a href="index.html#q2-wwpd-dictionary-mutation">Q2: WWPD: Dictionary Mutation</a></li>
+      <li><a href="index.html#q3-partial-reverse">Q3: Partial Reverse</a></li>
+      <li><a href="index.html#q4-group-by">Q4: Group By</a></li>
+    </ul>
+    <li><a href="index.html#data-abstraction">Data Abstraction</a></li>
+    <ul>
+      <li><a href="index.html#cities">Cities</a></li>
+      <li><a href="index.html#q5-distance">Q5: Distance</a></li>
+      <li><a href="index.html#q6-closer-city">Q6: Closer City</a></li>
+      <li><a href="index.html#q7-don-t-violate-the-abstraction-barrier">Q7: Don't violate the abstraction barrier!</a></li>
+    </ul>
+    <li><a href="index.html#check-your-score-locally">Check Your Score Locally</a></li>
+  </ul>
+  <li><a href="index.html#submit-assignment">Submit Assignment</a></li>
+</ul>
+    </nav>
+  </div>
+</div>
+
+    </main>
+
+    <!-- <footer class="container">
+      <div class="row text-center">
+        <div class="col col-sm-4">
+          <h3><a href="/">CS 61A</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/weekly">Weekly Schedule</a></li>
+            <li><a href="/office-hours">Office Hours</a></li>
+            <li><a href="/staff">Staff</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/resources">Resources</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/studying">Studying Guide</a></li>
+            <li><a href="/articles/debugging">Debugging Guide</a></li>
+            <li><a href="/articles/composition">Composition Guide</a></li>
+            <li><a href="/articles/pair-programming">Pair Programming</a></li>
+          </ul>
+        </div>
+        <div class="col col-sm-4">
+          <h3><a href="/articles/about">Policies</a></h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="/articles/about#assignments">Assignments</a></li>
+            <li><a href="/articles/about#exams">Exams</a></li>
+            <li><a href="/articles/about#grading">Grading</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer> -->
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js"></script>
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/editor/editor.main.min.css">
+  <script>
+      require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' }});
+      window.MonacoEnvironment = { getWorkerUrl: () => URL.createObjectURL(new Blob([`
+      self.MonacoEnvironment = {
+          baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min'
+      };
+      importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/base/worker/workerMain.min.js');
+  `], { type: 'text/javascript' }))
+  };
+  </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPlumb/2.15.5/js/jsplumb.min.js"></script>
+    <script src="../../assets/js/network_storage.js"></script>
+    <script src="../../assets/js/storable.js"></script>
+    <script src="../../assets/js/editor.js"></script>
+    <script src="../../assets/js/copy-button.js"></script>
+    <script src="../../assets/js/env-diagram.js"></script>
+    
+<!-- <script src="/assets/js/sketchy.js"></script> -->
+<script>
+  $('.sidebar ul').addClass('nav nav-stacked noselect');
+  $('body').scrollspy({
+    target: '.sidebar',
+    offset: 40
+  });
+
+  function goToId(id) {
+    var target = $(id);
+    target.parent().show();
+    $('html,body').animate({
+      scrollTop: target.offset().top,
+    }, 100);
+    $("body").scrollspy('refresh');
+  }
+
+  if (location.hash) {
+    setTimeout(function() {
+      if (location.hash) {
+        goToId(location.hash);
+      }
+    }, 1);
+  }
+
+  $("a").click(function(event) {
+    var urlBeforeHashRegEx = new RegExp("^"+window.location.href.split("#")[0]);
+    if (/^#/.test(this.hash) && urlBeforeHashRegEx.test(this.href)) {
+      event.preventDefault();
+      goToId(this.hash);
+      document.location.hash = this.hash;
+    }
+  });
+</script>
+
+  </body>
+</html>
