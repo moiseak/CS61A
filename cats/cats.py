@@ -62,6 +62,7 @@ def about(subject):
 
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
+
     def is_about(para):
         para = split(remove_punctuation(lower(para)))
         for i in para:
@@ -69,6 +70,7 @@ def about(subject):
                 if i == j:
                     return True
         return False
+
     return is_about
     # END PROBLEM 2
 
@@ -255,19 +257,17 @@ def minimum_mewtations(typed, source, limit):
     >>> minimum_mewtations("ckiteus", "kittens", big_limit) # ckiteus -> kiteus -> kitteus -> kittens
     3
     """
-    if limit < 0:  # Base cases should go here, you may add more base cases as needed.
+    if len(typed) == 0 or len(source) == 0:  # Base cases should go here, you may add more base cases as needed.
         # BEGIN
         "*** YOUR CODE HERE ***"
-        return 0
+        return abs(len(typed) - len(source))
         # END
     # Recursive cases should go below here
-    if typed == source:  # Feel free to remove or add additional cases
+    if typed == source or limit < 0:  # Feel free to remove or add additional cases
         # BEGIN
         "*** YOUR CODE HERE ***"
         return 0
         # END
-    if len(typed) == 0 or len(source) == 0:
-        return abs(len(typed) - len(source))
     if typed[0] == source[0]:
         return minimum_mewtations(typed[1:], source[1:], limit)
     else:
@@ -285,9 +285,27 @@ minimum_mewtations = count(minimum_mewtations)
 
 
 def final_diff(typed, source, limit):
-    """A diff function that takes in a string TYPED, a string SOURCE, and a number LIMIT.
-    If you implement this function, it will be used."""
-    assert False, "Remove this line to use your final_diff function."
+    if len(typed) == 0 or len(source) == 0:  # Base cases should go here, you may add more base cases as needed.
+        # BEGIN
+        "*** YOUR CODE HERE ***"
+        return abs(len(typed) - len(source))
+        # END
+    # Recursive cases should go below here
+    if typed == source or limit < 0:  # Feel free to remove or add additional cases
+        # BEGIN
+        "*** YOUR CODE HERE ***"
+        return 0
+        # END
+    if typed[0] == source[0]:
+        return minimum_mewtations(typed[1:], source[1:], limit)
+    else:
+        add = 1 + minimum_mewtations(typed, source[1:], limit - 1)
+        remove = 1 + minimum_mewtations(typed[1:], source, limit - 1)
+        substitute = 1 + minimum_mewtations(typed[1:], source[1:], limit - 1)
+        # BEGIN
+        "*** YOUR CODE HERE ***"
+        return min(add, remove, substitute)
+        # END
 
 
 FINAL_DIFF_LIMIT = 6  # REPLACE THIS WITH YOUR LIMIT
@@ -441,6 +459,7 @@ def match_string(match):
 
 
 enable_multiplayer = False  # Change to True when you're ready to race.
+
 
 ##########################
 # Command Line Interface #
