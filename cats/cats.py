@@ -193,13 +193,11 @@ def autocorrect(typed_word, word_list, diff_function, limit):
     if typed_word in word_list:
         return typed_word
     else:
-        diff_list = [diff_function(typed_word, word, limit) for word in word_list]
-        min_diff = min(diff_list)
+        min_diff = min([diff_function(typed_word, word, limit) for word in word_list])
         if min_diff > limit:
             return typed_word
         for word in word_list:
-            diff = diff_function(typed_word,word, limit)
-            if diff == min_diff:
+            if diff_function(typed_word, word, limit) == min_diff:
                 return word
 
     # END PROBLEM 5
@@ -228,7 +226,15 @@ def furry_fixes(typed, source, limit):
     5
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    if limit < 0:
+        return 0
+    if len(typed) == 0 or len(source) == 0:
+        return abs(len(typed) - len(source))
+    else:
+        if typed[0] != source[0]:
+            return 1 + furry_fixes(typed[1:], source[1:], limit - 1)
+        else:
+            return furry_fixes(typed[1:], source[1:], limit)
     # END PROBLEM 6
 
 
