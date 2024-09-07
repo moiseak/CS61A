@@ -70,6 +70,10 @@ def size_of_tree(t):
     7
     """
     "*** YOUR CODE HERE ***"
+    sum_tree = 0
+    for subtree in branches(t):
+        sum_tree += size_of_tree(subtree)
+    return 1 + sum_tree
 
 
 def replace_loki_at_leaf(t, lokis_replacement):
@@ -102,6 +106,11 @@ def replace_loki_at_leaf(t, lokis_replacement):
     True
     """
     "*** YOUR CODE HERE ***"
+    if is_leaf(t) and label(t) == 'loki':
+        return tree(lokis_replacement)
+    else:
+        bs = [replace_loki_at_leaf(b, lokis_replacement) for b in branches(t)]
+        return tree(label(t), bs)
 
 
 def divide(quotients, divisors):
@@ -113,7 +122,7 @@ def divide(quotients, divisors):
     >>> divide(range(1, 5), range(20, 25))
     {1: [20, 21, 22, 23, 24], 2: [20, 22, 24], 3: [21, 24], 4: [20, 24]}
     """
-    #return {____: ____ for ____ in ____}
+    return {key_: [val for val in divisors if val % key_ == 0] for key_ in quotients}
 
 
 
