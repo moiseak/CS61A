@@ -2,3 +2,6 @@
 'size_of_tree-correct', (512, 66)
 'replace_loki_at_leaf-correct', (1024, 66)
 'divide-correct', (1536, 66)
+'Lists-correct', (2048, 66)
+'Dictionaries-correct', (2560, 66)
+'merge-correct', (3072, 66)
