@@ -14,6 +14,12 @@ def pascal(row, column):
     6
     """
     "*** YOUR CODE HERE ***"
+    if column > row or column < 0 or row < 0:
+        return 0
+    elif row == 0 and column == 0:
+        return 1
+    else:
+        return pascal(row - 1, column) + pascal(row - 1, column - 1)
 
 
 def insert_items(s, before, after):
@@ -42,6 +48,13 @@ def insert_items(s, before, after):
     True
     """
     "*** YOUR CODE HERE ***"
+    i = 0
+    while i < len(s):
+        if s[i] == before:
+            s.insert(i + 1, after)
+            i += 1
+        i += 1
+    return s
 
 
 HW_SOURCE_FILE=__file__
@@ -51,11 +64,13 @@ def planet(mass):
     """Construct a planet of some mass."""
     assert mass > 0
     "*** YOUR CODE HERE ***"
+    return ['planet', mass]
 
 def mass(p):
     """Select the mass of a planet."""
     assert is_planet(p), 'must call mass on a planet'
     "*** YOUR CODE HERE ***"
+    return p[1]
 
 def is_planet(p):
     """Whether p is a planet."""
@@ -108,6 +123,18 @@ def balanced(m):
     True
     """
     "*** YOUR CODE HERE ***"
+    if not is_planet(end(left(m))):
+        if not balanced(end(left(m))):
+            return False
+    if not is_planet(end(right(m))):
+        if not balanced(end(right(m))):
+            return False
+    if total_mass(end(left(m))) * length(left(m)) == total_mass(end(right(m))) * length(right(m)):
+        return True
+    else:
+        return False
+
+
 
 
 def berry_finder(t):
