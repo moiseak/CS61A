@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="f354259e-9627-41d2-bf95-adebec1567b9" name="更改" comment="" />
+    <list default="true" id="f354259e-9627-41d2-bf95-adebec1567b9" name="更改" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lab05.py" beforeDir="false" afterPath="$PROJECT_DIR$/lab05.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/dictionaries-wwpd.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/dictionaries-wwpd.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/list-mutation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/list-mutation.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,9 +19,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 6
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
   <component name="ProjectId" id="2lmXRGih3aIPX17XQIe0AvslQhi" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -23,6 +32,10 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "last_opened_file_path": "D:/1CS61A/lab05",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
@@ -44,6 +57,7 @@
       <option name="presentableId" value="Default" />
       <updated>1725786215369</updated>
       <workItem from="1725786216380" duration="13000" />
+      <workItem from="1725870418229" duration="3395000" />
     </task>
     <servers />
   </component>

@@ -11,6 +11,12 @@ def partial_reverse(s, start):
     [1, 2, 7, 6, 5, 3, 4]
     """
     "*** YOUR CODE HERE ***"
+    i = 0
+    while i < (len(s) - start) // 2:
+        temp = s[start + i]
+        s[start + i] = s[len(s) - 1 - i]
+        s[len(s) - 1 - i] = temp
+        i += 1
 
 
 def group_by(s, fn):
@@ -24,12 +30,12 @@ def group_by(s, fn):
     {9: [-3, 3], 4: [-2, 2], 1: [-1, 1], 0: [0]}
     """
     grouped = {}
-    for ____ in ____:
-        key = ____
+    for i in s:
+        key = fn(i)
         if key in grouped:
-            ____
+            grouped[key].append(i)
         else:
-            grouped[key] = ____
+            grouped[key] = [i]
     return grouped
 
 
@@ -46,6 +52,11 @@ def distance(city_a, city_b):
     5.0
     """
     "*** YOUR CODE HERE ***"
+    la1 = get_lat(city_a)
+    la2 = get_lat(city_b)
+    lo1 = get_lon(city_a)
+    lo2 = get_lon(city_b)
+    return sqrt((la1 - la2) ** 2 + (lo1 - lo2) ** 2)
 
 def closer_city(lat, lon, city_a, city_b):
     """
@@ -63,6 +74,13 @@ def closer_city(lat, lon, city_a, city_b):
     'Bucharest'
     """
     "*** YOUR CODE HERE ***"
+    goal = make_city('goal', lat, lon)
+    dis1 = distance(city_a, goal)
+    dis2 = distance(city_b, goal)
+    if dis1 < dis2:
+        return get_name(city_a)
+    else:
+        return get_name(city_b)
 
 def check_city_abstraction():
     """
