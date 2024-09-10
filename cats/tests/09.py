@@ -10,28 +10,22 @@ test = {
           >>> words = ['This', 'is', 'fun']
           >>> words, times = time_per_word(words, p)
           >>> words
-          19534957e1c84f7da7ed570021f15b71
-          # locked
+          ['This', 'is', 'fun']
           >>> times
-          aa2d895a2e5d7bcaa2f2b23f38726547
-          # locked
+          [[3, 2, 1], [4, 2, 3]]
           >>> p = [[0, 2, 3], [2, 4, 7]]
           >>> words, times = time_per_word(['hello', 'world'], p)
           >>> words
-          5395768332580efe47c60ca35dc955d7
-          # locked
+          ['hello', 'world']
           >>> words[1]
-          1db4096d8d74bcd7bee03ad96f044740
-          # locked
+          'world'
           >>> times
-          7f55cfc66683ae9bd44af8592e4fd001
-          # locked
+          [[2, 1], [2, 3]]
           >>> times[0][1]
-          52f1b72ba99dddc798bb5cebce0be695
-          # locked
+          1
           """,
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'multiline': False
         },
         {

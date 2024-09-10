@@ -10,25 +10,20 @@ test = {
           >>> words = ['This', 'is', 'fun']
           >>> match_object = time_per_word_match(words, p)
           >>> get_all_words(match_object)    # what does this selector do?
-          19534957e1c84f7da7ed570021f15b71
-          # locked
+          ['This', 'is', 'fun']
           >>> get_all_times(match_object)    # what does this selector do?
-          aa2d895a2e5d7bcaa2f2b23f38726547
-          # locked
+          [[3, 2, 1], [4, 2, 3]]
           >>> p = [[0, 2, 3], [2, 4, 7]]
           >>> match_object = time_per_word_match(['hello', 'world'], p)
           >>> get_word(match_object, word_index=1)
-          1db4096d8d74bcd7bee03ad96f044740
-          # locked
+          'world'
           >>> get_all_times(match_object)
-          7f55cfc66683ae9bd44af8592e4fd001
-          # locked
+          [[2, 1], [2, 3]]
           >>> get_time(match_object, player_num=0, word_index=1)
-          52f1b72ba99dddc798bb5cebce0be695
-          # locked
+          1
           """,
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'multiline': False
         },
         {
