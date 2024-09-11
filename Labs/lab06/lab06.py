@@ -20,6 +20,13 @@ def count_occurrences(t, n, x):
     2
     """
     "*** YOUR CODE HERE ***"
+    i = 0
+    count_ = 0
+    while i < n:
+        if next(t) == x:
+            count_ += 1
+        i += 1
+    return count_
 
 
 def hailstone(n):
@@ -36,6 +43,14 @@ def hailstone(n):
     1
     """
     "*** YOUR CODE HERE ***"
+    if n != 1:
+        yield n
+    if n == 1:
+        yield 1
+    elif n % 2 == 0:
+        yield from hailstone(n // 2)
+    else:
+        yield from hailstone(n * 3 + 1)
 
 
 def merge(incr_a, incr_b):
@@ -58,6 +73,16 @@ def merge(incr_a, incr_b):
     iter_a, iter_b = iter(incr_a), iter(incr_b)
     next_a, next_b = next(iter_a, None), next(iter_b, None)
     "*** YOUR CODE HERE ***"
+    while next_a is not None or next_b is not None:
+        if next_a is None or next_b is not None and next_b < next_a:
+            yield next_b
+            next_b = next(iter_b, None)
+        elif next_b is None or next_a is not None and next_a < next_b:
+            yield next_a
+            next_a = next(iter_a, None)
+        else:
+            yield next_a
+            next_a, next_b = next(iter_a, None), next(iter_b, None)
 
 
 def deep_map(f, s):
@@ -83,6 +108,11 @@ def deep_map(f, s):
     True
     """
     "*** YOUR CODE HERE ***"
+    for i in range(len(s)):
+        if type(s[i]) is list:
+            deep_map(f, s[i])
+        else:
+            s[i] = f(s[i])
 
 
 def buy(required_fruits, prices, total_amount):
@@ -99,14 +129,16 @@ def buy(required_fruits, prices, total_amount):
     [6 apples][2 kiwis]
     [9 apples][1 kiwi]
     """
+
     def add(fruits, amount, cart):
         if fruits == [] and amount == 0:
             print(cart)
         elif fruits and amount > 0:
             fruit = fruits[0]
-            price = ____
-            for k in ____:
-                add(____, ____, ____)
+            price = prices[fruit]
+            for k in range(1, amount // price + 1):
+                add(fruits[1:], amount - price * k, cart + display(fruit, k))
+
     add(required_fruits, total_amount, '')
 
 
@@ -122,6 +154,3 @@ def display(fruit, count):
     if count == 1:
         fruit = fruit[:-1]  # get rid of the plural s
     return '[' + str(count) + ' ' + fruit + ']'
-
-
-

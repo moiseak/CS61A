@@ -11,29 +11,22 @@ test = {
           >>> s = [1, 2, 3, 4]
           >>> t = iter(s)
           >>> next(s)
-          34db8258c24aff02f4e0aeaa32af407b
-          # locked
+          Error
           >>> next(t)
-          c659f52f950a31de33b0888e439f05a7
-          # locked
+          1
           >>> next(t)
-          d05bc830613dfa69ef96df4f94a8da70
-          # locked
+          2
           >>> next(iter(s))
-          c659f52f950a31de33b0888e439f05a7
-          # locked
+          1
           >>> next(iter(s))
-          c659f52f950a31de33b0888e439f05a7
-          # locked
+          1
           >>> next(t)
-          214f1f0cf62380259278c29f0dd9185d
-          # locked
+          3
           >>> next(t)
-          41cc26e29cc2a9e0b6fb880e349243bb
-          # locked
+          4
           """,
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'multiline': False
         },
         {
@@ -41,45 +34,36 @@ test = {
           >>> r = range(6)
           >>> r_iter = iter(r)
           >>> next(r_iter)
-          5b62c9d6f358ce77683fee7b403e4cee
-          # locked
+          0
           >>> [x + 1 for x in r]
-          ff5a839523694926c5109e5b6a40db7d
-          # locked
+          [1, 2, 3, 4, 5, 6]
           >>> [x + 1 for x in r_iter]
-          3599898b41ed92836fc2d788cf3c88d2
-          # locked
+          [2, 3, 4, 5, 6]
           >>> next(r_iter)
-          480e2afbef4ea5033f7ed1d175609b6e
-          # locked
+          StopIteration
           """,
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'multiline': False
         },
         {
           'code': r"""
           >>> map_iter = map(lambda x : x + 10, range(5))
           >>> next(map_iter)
-          f6b228b9600512664524ace9bb20487f
-          # locked
+          10
           >>> next(map_iter)
-          e8c16581add35bc404672e54d14aa222
-          # locked
+          11
           >>> list(map_iter)
-          f713ba8c5c3e496289c4eb738fbf14ec
-          # locked
+          [12, 13, 14]
           >>> for e in filter(lambda x : x % 4 == 0, range(1000, 1008)):
           ...     print(e)
-          4c54662f8cc7843b0d0c7304d9aea453
-          53d7745981558f7e8c26148d16d17451
-          # locked
+          1000
+          1004
           >>> [x + y for x, y in zip([1, 2, 3], [4, 5, 6])]
-          7ad6104e44cc3932c03229aa44e6763f
-          # locked
+          [5, 7, 9]
           """,
           'hidden': False,
-          'locked': True,
+          'locked': False,
           'multiline': False
         }
       ],
