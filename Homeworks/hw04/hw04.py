@@ -9,6 +9,24 @@ def hailstone(n):
     1
     """
     "*** YOUR CODE HERE ***"
+    # recursively
+    yield n
+    if n == 1:
+        yield from hailstone(1)
+    if n % 2 == 0:
+        yield from hailstone(n // 2)
+    else:
+        yield from hailstone(3 * n + 1)
+    # iteratively
+    # while n > 1:
+    #     yield n
+    #     if n % 2 == 0:
+    #         n = n // 2
+    #     else:
+    #         n = 3 * n + 1
+    # while n == 1:
+    #     yield 1
+
 
 
 def merge(a, b):
@@ -24,6 +42,19 @@ def merge(a, b):
     [2, 3, 5, 7, 8, 9, 11, 13, 14, 15]
     """
     "*** YOUR CODE HERE ***"
+    na = next(a)
+    nb = next(b)
+    while True:
+        if na > nb:
+            yield nb
+            nb = next(b)
+        elif na < nb:
+            yield na
+            na = next(a)
+        else:
+            yield na
+            na = next(a)
+            nb = next(b)
 
 
 def perms(seq):
