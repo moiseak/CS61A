@@ -28,7 +28,6 @@ def hailstone(n):
     #     yield 1
 
 
-
 def merge(a, b):
     """Q2:
     >>> def sequence(start, step):
@@ -80,6 +79,12 @@ def perms(seq):
     [['a', 'b'], ['b', 'a']]
     """
     "*** YOUR CODE HERE ***"
+    if len(seq) == 1:
+        yield list(seq)
+    else:
+        for perm in perms(seq[1:]):
+            for i in range(len(seq)):
+                yield perm[:i] + [seq[0]] + perm[i:]
 
 
 def yield_paths(t, value):
@@ -117,10 +122,10 @@ def yield_paths(t, value):
     [[0, 2], [0, 2, 1, 2]]
     """
     if label(t) == value:
-        yield ____
+        yield [value]
     for b in branches(t):
-        for ____ in ____:
-            yield ____
+        for a in yield_paths(b, value):
+            yield [label(t)] + a
 
 
 class Minty:
@@ -153,18 +158,31 @@ class Minty:
 
     def create(self, type):
         "*** YOUR CODE HERE ***"
+        return Coin(self.year, type)
 
     def update(self):
         "*** YOUR CODE HERE ***"
+        self.year = Minty.present_year
+
 
 class Coin:
     cents = 50
 
     def __init__(self, year, type):
         "*** YOUR CODE HERE ***"
+        self.year = year
+        self.type = type
+        if type == 'Dime':
+            self.cents = 10
+        elif type == 'Nickel':
+            self.cents = 5
 
     def worth(self):
         "*** YOUR CODE HERE ***"
+        if Minty.present_year - self.year - 50 > 0:
+            return Minty.present_year - self.year - 50 + self.cents
+        else:
+            return self.cents
 
 
 class VendingMachine:
@@ -206,6 +224,37 @@ class VendingMachine:
     """
     "*** YOUR CODE HERE ***"
 
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
+        self.number = 0
+        self.funds = 0
+
+    def add_funds(self, amount):
+        if self.number > 0:
+            self.funds += amount
+            return f'Current balance: ${self.funds}'
+        else:
+            return f'Nothing left to vend. Please restock. Here is your ${amount}.'
+
+    def restock(self, amount):
+        self.number += amount
+        return f'Current {self.name} stock: {self.number}'
+
+    def vend(self):
+        if self.number == 0:
+            return 'Nothing left to vend. Please restock.'
+        elif self.number > 0 and (self.funds < self.price):
+            diff = self.price - self.funds
+            return f'Please add ${diff} more funds.'
+        elif self.number > 0 and (self.funds >= self.price):
+            change = self.funds - self.price
+            self.funds = 0
+            self.number -= 1
+            if change == 0:
+                return f'Here is your {self.name}.'
+            else:
+                return f'Here is your {self.name} and ${change} change.'
 
 
 # Tree Data Abstraction
@@ -216,13 +265,16 @@ def tree(label, branches=[]):
         assert is_tree(branch), 'branches must be trees'
     return [label] + list(branches)
 
+
 def label(tree):
     """Return the label value of a tree."""
     return tree[0]
 
+
 def branches(tree):
     """Return the list of branches of the given tree."""
     return tree[1:]
+
 
 def is_tree(tree):
     """Returns True if the given tree is a tree, and False otherwise."""
@@ -233,11 +285,13 @@ def is_tree(tree):
             return False
     return True
 
+
 def is_leaf(tree):
     """Returns True if the given tree's list of branches is empty, and False
     otherwise.
     """
     return not branches(tree)
+
 
 def print_tree(t, indent=0):
     """Print a representation of this tree in which each node is
@@ -262,6 +316,7 @@ def print_tree(t, indent=0):
     for b in branches(t):
         print_tree(b, indent + 1)
 
+
 def copy_tree(t):
     """Returns a copy of t. Only for testing purposes.
 
@@ -272,4 +327,3 @@ def copy_tree(t):
     5
     """
     return tree(label(t), [copy_tree(b) for b in branches(t)])
-
