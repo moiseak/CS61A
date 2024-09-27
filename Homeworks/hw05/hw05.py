@@ -67,9 +67,24 @@ class Player:
 
     def debate(self, other):
         "*** YOUR CODE HERE ***"
+        random_num = self.random_func()
+        probability = max(0.1, self.popularity / (self.popularity + other.popularity))
+        if random_num < probability:
+            self.popularity += 50
+        else:
+            self.popularity -= 50
+            if self.popularity < 0:
+                self.popularity = 0
 
     def speech(self, other):
         "*** YOUR CODE HERE ***"
+        up = self.popularity // 10
+        down = other.popularity // 10
+        self.popularity += up
+        self.votes += up
+        other.popularity -= down
+        if other.popularity < 0:
+            other.popularity = 0
 
     def choose(self, other):
         return self.speech
@@ -101,6 +116,12 @@ class Game:
     def play(self):
         while not self.game_over():
             "*** YOUR CODE HERE ***"
+            n = (self.turn % 2 == 0)
+            if n:
+                self.p1.choose(self.p2)(self.p2)
+            else:
+                self.p2.choose(self.p1)(self.p1)
+            self.turn += 1
         return self.winner()
 
     def game_over(self):
@@ -108,6 +129,18 @@ class Game:
 
     def winner(self):
         "*** YOUR CODE HERE ***"
+        if self.p1.votes >= 50:
+            return self.p1
+        elif self.p2.votes >= 50:
+            return self.p2
+        else:
+            if self.p1.votes > self.p2.votes:
+                return self.p1
+            elif self.p2.votes > self.p1.votes:
+                return self.p2
+            else:
+                return None
+
 
 
 ### Phase 3: New Players
@@ -131,6 +164,10 @@ class AggressivePlayer(Player):
     """
     def choose(self, other):
         "*** YOUR CODE HERE ***"
+        if self.popularity <= other.popularity:
+            return self.debate
+        else:
+            return self.speech
 
 class CautiousPlayer(Player):
     """
@@ -148,6 +185,10 @@ class CautiousPlayer(Player):
     """
     def choose(self, other):
         "*** YOUR CODE HERE ***"
+        if self.popularity == 0:
+            return self.debate
+        else:
+            return self.speech
 
 
 def add_d_leaves(t, v):
@@ -213,6 +254,12 @@ def add_d_leaves(t, v):
         10
     """
     "*** YOUR CODE HERE ***"
+    def add_leaves(tree, d):
+        for b in tree.branches:
+            add_leaves(b, d + 1)
+        tree.branches.extend([Tree(v) for _ in range(d)])
+    add_leaves(t, 0)
+
 
 
 def level_mutation_link(t, funcs):
