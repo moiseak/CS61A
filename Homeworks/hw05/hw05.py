@@ -13,11 +13,14 @@ def make_test_random():
     0.0
     """
     rands = [x / 10 for x in range(10)]
+
     def random():
         rand = rands[0]
         rands.append(rands.pop(0))
         return rand
+
     return random
+
 
 ### Phase 1: The Player Class
 class Player:
@@ -59,6 +62,7 @@ class Player:
     >>> p2.popularity
     0
     """
+
     def __init__(self, name, random_func):
         self.name = name
         self.votes = 0
@@ -108,6 +112,7 @@ class Game:
     >>> print(g.winner())
     None
     """
+
     def __init__(self, player1, player2):
         self.p1 = player1
         self.p2 = player2
@@ -142,7 +147,6 @@ class Game:
                 return None
 
 
-
 ### Phase 3: New Players
 class AggressivePlayer(Player):
     """
@@ -162,12 +166,14 @@ class AggressivePlayer(Player):
     >>> p2.choose(p1) == p2.speech
     True
     """
+
     def choose(self, other):
         "*** YOUR CODE HERE ***"
         if self.popularity <= other.popularity:
             return self.debate
         else:
             return self.speech
+
 
 class CautiousPlayer(Player):
     """
@@ -183,6 +189,7 @@ class CautiousPlayer(Player):
     >>> p2.choose(p1) == p2.speech
     True
     """
+
     def choose(self, other):
         "*** YOUR CODE HERE ***"
         if self.popularity == 0:
@@ -254,16 +261,17 @@ def add_d_leaves(t, v):
         10
     """
     "*** YOUR CODE HERE ***"
+
     def add_leaves(tree, d):
         for b in tree.branches:
             add_leaves(b, d + 1)
         tree.branches.extend([Tree(v) for _ in range(d)])
+
     add_leaves(t, 0)
 
 
-
 def level_mutation_link(t, funcs):
-	"""Mutates t using the functions in the linked list funcs.
+    """Mutates t using the functions in the linked list funcs.
 
 	>>> t = Tree(1, [Tree(2, [Tree(3)])])
 	>>> funcs = Link(lambda x: x + 1, Link(lambda y: y * 5, Link(lambda z: z ** 2)))
@@ -279,16 +287,16 @@ def level_mutation_link(t, funcs):
 	>>> t3    # Level 0: 1+1=2; Level 1: 2*5=10; no further levels, so apply remaining z ** 2: 10**2=100
 	Tree(2, [Tree(100)])
 	"""
-	if _____________________:
-		return
-	t.label = _____________________
-	remaining = _____________________
-	if __________________ and __________________:
-		while _____________________:
-			_____________________
-			remaining = remaining.rest
-	for b in t.branches:
-		_____________________
+    if funcs is Link.empty:
+        return
+    t.label = funcs.first(t.label)
+    remaining = funcs.rest
+    if t.is_leaf() and remaining is not Link.empty:
+        while remaining is not Link.empty:
+            t.label = remaining.first(t.label)
+            remaining = remaining.rest
+    for b in t.branches:
+        level_mutation_link(b, remaining)
 
 
 def store_digits(n):
@@ -309,6 +317,11 @@ def store_digits(n):
     >>> print("Do not use str or reversed!") if any([r in cleaned for r in ["str", "reversed"]]) else None
     """
     "*** YOUR CODE HERE ***"
+    result = Link.empty
+    while n > 0:
+        result = Link(n % 10, result)
+        n //= 10
+    return result
 
 
 def deep_map_mut(func, lnk):
@@ -331,7 +344,13 @@ def deep_map_mut(func, lnk):
     <9 <16> 25 36>
     """
     "*** YOUR CODE HERE ***"
-
+    if lnk is Link.empty:
+        return
+    elif isinstance(lnk.first, Link):
+        deep_map_mut(func, lnk.first)
+    else:
+        lnk.first = func(lnk.first)
+    deep_map_mut(func, lnk.rest)
 
 def crispr_gene_insertion(lnk_of_genes, insert):
     """Takes a linked list of genes and mutates the genes with the INSERT codon added the correct number of times.
@@ -355,6 +374,7 @@ def crispr_gene_insertion(lnk_of_genes, insert):
     """
     "*** YOUR CODE HERE ***"
 
+
 def transcribe(dna):
     """Takes a string of DNA and returns a Python list with the RNA codons.
 
@@ -376,6 +396,7 @@ class Tree:
     >>> t.branches[1].is_leaf()
     True
     """
+
     def __init__(self, label, branches=[]):
         for b in branches:
             assert isinstance(b, Tree)
@@ -398,6 +419,7 @@ class Tree:
             for b in t.branches:
                 tree_str += print_tree(b, indent + 1)
             return tree_str
+
         return print_tree(self).rstrip()
 
 
@@ -441,4 +463,3 @@ class Link:
             string += str(self.first) + ' '
             self = self.rest
         return string + str(self.first) + '>'
-
