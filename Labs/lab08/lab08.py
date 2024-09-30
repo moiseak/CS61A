@@ -12,6 +12,10 @@ def cumulative_mul(t):
     Tree(5040, [Tree(60, [Tree(3), Tree(4), Tree(5)]), Tree(42, [Tree(7)])])
     """
     "*** YOUR CODE HERE ***"
+    #不需要考虑返回值, 没有子树就不进循环直接回了, 也就是没有任何改变
+    for bt in t.branches:
+        cumulative_mul(bt)  #对所有子树进行计算
+        t.label *= bt.label  #计算完子树再计算根
 
 
 def delete(t, x):
@@ -34,13 +38,14 @@ def delete(t, x):
     Tree(1, [Tree(4), Tree(5), Tree(3, [Tree(6)]), Tree(6), Tree(7), Tree(8), Tree(4)])
     """
     new_branches = []
-    for _________ in ________________:
-        _______________________
+    for b in t.branches:
+        delete(b, x)
         if b.label == x:
-            __________________________________
+            for st in b.branches:
+                new_branches.append(st)
         else:
-            __________________________________
-    t.branches = ___________________
+            new_branches.append(b)
+    t.branches = new_branches
 
 
 def convert_link(link):
@@ -54,6 +59,9 @@ def convert_link(link):
     []
     """
     "*** YOUR CODE HERE ***"
+    if link is Link.empty:
+        return []
+    return [link.first] + convert_link(link.rest)
 
 
 def add_links(link1, link2):
@@ -69,6 +77,12 @@ def add_links(link1, link2):
     <3 4 5 1 2>
     """
     "*** YOUR CODE HERE ***"
+    if link1 is not Link.empty:
+        return Link(link1.first, add_links(link1.rest, link2))
+    elif link2 is not Link.empty:
+        return Link(link2.first, add_links(link1, link2.rest))
+    else:
+        return Link.empty
 
 
 def multiply_lnks(lst_of_lnks):
@@ -87,12 +101,12 @@ def multiply_lnks(lst_of_lnks):
     Link(48, Link(12, Link(0)))
     """
     product = 1
-    for _________ in ________________:
-        if __________________________________________:
-            _________________________________
-        ___________________
-    lst_of_lnks_rests = [_________ for _________ in ________________]
-    return _________________________________________________
+    for link in lst_of_lnks:
+        if link is Link.empty:
+            return Link.empty
+        product *= link.first
+    lst_of_lnks_rests = [link.rest for link in lst_of_lnks]
+    return Link(product, multiply_lnks(lst_of_lnks_rests))
 
 
 class Tree:
@@ -105,6 +119,7 @@ class Tree:
     >>> t.branches[1].is_leaf()
     True
     """
+
     def __init__(self, label, branches=[]):
         for b in branches:
             assert isinstance(b, Tree)
@@ -127,6 +142,7 @@ class Tree:
             for b in t.branches:
                 tree_str += print_tree(b, indent + 1)
             return tree_str
+
         return print_tree(self).rstrip()
 
 
@@ -170,4 +186,3 @@ class Link:
             string += str(self.first) + ' '
             self = self.rest
         return string + str(self.first) + '>'
-
